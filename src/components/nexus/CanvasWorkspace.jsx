@@ -107,21 +107,23 @@ export default function CanvasWorkspace({ post, onClose, onFork, onSummonSwarm }
         <TabButton active={activeTab === 'audit'} onClick={() => setActiveTab('audit')} icon={<ScrollText size={14} />}>Audit Log</TabButton>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 relative">
-        {activeTab === 'context' && (
-          <ContextTab post={post} onSummonSwarm={onSummonSwarm} />
-        )}
-        {activeTab === 'code' && (
-          <CodeTab post={post} isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen} copied={copied} onCopy={handleCopyCode} />
-        )}
-        {activeTab === 'oracle' && (
+      {/* Content — context/code tabs scroll freely; oracle/audit manage their own internal scroll */}
+      {(activeTab === 'context' || activeTab === 'code') && (
+        <div className="flex-1 overflow-y-auto p-4 md:p-6">
+          {activeTab === 'context' && <ContextTab post={post} onSummonSwarm={onSummonSwarm} />}
+          {activeTab === 'code' && <CodeTab post={post} isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen} copied={copied} onCopy={handleCopyCode} />}
+        </div>
+      )}
+      {activeTab === 'oracle' && (
+        <div className="flex-1 overflow-hidden p-4 md:p-6 flex flex-col min-h-0">
           <OracleEngine post={post} />
-        )}
-        {activeTab === 'audit' && (
+        </div>
+      )}
+      {activeTab === 'audit' && (
+        <div className="flex-1 overflow-hidden p-4 md:p-6 flex flex-col min-h-0">
           <AgentAuditLog post={post} />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -201,7 +203,7 @@ function BountyCard({ post }) {
 
 function CodeTab({ post, isFullscreen, setIsFullscreen, copied, onCopy }) {
   return (
-    <div className="h-full flex flex-col bg-[#0A0A0E] border border-white/10 rounded-xl overflow-hidden animate-in fade-in shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+    <div className="min-h-[400px] h-full flex flex-col bg-[#0A0A0E] border border-white/10 rounded-xl overflow-hidden animate-in fade-in shadow-[0_0_40px_rgba(0,0,0,0.5)]">
       <div className="bg-black/60 border-b border-white/5 p-2 md:p-3 flex justify-between items-center overflow-x-auto scrollbar-hide">
         <div className="flex gap-2 text-xs font-mono text-gray-400">
           <span className="text-cyan-300 bg-cyan-900/20 border border-cyan-500/20 px-3 py-1.5 rounded-md flex items-center gap-2"><Code size={12} /> index.logic</span>

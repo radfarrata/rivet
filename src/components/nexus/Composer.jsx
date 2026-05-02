@@ -10,6 +10,12 @@ export default function Composer({ composerText, setComposerText, onExecute }) {
         <textarea
           value={composerText}
           onChange={(e) => setComposerText(e.target.value)}
+          onKeyDown={(e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+              e.preventDefault();
+              onExecute();
+            }
+          }}
           placeholder="Initialize node or deploy agent... (⌘+Enter)"
           className="w-full bg-transparent border-none outline-none resize-none text-[13px] text-gray-200 placeholder-gray-600 min-h-[50px] font-mono leading-relaxed"
         />

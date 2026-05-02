@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { GitCommit, ShieldCheck, Code, AlertTriangle, Rocket, RefreshCw, Filter } from 'lucide-react';
 
 const EVENT_TYPES = {
@@ -82,13 +82,13 @@ function buildHistory(post) {
 }
 
 export default function AgentAuditLog({ post }) {
-  const history = buildHistory(post);
+  const history = useMemo(() => buildHistory(post), [post.id]);
   const [filter, setFilter] = useState('all');
 
   const filtered = filter === 'all' ? history : history.filter(e => e.type === filter);
 
   return (
-    <div className="h-full flex flex-col animate-in fade-in max-w-3xl mx-auto">
+    <div className="flex flex-col flex-1 min-h-0 max-w-3xl mx-auto w-full animate-in fade-in">
       {/* Stats bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
         {[
@@ -123,7 +123,7 @@ export default function AgentAuditLog({ post }) {
       </div>
 
       {/* Timeline */}
-      <div className="flex-1 overflow-y-auto space-y-0 relative">
+      <div className="flex-1 min-h-0 overflow-y-auto space-y-0 relative">
         <div className="absolute left-[22px] top-0 bottom-0 w-px bg-white/5 pointer-events-none" />
         {filtered.length === 0 && (
           <div className="text-center text-gray-600 font-mono text-sm py-16">No events of this type recorded.</div>

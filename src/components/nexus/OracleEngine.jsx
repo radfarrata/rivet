@@ -6,11 +6,20 @@ export default function OracleEngine({ post }) {
   const [simState, setSimState] = useState('idle');
   const [logs, setLogs] = useState([]);
   const logsEndRef = useRef(null);
+  const timersRef = useRef([]);
 
+  // Clear all pending timers and reset on post change
   useEffect(() => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
     setSimState('idle');
     setLogs([]);
   }, [post.id]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => timersRef.current.forEach(clearTimeout);
+  }, []);
 
   useEffect(() => {
     if (logsEndRef.current) {
@@ -22,38 +31,43 @@ export default function OracleEngine({ post }) {
     setLogs(prev => [...prev, { time: new Date().toISOString().substring(11, 19), msg, type }]);
   };
 
-  const runSimulation = () => {
-    setSimState('compiling');
-    setLogs([]);
-    addLog('Initiating Zero-Knowledge Sandbox...', 'sys');
+  const schedule = (fn, delay) => {
+    const id = setTimeout(fn, delay);
+    timersRef.current.push(id);
+    return id;
+  };
 
-    setTimeout(() => {
+  const runSimulation = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+    setSimState('compiling');
+    setLogs([{ time: new Date().toISOString().substring(11, 19), msg: 'Initiating Zero-Knowledge Sandbox...', type: 'sys' }]);
+
+    schedule(() => {
       addLog('Compiling AST and resolving network vectors...', 'sys');
-      setTimeout(() => {
+      schedule(() => {
         setSimState('running');
         addLog('Execution environment active.', 'success');
         addLog('Injecting 500,000 synthetic state mutations...', 'info');
 
-        let counter = 0;
-        const interval = setInterval(() => {
-          counter++;
-          addLog(`Verifying branch constraint ${Math.floor(Math.random() * 90000)} - O(1) Pass`, 'info');
-          if (counter > 3) clearInterval(interval);
-        }, 300);
+        [0, 300, 600, 900].forEach((delay, i) => {
+          schedule(() => {
+            addLog(`Verifying branch constraint ${Math.floor(Math.random() * 90000)} - O(1) Pass`, 'info');
+          }, delay);
+        });
 
-        setTimeout(() => {
-          clearInterval(interval);
+        schedule(() => {
           addLog('Generating ZK-SNARK Proof...', 'warn');
-          setTimeout(() => {
+          schedule(() => {
             setSimState('verified');
             addLog(`Mathematical Proof Verified: 0x${Math.random().toString(16).substring(2, 10)}...`, 'success');
             addLog('Algorithm improves baseline efficiency by 14.2%', 'success');
-            setTimeout(() => {
+            schedule(() => {
               setSimState('deployable');
               addLog('Ready for Physical Infrastructure (DePIN) Binding.', 'warn');
             }, 1000);
           }, 1500);
-        }, 2500);
+        }, 1800);
       }, 1500);
     }, 1000);
   };
@@ -61,7 +75,7 @@ export default function OracleEngine({ post }) {
   const handleDePINDeploy = () => {
     setSimState('deploying');
     addLog('Binding verified logic to Edge Cluster (US-West)...', 'sys');
-    setTimeout(() => {
+    schedule(() => {
       setSimState('deployed');
       addLog('HARDWARE BINDING COMPLETE. Code is live on physical infrastructure.', 'success');
     }, 2000);
@@ -75,7 +89,7 @@ export default function OracleEngine({ post }) {
   };
 
   return (
-    <div className="h-full flex flex-col max-w-4xl mx-auto animate-in fade-in">
+    <div className="flex flex-col flex-1 min-h-0 max-w-4xl mx-auto w-full animate-in fade-in">
       {/* Metrics Panel */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 md:mb-6">
         <div className="bg-black/40 border border-white/5 rounded-xl p-3 md:p-4 shadow-inner">
@@ -124,7 +138,7 @@ export default function OracleEngine({ post }) {
       </div>
 
       {/* Terminal Output */}
-      <div className="flex-1 bg-black rounded-xl border border-white/10 p-3 md:p-4 font-mono text-[11px] md:text-[13px] overflow-y-auto shadow-inner flex flex-col relative">
+      <div className="flex-1 min-h-0 bg-black rounded-xl border border-white/10 p-3 md:p-4 font-mono text-[11px] md:text-[13px] overflow-y-auto shadow-inner flex flex-col relative">
         <div className="text-gray-600 mb-4 border-b border-white/5 pb-2 sticky top-0 bg-black z-10 pt-1">
           Nexus Virtual Machine v4.2.0 initialized. Ready for execution.
         </div>
