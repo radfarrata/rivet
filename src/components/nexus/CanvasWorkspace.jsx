@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft, Network, GitBranch, Check, X as XIcon,
   FileText, Code, Cpu as CpuIcon, Copy, Maximize2, Command,
-  Users, Bot, BookOpen, Sparkles, Lock, CheckCircle2, Target
+  Users, Bot, BookOpen, Sparkles, Lock, CheckCircle2, Target, ScrollText
 } from 'lucide-react';
 import NexusAvatar from './NexusAvatar';
 import GlassButton from './GlassButton';
 import OracleEngine from './OracleEngine';
+import AgentAuditLog from './AgentAuditLog';
 
 function TabButton({ children, active, onClick, icon, className = '' }) {
   return (
@@ -103,6 +104,7 @@ export default function CanvasWorkspace({ post, onClose, onFork, onSummonSwarm }
         <TabButton active={activeTab === 'context'} onClick={() => setActiveTab('context')} icon={<FileText size={14} />}>Context</TabButton>
         <TabButton active={activeTab === 'code'} onClick={() => setActiveTab('code')} icon={<Code size={14} />}>Source</TabButton>
         <TabButton active={activeTab === 'oracle'} onClick={() => setActiveTab('oracle')} icon={<CpuIcon size={14} />} className="text-cyan-400 border-cyan-500/30">DePIN Engine</TabButton>
+        <TabButton active={activeTab === 'audit'} onClick={() => setActiveTab('audit')} icon={<ScrollText size={14} />}>Audit Log</TabButton>
       </div>
 
       {/* Content */}
@@ -115,6 +117,9 @@ export default function CanvasWorkspace({ post, onClose, onFork, onSummonSwarm }
         )}
         {activeTab === 'oracle' && (
           <OracleEngine post={post} />
+        )}
+        {activeTab === 'audit' && (
+          <AgentAuditLog post={post} />
         )}
       </div>
     </div>
