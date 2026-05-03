@@ -20,7 +20,7 @@ export default function PostCard({ post, isActive, onClick, theme = {} }) {
         ${isActive
           ? `${activeClasses} shadow-[${theme.shadow || '0_0_20px_rgba(34,211,238,0.1)'}]`
           : post.type === 'System Bounty' ? 'bg-red-900/10 border-red-500/30 hover:border-red-500/50'
-          : `bg-white/[0.01] border-white/5 hover:border-white/20 hover:bg-white/[0.03] ${theme.glow || ''}`
+          : `${theme.cardBg || 'bg-white/[0.01]'} border-white/5 hover:border-white/20 ${theme.glow || ''}`
         }
       `}
     >
@@ -51,7 +51,7 @@ export default function PostCard({ post, isActive, onClick, theme = {} }) {
         )}
       </div>
 
-      <h3 className="text-[14px] font-medium text-gray-100 mb-2 leading-snug">{post.title}</h3>
+      <h3 className={`text-[14px] font-medium mb-2 leading-snug ${isActive ? (theme.titleColor || 'text-white') : 'text-gray-100 group-hover:' + (theme.titleColor || 'text-white')}`}>{post.title}</h3>
       <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-4">{post.content}</p>
 
       <div className="flex items-center justify-between mt-auto">

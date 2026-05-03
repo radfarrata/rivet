@@ -22,15 +22,18 @@ export default function StreamPanel({
   const theme = SYNDICATE_THEMES[activeSyndicate] || SYNDICATE_THEMES.global;
 
   return (
-    <aside className={`
-      ${activePost ? 'hidden lg:flex' : 'flex'} 
-      w-full md:w-[380px] lg:w-[450px] h-[calc(100vh-53px)] md:h-screen 
-      border-r border-white/5 bg-[#07070A]/80 backdrop-blur-xl flex-col z-20 flex-shrink-0 relative shadow-2xl transition-all duration-300
-    `}>
+    <aside
+      className={`
+        ${activePost ? 'hidden lg:flex' : 'flex'} 
+        w-full md:w-[380px] lg:w-[450px] h-[calc(100vh-53px)] md:h-screen 
+        border-r border-white/5 backdrop-blur-xl flex-col z-20 flex-shrink-0 relative shadow-2xl transition-all duration-500
+      `}
+      style={{ background: theme.panelBg || 'rgba(7,7,10,0.92)' }}
+    >
       {/* Header & View Toggle */}
       <div
         className="p-4 md:p-5 border-b border-white/5 flex-shrink-0 transition-colors duration-500"
-        style={{ background: `linear-gradient(to bottom, color-mix(in srgb, ${theme.headerGlow} 100%, transparent), #07070A 90%)` }}
+        style={{ background: theme.headerBg }}
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-100 flex items-center gap-2 tracking-tight">

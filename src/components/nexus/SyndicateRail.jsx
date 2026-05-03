@@ -3,7 +3,7 @@ import { X as XIcon, LayoutDashboard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ConcentricLogo from './ConcentricLogo';
 import NexusAvatar from './NexusAvatar';
-import { SYNDICATES, CURRENT_USER } from './data';
+import { SYNDICATES, CURRENT_USER, SYNDICATE_THEMES } from './data';
 
 const MenuIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -44,6 +44,7 @@ export default function SyndicateRail({ activeSyndicate, setActiveSyndicate, set
         <div className="md:hidden w-full text-xs font-mono text-gray-500 uppercase tracking-widest mb-2 px-2 border-b border-white/10 pb-2">Syndicates</div>
         {SYNDICATES.map((syn) => {
           const isActive = activeSyndicate === syn.id;
+          const t = SYNDICATE_THEMES[syn.id] || SYNDICATE_THEMES.global;
           return (
             <div
               key={syn.id}
@@ -51,12 +52,11 @@ export default function SyndicateRail({ activeSyndicate, setActiveSyndicate, set
               onClick={() => { setActiveSyndicate(syn.id); setActivePost(null); setIsMobileNavOpen(false); }}
               title={syn.name}
             >
-              <div className={`absolute left-0 w-1 rounded-r-full transition-all duration-300 ${isActive ? 'h-8 md:h-8 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]' : 'h-0 bg-white/20 group-hover:h-4'}`} />
+              <div className={`absolute left-0 w-1 rounded-r-full transition-all duration-300 ${isActive ? `h-8 ${t.railIndicator}` : 'h-0 bg-white/20 group-hover:h-4'}`} />
               <div className={`
                 flex md:w-12 w-full h-12 md:rounded-xl rounded-lg items-center md:justify-center px-4 md:px-0
-                transition-all duration-300 
-                ${isActive ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.2)]' : 'bg-white/5 text-gray-500 border-transparent group-hover:bg-white/10 group-hover:text-gray-300'}
-                border
+                transition-all duration-300 border
+                ${isActive ? t.railActive : 'bg-white/5 text-gray-500 border-transparent group-hover:bg-white/10 group-hover:text-gray-300'}
               `}>
                 {React.cloneElement(syn.icon, { size: 22 })}
                 <span className="md:hidden ml-3 font-medium text-sm">{syn.name}</span>
