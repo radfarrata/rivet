@@ -8,13 +8,83 @@ export const CURRENT_USER = {
 };
 
 export const SYNDICATES = [
-  { id: 'global', name: 'Global Nexus', icon: <Globe /> },
-  { id: 'ai', name: 'AI Syndicate', icon: <BrainCircuit /> },
-  { id: 'infra', name: 'Infrastructure', icon: <Compass /> },
-  { id: 'depin', name: 'DePIN Network', icon: <Rocket /> },
-  { id: 'research', name: 'Research Lab', icon: <Microscope /> },
-  { id: 'archive', name: 'Archive Vault', icon: <Library /> },
+  { id: 'global',   name: 'Global Nexus',   icon: <Globe /> },
+  { id: 'ai',       name: 'AI Syndicate',   icon: <BrainCircuit /> },
+  { id: 'infra',    name: 'Infrastructure', icon: <Compass /> },
+  { id: 'depin',    name: 'DePIN Network',  icon: <Rocket /> },
+  { id: 'research', name: 'Research Lab',   icon: <Microscope /> },
+  { id: 'archive',  name: 'Archive Vault',  icon: <Library /> },
 ];
+
+// Per-syndicate visual theme used across StreamPanel, PostCard, etc.
+export const SYNDICATE_THEMES = {
+  global: {
+    accent: 'cyan',
+    headerGlow: 'rgba(34,211,238,0.08)',
+    borderActive: 'border-cyan-500/50',
+    bgActive: 'bg-cyan-900/10',
+    shadow: '0_0_20px_rgba(34,211,238,0.1)',
+    cardAccent: 'border-l-cyan-500',
+    searchFocus: 'focus:border-cyan-500/50',
+    badgeBg: 'bg-cyan-500/10 border-cyan-500/20 text-cyan-300',
+    glow: 'shadow-[0_0_30px_rgba(34,211,238,0.06)]',
+  },
+  ai: {
+    accent: 'violet',
+    headerGlow: 'rgba(139,92,246,0.1)',
+    borderActive: 'border-violet-500/50',
+    bgActive: 'bg-violet-900/10',
+    shadow: '0_0_20px_rgba(139,92,246,0.15)',
+    cardAccent: 'border-l-violet-500',
+    searchFocus: 'focus:border-violet-500/50',
+    badgeBg: 'bg-violet-500/10 border-violet-500/20 text-violet-300',
+    glow: 'shadow-[0_0_30px_rgba(139,92,246,0.08)]',
+  },
+  infra: {
+    accent: 'orange',
+    headerGlow: 'rgba(249,115,22,0.08)',
+    borderActive: 'border-orange-500/50',
+    bgActive: 'bg-orange-900/10',
+    shadow: '0_0_20px_rgba(249,115,22,0.1)',
+    cardAccent: 'border-l-orange-500',
+    searchFocus: 'focus:border-orange-500/50',
+    badgeBg: 'bg-orange-500/10 border-orange-500/20 text-orange-300',
+    glow: 'shadow-[0_0_30px_rgba(249,115,22,0.06)]',
+  },
+  depin: {
+    accent: 'red',
+    headerGlow: 'rgba(239,68,68,0.08)',
+    borderActive: 'border-red-500/50',
+    bgActive: 'bg-red-900/10',
+    shadow: '0_0_20px_rgba(239,68,68,0.12)',
+    cardAccent: 'border-l-red-500',
+    searchFocus: 'focus:border-red-500/50',
+    badgeBg: 'bg-red-500/10 border-red-500/20 text-red-300',
+    glow: 'shadow-[0_0_30px_rgba(239,68,68,0.06)]',
+  },
+  research: {
+    accent: 'emerald',
+    headerGlow: 'rgba(16,185,129,0.08)',
+    borderActive: 'border-emerald-500/50',
+    bgActive: 'bg-emerald-900/10',
+    shadow: '0_0_20px_rgba(16,185,129,0.1)',
+    cardAccent: 'border-l-emerald-500',
+    searchFocus: 'focus:border-emerald-500/50',
+    badgeBg: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300',
+    glow: 'shadow-[0_0_30px_rgba(16,185,129,0.06)]',
+  },
+  archive: {
+    accent: 'amber',
+    headerGlow: 'rgba(245,158,11,0.08)',
+    borderActive: 'border-amber-500/50',
+    bgActive: 'bg-amber-900/10',
+    shadow: '0_0_20px_rgba(245,158,11,0.1)',
+    cardAccent: 'border-l-amber-500',
+    searchFocus: 'focus:border-amber-500/50',
+    badgeBg: 'bg-amber-500/10 border-amber-500/20 text-amber-300',
+    glow: 'shadow-[0_0_30px_rgba(245,158,11,0.06)]',
+  },
+};
 
 export const INITIAL_POSTS = [
   {

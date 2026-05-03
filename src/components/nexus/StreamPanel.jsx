@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Layers, Share2 } from 'lucide-react';
-import { SYNDICATES } from './data';
+import { SYNDICATES, SYNDICATE_THEMES } from './data';
 import Composer from './Composer';
 import PostCard from './PostCard';
 import TopologyView from './TopologyView';
@@ -19,6 +19,7 @@ export default function StreamPanel({
   setSearchQuery,
 }) {
   const currentSyndicate = SYNDICATES.find(s => s.id === activeSyndicate);
+  const theme = SYNDICATE_THEMES[activeSyndicate] || SYNDICATE_THEMES.global;
 
   return (
     <aside className={`
@@ -27,7 +28,10 @@ export default function StreamPanel({
       border-r border-white/5 bg-[#07070A]/80 backdrop-blur-xl flex-col z-20 flex-shrink-0 relative shadow-2xl transition-all duration-300
     `}>
       {/* Header & View Toggle */}
-      <div className="p-4 md:p-5 border-b border-white/5 bg-black/40 flex-shrink-0">
+      <div
+        className="p-4 md:p-5 border-b border-white/5 flex-shrink-0 transition-colors duration-500"
+        style={{ background: `linear-gradient(to bottom, color-mix(in srgb, ${theme.headerGlow} 100%, transparent), #07070A 90%)` }}
+      >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-100 flex items-center gap-2 tracking-tight">
             {currentSyndicate?.icon}
@@ -56,7 +60,7 @@ export default function StreamPanel({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Query semantic graph..."
-            className="w-full bg-white/[0.02] border border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all"
+            className={`w-full bg-white/[0.02] border border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:bg-white/[0.05] transition-all ${theme.searchFocus}`}
           />
         </div>
       </div>
@@ -87,6 +91,7 @@ export default function StreamPanel({
                 post={post}
                 isActive={activePost?.id === post.id}
                 onClick={() => setActivePost(post)}
+                theme={theme}
               />
             ))}
           </div>

@@ -2,25 +2,30 @@ import React from 'react';
 import { Activity, GitBranch, Target } from 'lucide-react';
 import NexusAvatar from './NexusAvatar';
 import NexusBadge from './NexusBadge';
+import { SYNDICATE_THEMES } from './data';
 
-export default function PostCard({ post, isActive, onClick }) {
+export default function PostCard({ post, isActive, onClick, theme = {} }) {
   const badgeColor = post.type === 'Verified Execution' ? 'emerald'
     : post.type === 'System Bounty' ? 'red'
     : post.isAgent ? 'cyan' : 'purple';
 
+  const activeClasses = theme.bgActive && theme.borderActive
+    ? `${theme.bgActive} ${theme.borderActive}`
+    : 'bg-cyan-900/10 border-cyan-500/50';
+
   return (
     <div
       onClick={onClick}
-      className={`group relative border rounded-xl p-4 transition-all duration-300 cursor-pointer overflow-hidden
+      className={`group relative border rounded-xl p-4 transition-all duration-300 cursor-pointer overflow-hidden border-l-2
         ${isActive
-          ? 'bg-cyan-900/10 border-cyan-500/50 shadow-[0_0_20px_rgba(34,211,238,0.1)]'
+          ? `${activeClasses} shadow-[${theme.shadow || '0_0_20px_rgba(34,211,238,0.1)'}]`
           : post.type === 'System Bounty' ? 'bg-red-900/10 border-red-500/30 hover:border-red-500/50'
-          : 'bg-white/[0.01] border-white/5 hover:border-white/20 hover:bg-white/[0.03]'
+          : `bg-white/[0.01] border-white/5 hover:border-white/20 hover:bg-white/[0.03] ${theme.glow || ''}`
         }
       `}
     >
       {isActive && (
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,1)]" />
+        <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${theme.cardAccent ? theme.cardAccent.replace('border-l-', 'bg-') : 'bg-cyan-400'} shadow-[0_0_10px_rgba(34,211,238,0.8)]`} />
       )}
       {post.isResolving && (
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
@@ -33,7 +38,7 @@ export default function PostCard({ post, isActive, onClick }) {
         <div className="flex items-center gap-3">
           <NexusAvatar name={post.author} size="sm" isAgent={post.isAgent} />
           <div>
-            <div className={`text-sm font-semibold transition-colors ${post.isAgent ? 'text-cyan-300 group-hover:text-cyan-200' : 'text-gray-200 group-hover:text-purple-300'}`}>
+            <div className={`text-sm font-semibold transition-colors ${post.isAgent ? `text-cyan-300 group-hover:text-cyan-200` : 'text-gray-200 group-hover:text-gray-100'}`}>
               {post.author}
             </div>
             <div className="text-[10px] font-mono text-gray-500">{post.time} • {post.isAgent ? 'Autonomous' : 'Human'}</div>
