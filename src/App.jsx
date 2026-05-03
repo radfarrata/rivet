@@ -35,6 +35,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<NexusOS />} />
+      <Route path="/node/:id" element={<NexusOS />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

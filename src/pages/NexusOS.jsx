@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import SyndicateRail, { MobileHeader } from '../components/nexus/SyndicateRail';
 import StreamPanel from '../components/nexus/StreamPanel';
 import CanvasWorkspace from '../components/nexus/CanvasWorkspace';
@@ -6,6 +7,8 @@ import EmptyCanvasState from '../components/nexus/EmptyCanvasState';
 import { CURRENT_USER, INITIAL_POSTS } from '../components/nexus/data';
 
 export default function NexusOS() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [activeSyndicate, setActiveSyndicate] = useState('global');
   const [posts, setPosts] = useState(INITIAL_POSTS);
   const [activePost, setActivePost] = useState(null);
@@ -13,6 +16,23 @@ export default function NexusOS() {
   const [viewMode, setViewMode] = useState('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  // Deep link: open post from URL param
+  useEffect(() => {
+    if (id) {
+      const found = posts.find(p => String(p.id) === String(id));
+      if (found) setActivePost(found);
+    }
+  }, [id]);
+
+  const handleSetActivePost = (post) => {
+    setActivePost(post);
+    if (post) {
+      navigate(`/node/${post.id}`, { replace: true });
+    } else {
+      navigate('/', { replace: true });
+    }
+  };
 
   const filteredPosts = posts.filter(p => {
     const matchesSyndicate = activeSyndicate === 'global' ? true : p.syndicate === activeSyndicate;
@@ -104,7 +124,7 @@ export default function NexusOS() {
       <SyndicateRail
         activeSyndicate={activeSyndicate}
         setActiveSyndicate={setActiveSyndicate}
-        setActivePost={setActivePost}
+        setActivePost={handleSetActivePost}
         isMobileNavOpen={isMobileNavOpen}
         setIsMobileNavOpen={setIsMobileNavOpen}
       />
@@ -114,7 +134,7 @@ export default function NexusOS() {
         activeSyndicate={activeSyndicate}
         posts={filteredPosts}
         activePost={activePost}
-        setActivePost={setActivePost}
+        setActivePost={handleSetActivePost}
         composerText={composerText}
         setComposerText={setComposerText}
         onExecute={handleExecute}
@@ -132,7 +152,7 @@ export default function NexusOS() {
         {activePost ? (
           <CanvasWorkspace
             post={activePost}
-            onClose={() => setActivePost(null)}
+            onClose={() => handleSetActivePost(null)}
             onFork={handleFork}
             onSummonSwarm={handleSummonSwarm}
           />

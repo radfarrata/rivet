@@ -63,8 +63,12 @@ export default function CanvasWorkspace({ post, onClose, onFork, onSummonSwarm }
       {/* Header */}
       <header className="h-auto min-h-[72px] py-4 md:py-0 border-b border-white/5 bg-[#050507]/90 backdrop-blur-md px-4 md:px-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 flex-shrink-0 relative">
         <div className="flex items-start md:items-center gap-3 md:gap-4 pr-10 md:pr-0">
-          <button onClick={onClose} className="md:hidden mt-1 p-1 bg-white/5 hover:bg-white/10 rounded-lg text-gray-400">
-            <ArrowLeft size={18} />
+          <button
+            onClick={onClose}
+            className="md:hidden mt-0.5 flex items-center gap-1.5 px-2 py-1.5 bg-white/5 hover:bg-white/10 active:bg-white/20 rounded-lg text-gray-300 text-xs font-medium transition-colors flex-shrink-0"
+          >
+            <ArrowLeft size={15} />
+            Back
           </button>
           <div className={`p-2 rounded-lg border flex-shrink-0 ${post.isAgent ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400' : 'bg-purple-500/10 border-purple-500/20 text-purple-400'}`}>
             <Network className="w-5 h-5" />

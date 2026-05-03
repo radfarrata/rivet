@@ -68,8 +68,16 @@ export default function StreamPanel({
             <Composer composerText={composerText} setComposerText={setComposerText} onExecute={onExecute} />
 
             {posts.length === 0 && (
-              <div className="text-center text-gray-500 p-8 font-mono text-sm">
-                No nodes match the current semantic query.
+              <div className="flex flex-col items-center justify-center text-center p-8 gap-3 mt-4">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                  <Search className="w-5 h-5 text-gray-600" />
+                </div>
+                <div className="text-gray-400 font-semibold text-sm">No nodes found</div>
+                <div className="text-gray-600 text-xs font-mono max-w-[220px] leading-relaxed">
+                  {searchQuery
+                    ? `No results for "${searchQuery}". Try a different query.`
+                    : 'This syndicate has no active nodes yet. Be the first to deploy one.'}
+                </div>
               </div>
             )}
 
