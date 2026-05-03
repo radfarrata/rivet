@@ -1,5 +1,6 @@
 import React from 'react';
-import { X as XIcon } from 'lucide-react';
+import { X as XIcon, LayoutDashboard } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import ConcentricLogo from './ConcentricLogo';
 import NexusAvatar from './NexusAvatar';
 import { SYNDICATES, CURRENT_USER } from './data';
@@ -26,6 +27,7 @@ export function MobileHeader({ isMobileNavOpen, setIsMobileNavOpen }) {
 }
 
 export default function SyndicateRail({ activeSyndicate, setActiveSyndicate, setActivePost, isMobileNavOpen, setIsMobileNavOpen }) {
+  const navigate = useNavigate();
   return (
     <aside className={`
       absolute md:relative z-40 h-[calc(100vh-53px)] md:h-screen w-full md:w-[72px] 
@@ -62,6 +64,17 @@ export default function SyndicateRail({ activeSyndicate, setActiveSyndicate, set
             </div>
           );
         })}
+      </div>
+
+      <div className="md:w-auto w-full px-4 md:px-0 mb-2">
+        <div
+          className="flex md:w-12 w-full h-12 md:rounded-xl rounded-lg items-center md:justify-center px-4 md:px-0 transition-all duration-300 bg-white/5 text-gray-500 border border-transparent hover:bg-white/10 hover:text-gray-300 cursor-pointer"
+          onClick={() => { navigate('/dashboard'); setIsMobileNavOpen(false); }}
+          title="Agent Dashboard"
+        >
+          <LayoutDashboard size={22} />
+          <span className="md:hidden ml-3 font-medium text-sm">Agent Dashboard</span>
+        </div>
       </div>
 
       <div className="mt-auto md:w-auto w-full px-4 md:px-0 pb-4 md:pb-0">
