@@ -439,8 +439,8 @@ export function AppEmptyCanvas({ onCmdK }) {
           <Terminal size={48} className="text-zinc-300"/>
         </div>
       </div>
-      <h2 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">Execution Queue</h2>
-      <p className="text-zinc-400 max-w-sm leading-relaxed text-sm mb-6">Select an item from the execution feed to review specs, run verifications, or orchestrate agents.</p>
+      <h2 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">Rivet</h2>
+      <p className="text-zinc-400 max-w-sm leading-relaxed text-sm mb-6">Select an item from the feed to review specs, run verifications, or deploy agents.</p>
       <AppButton variant="secondary" onClick={onCmdK} className="text-xs">Press Cmd + K to Search</AppButton>
     </div>
   );

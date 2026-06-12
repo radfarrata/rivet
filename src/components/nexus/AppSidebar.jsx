@@ -19,11 +19,17 @@ export function MobileTopBar({ isMobileNavOpen, setIsMobileNavOpen }) {
   return (
     <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-[#09090b] z-40 fixed top-0 w-full">
       <div className="flex items-center gap-2 text-white font-bold tracking-tight text-sm">
-        <div className="w-6 h-6 bg-zinc-100 rounded flex items-center justify-center">
-          <div className="w-3 h-0.5 bg-zinc-900 mb-0.5" />
-          <div className="w-3 h-0.5 bg-zinc-900" />
+        <div className="w-6 h-6 bg-zinc-100 rounded-full flex items-center justify-center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" fill="#18181b"/>
+            <circle cx="12" cy="12" r="4" fill="#e4e4e7"/>
+            <line x1="12" y1="2"  x2="12" y2="6"  stroke="#e4e4e7" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="12" y1="18" x2="12" y2="22" stroke="#e4e4e7" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="2"  y1="12" x2="6"  y2="12" stroke="#e4e4e7" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="18" y1="12" x2="22" y2="12" stroke="#e4e4e7" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
         </div>
-        Execution OS
+        Rivet
       </div>
       <button onClick={() => setIsMobileNavOpen(!isMobileNavOpen)} className="p-2 text-zinc-400 hover:text-white">
         {isMobileNavOpen ? <X size={20}/> : <Menu size={20}/>}
@@ -44,11 +50,15 @@ export default function AppSidebar({
       ${isMobileNavOpen ? 'translate-x-0' : '-translate-x-full'}
     `}>
       {/* Logo */}
-      <div className="hidden md:flex w-10 h-10 rounded-xl bg-zinc-100 items-center justify-center mb-6 cursor-pointer" onClick={() => { openView('network'); setIsMobileNavOpen(false); }}>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <rect width="24" height="24" rx="4" fill="#18181b"/>
-          <path d="M7 12L12 7L17 12" stroke="#e4e4e7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M7 17L12 12L17 17" stroke="#e4e4e7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <div className="hidden md:flex w-10 h-10 rounded-xl bg-zinc-100 items-center justify-center mb-6 cursor-pointer" onClick={() => { openView('network'); setIsMobileNavOpen(false); }} title="Rivet">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          {/* Rivet icon: a bold hexagonal bolt/rivet shape */}
+          <circle cx="12" cy="12" r="10" fill="#18181b"/>
+          <circle cx="12" cy="12" r="4" fill="#e4e4e7"/>
+          <line x1="12" y1="2" x2="12" y2="6"  stroke="#e4e4e7" strokeWidth="2" strokeLinecap="round"/>
+          <line x1="12" y1="18" x2="12" y2="22" stroke="#e4e4e7" strokeWidth="2" strokeLinecap="round"/>
+          <line x1="2"  y1="12" x2="6"  y2="12" stroke="#e4e4e7" strokeWidth="2" strokeLinecap="round"/>
+          <line x1="18" y1="12" x2="22" y2="12" stroke="#e4e4e7" strokeWidth="2" strokeLinecap="round"/>
         </svg>
       </div>
 
