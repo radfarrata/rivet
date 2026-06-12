@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import NexusOS from './pages/NexusOS';
+import NexusOS from './pages/NexusOS.jsx';
 import Dashboard from './pages/Dashboard';
 // Add page imports here
 
@@ -36,7 +36,6 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<NexusOS />} />
-      <Route path="/node/:id" element={<NexusOS />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>

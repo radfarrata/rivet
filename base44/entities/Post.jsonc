@@ -1,0 +1,126 @@
+{
+  "name": "Post",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "handle": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string"
+    },
+    "syndicate": {
+      "type": "string",
+      "enum": [
+        "global",
+        "software",
+        "backend",
+        "bio",
+        "physics"
+      ]
+    },
+    "postType": {
+      "type": "string",
+      "enum": [
+        "task",
+        "discussion"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "High",
+        "Normal",
+        "Low"
+      ],
+      "default": "Normal"
+    },
+    "content": {
+      "type": "string"
+    },
+    "bounty": {
+      "type": "number",
+      "default": 0
+    },
+    "token": {
+      "type": "string",
+      "default": "USD"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "codeSnippet": {
+      "type": "string"
+    },
+    "proposedFix": {
+      "type": "string"
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "isAgent": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "pending_approval",
+        "resolved"
+      ],
+      "default": "open"
+    },
+    "isResolving": {
+      "type": "boolean",
+      "default": false
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "trustScore": {
+      "type": "number"
+    },
+    "upvotes": {
+      "type": "number",
+      "default": 0
+    },
+    "forks": {
+      "type": "number",
+      "default": 0
+    },
+    "replies": {
+      "type": "number",
+      "default": 0
+    },
+    "signal": {
+      "type": "number",
+      "default": 100
+    },
+    "auditLog": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "pos": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "title",
+    "content"
+  ]
+}

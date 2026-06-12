@@ -1,0 +1,19 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "channelId": {
+      "type": "string"
+    },
+    "authorName": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "channelId",
+    "text"
+  ]
+}
