@@ -1,25 +1,13 @@
-import React, { useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import React, { useState } from 'react';
 import PostCard from '../PostCard';
 import PostComposer from '../PostComposer';
+import PostDetailModal from '../PostDetailModal';
+import { usePosts, useUpvote } from '../usePosts';
 
 export default function FeedView({ currentUser }) {
-  const queryClient = useQueryClient();
-  const { data: posts = [], isLoading } = useQuery({
-    queryKey: ['rivet-posts'],
-    queryFn: () => base44.entities.Post.list('-created_date', 50),
-  });
-
-  useEffect(() => {
-    const unsub = base44.entities.Post.subscribe(() => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }));
-    return unsub;
-  }, [queryClient]);
-
-  const upvote = useMutation({
-    mutationFn: ({ id, upvotes }) => base44.entities.Post.update(id, { upvotes: (upvotes || 0) + 1 }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
+  const { data: posts = [], isLoading } = usePosts();
+  const upvote = useUpvote();
+  const [selectedPost, setSelectedPost] = useState(null);
 
   return (
     <div className="space-y-5">
@@ -37,10 +25,11 @@ export default function FeedView({ currentUser }) {
       ) : (
         <div className="space-y-4">
           {posts.map(post => (
-            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} />
+            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} />
           ))}
         </div>
       )}
+      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} />}
     </div>
   );
 }

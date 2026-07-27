@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import React, { useState } from 'react';
 import { Calendar, MessageSquare, Users } from 'lucide-react';
 import PostCard from '../PostCard';
+import PostDetailModal from '../PostDetailModal';
+import { usePosts, useUpvote } from '../usePosts';
 
 const EVENTS = [
   { id: 1, title: 'Rivet Hackathon 2026', date: 'Aug 15', time: '10:00 AM', attendees: 234, type: 'Hackathon' },
@@ -12,22 +12,10 @@ const EVENTS = [
 ];
 
 export default function CommunityViews({ mode = 'discussions', currentUser }) {
-  const queryClient = useQueryClient();
+  const { data: posts = [], isLoading } = usePosts();
+  const upvote = useUpvote();
   const [filter, setFilter] = useState('all');
-  const { data: posts = [], isLoading } = useQuery({
-    queryKey: ['rivet-posts'],
-    queryFn: () => base44.entities.Post.list('-created_date', 50),
-  });
-
-  useEffect(() => {
-    const unsub = base44.entities.Post.subscribe(() => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }));
-    return unsub;
-  }, [queryClient]);
-
-  const upvote = useMutation({
-    mutationFn: ({ id, upvotes }) => base44.entities.Post.update(id, { upvotes: (upvotes || 0) + 1 }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
+  const [selectedPost, setSelectedPost] = useState(null);
 
   if (mode === 'events') {
     return (
@@ -84,10 +72,11 @@ export default function CommunityViews({ mode = 'discussions', currentUser }) {
       ) : (
         <div className="space-y-4">
           {filtered.map(post => (
-            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} />
+            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} />
           ))}
         </div>
       )}
+      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} />}
     </div>
   );
 }
