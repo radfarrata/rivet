@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import NexusOS from './pages/NexusOS.jsx';
 import Dashboard from './pages/Dashboard';
+import RivetDashboard from './pages/RivetDashboard.jsx';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -35,7 +36,8 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      <Route path="/" element={<NexusOS />} />
+      <Route path="/" element={<RivetDashboard />} />
+      <Route path="/network" element={<NexusOS />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
