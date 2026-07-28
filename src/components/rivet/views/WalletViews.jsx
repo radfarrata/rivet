@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, CheckCircle2, Wallet as WalletIcon } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, Wallet as WalletIcon, TrendingUp, ArrowDown, Clock, ChevronRight } from 'lucide-react';
 import { useTransactions, useCreateTransaction } from '../useTransactions';
 
 function formatDate(dateStr) {
@@ -8,11 +8,134 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function formatRelative(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const diffMin = Math.floor((Date.now() - d) / 60000);
+  if (diffMin < 1) return 'just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffH = Math.floor(diffMin / 60);
+  if (diffH < 24) return `${diffH}h ago`;
+  const diffD = Math.floor(diffH / 24);
+  if (diffD < 30) return `${diffD}d ago`;
+  return formatDate(dateStr);
+}
+
+const FILTERS = [
+  { id: 'all', label: 'All' },
+  { id: 'earned', label: 'Earned' },
+  { id: 'withdrawn', label: 'Withdrawn' },
+  { id: 'pending', label: 'Pending' },
+];
+
+function SummaryStats({ transactions }) {
+  const earned = transactions.filter(t => t.type === 'earned' && t.status === 'completed').reduce((s, t) => s + (t.amount || 0), 0);
+  const withdrawn = transactions.filter(t => t.type === 'withdrawn' && t.status === 'completed').reduce((s, t) => s + (t.amount || 0), 0);
+  const pending = transactions.filter(t => t.status === 'pending').reduce((s, t) => s + Math.abs(t.amount || 0), 0);
+
+  const stats = [
+    { label: 'Total Earned', value: `+${earned.toLocaleString()}`, unit: 'pts', icon: <TrendingUp size={16} />, color: 'text-green-600', bg: 'bg-green-50' },
+    { label: 'Total Withdrawn', value: `${withdrawn.toLocaleString()}`, unit: 'pts', icon: <ArrowDown size={16} />, color: 'text-red-600', bg: 'bg-red-50' },
+    { label: 'Pending', value: `${pending.toLocaleString()}`, unit: 'pts', icon: <Clock size={16} />, color: 'text-amber-600', bg: 'bg-amber-50' },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {stats.map(s => (
+        <div key={s.label} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4">
+          <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${s.bg} ${s.color}`}>{s.icon}</div>
+          <div>
+            <p className="text-xs text-gray-400 font-medium">{s.label}</p>
+            <p className="text-lg font-bold text-gray-900">{s.value} <span className="text-xs text-gray-400 font-normal">{s.unit}</span></p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function StatusBadge({ status }) {
+  const styles = {
+    completed: 'bg-green-100 text-green-600',
+    pending: 'bg-amber-100 text-amber-600',
+  };
+  return <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${styles[status] || 'bg-gray-100 text-gray-500'}`}>{status}</span>;
+}
+
+function TransactionRow({ t }) {
+  const isEarned = t.amount > 0;
+  return (
+    <tr className="hover:bg-gray-50 transition-colors">
+      <td className="px-5 py-3.5">
+        <div className="flex items-center gap-3">
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${isEarned ? 'bg-green-100' : 'bg-red-100'}`}>
+            {isEarned ? <CheckCircle2 size={14} className="text-green-600" /> : <ArrowUpRight size={14} className="text-red-600" />}
+          </div>
+          <span className="text-gray-800 font-medium">{t.description}</span>
+        </div>
+      </td>
+      <td className="px-5 py-3.5 text-gray-400 text-xs">{formatRelative(t.created_date)}</td>
+      <td className="px-5 py-3.5"><StatusBadge status={t.status} /></td>
+      <td className={`px-5 py-3.5 text-right font-bold ${isEarned ? 'text-green-600' : 'text-red-600'}`}>{isEarned ? '+' : ''}{t.amount} pts</td>
+    </tr>
+  );
+}
+
+function TransactionsTable() {
+  const { data: transactions = [], isLoading } = useTransactions();
+  const [filter, setFilter] = useState('all');
+
+  const filtered = transactions.filter(t => {
+    if (filter === 'all') return true;
+    if (filter === 'pending') return t.status === 'pending';
+    return t.type === filter;
+  });
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h2 className="text-xl font-bold text-gray-900">Transactions</h2>
+        <p className="text-sm text-gray-500 mt-0.5">Live history of all your earnings and withdrawals</p>
+      </div>
+
+      <SummaryStats transactions={transactions} />
+
+      <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit">
+        {FILTERS.map(f => (
+          <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>{f.label}</button>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 text-xs text-gray-400 uppercase tracking-wide">
+                <th className="text-left font-medium px-5 py-3">Description</th>
+                <th className="text-left font-medium px-5 py-3">Date</th>
+                <th className="text-left font-medium px-5 py-3">Status</th>
+                <th className="text-right font-medium px-5 py-3">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {isLoading ? (
+                <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">Loading transactions...</td></tr>
+              ) : filtered.length === 0 ? (
+                <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">No transactions match this filter.</td></tr>
+              ) : (
+                filtered.map(t => <TransactionRow key={t.id} t={t} />)
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function WalletHome() {
   const { data: transactions = [], isLoading } = useTransactions();
-  const balance = transactions
-    .filter((t) => t.status === 'completed')
-    .reduce((sum, t) => sum + (t.amount || 0), 0);
+  const balance = transactions.filter(t => t.status === 'completed').reduce((sum, t) => sum + (t.amount || 0), 0);
   const recent = transactions.slice(0, 5);
 
   return (
@@ -26,24 +149,32 @@ function WalletHome() {
           <div className="h-2 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-violet-400 to-blue-400 rounded-full" style={{ width: `${Math.min(100, (balance / 15000) * 100)}%` }} /></div>
         </div>
       </div>
-      <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <h3 className="text-base font-bold text-gray-900 mb-4">Recent Transactions</h3>
-        <div className="space-y-3">
-          {isLoading ? (
-            [...Array(3)].map((_, i) => <div key={i} className="h-10 bg-gray-50 rounded-lg animate-pulse" />)
-          ) : recent.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-4">No transactions yet.</p>
-          ) : (
-            recent.map((t) => (
-              <div key={t.id} className="flex items-center gap-3">
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${t.amount > 0 ? 'bg-green-100' : 'bg-red-100'}`}>
-                  {t.amount > 0 ? <CheckCircle2 size={16} className="text-green-600" /> : <ArrowUpRight size={16} className="text-red-600" />}
-                </div>
-                <div className="flex-1 min-w-0"><p className="text-sm font-medium text-gray-800 truncate">{t.description}</p><p className="text-xs text-gray-400">{formatDate(t.created_date)}</p></div>
-                <span className={`text-sm font-bold flex-shrink-0 ${t.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{t.amount > 0 ? '+' : ''}{t.amount} pts</span>
-              </div>
-            ))
-          )}
+
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <h3 className="text-base font-bold text-gray-900">Recent Payments</h3>
+          <span className="text-xs text-gray-400">{transactions.length} total</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-50 text-xs text-gray-400 uppercase tracking-wide">
+                <th className="text-left font-medium px-5 py-2.5">Description</th>
+                <th className="text-left font-medium px-5 py-2.5">Date</th>
+                <th className="text-left font-medium px-5 py-2.5">Status</th>
+                <th className="text-right font-medium px-5 py-2.5">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {isLoading ? (
+                <tr><td colSpan={4} className="px-5 py-6 text-center text-gray-400">Loading...</td></tr>
+              ) : recent.length === 0 ? (
+                <tr><td colSpan={4} className="px-5 py-6 text-center text-gray-400">No transactions yet.</td></tr>
+              ) : (
+                recent.map(t => <TransactionRow key={t.id} t={t} />)
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -57,9 +188,7 @@ function WithdrawForm() {
   const { data: transactions = [] } = useTransactions();
   const createTxn = useCreateTransaction();
 
-  const balance = transactions
-    .filter((t) => t.status === 'completed')
-    .reduce((sum, t) => sum + (t.amount || 0), 0);
+  const balance = transactions.filter(t => t.status === 'completed').reduce((sum, t) => sum + (t.amount || 0), 0);
 
   const handleWithdraw = () => {
     if (Number(amount) < 1000) return;
@@ -102,46 +231,6 @@ function WithdrawForm() {
           </div>
         </div>
         <button onClick={handleWithdraw} disabled={Number(amount) < 1000 || createTxn.isPending} className="w-full bg-violet-600 hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">Withdraw {amount && `${amount} pts`}</button>
-      </div>
-    </div>
-  );
-}
-
-function TransactionsTable() {
-  const { data: transactions = [], isLoading } = useTransactions();
-
-  return (
-    <div className="space-y-5">
-      <div><h2 className="text-xl font-bold text-gray-900">Transactions</h2><p className="text-sm text-gray-500 mt-0.5">All your earnings and withdrawals</p></div>
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-gray-100 text-xs text-gray-400 uppercase tracking-wide">
-              <th className="text-left font-medium px-5 py-3">Description</th>
-              <th className="text-left font-medium px-5 py-3">Date</th>
-              <th className="text-left font-medium px-5 py-3">Status</th>
-              <th className="text-right font-medium px-5 py-3">Amount</th>
-            </tr></thead>
-            <tbody className="divide-y divide-gray-50">
-              {isLoading ? (
-                <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">Loading transactions...</td></tr>
-              ) : transactions.length === 0 ? (
-                <tr><td colSpan={4} className="px-5 py-8 text-center text-gray-400">No transactions yet.</td></tr>
-              ) : (
-                transactions.map((t) => (
-                  <tr key={t.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3.5 text-gray-800 font-medium">{t.description}</td>
-                    <td className="px-5 py-3.5 text-gray-400">{formatDate(t.created_date)}</td>
-                    <td className="px-5 py-3.5">
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${t.status === 'completed' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>{t.status}</span>
-                    </td>
-                    <td className={`px-5 py-3.5 text-right font-bold ${t.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>{t.amount > 0 ? '+' : ''}{t.amount} pts</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );
