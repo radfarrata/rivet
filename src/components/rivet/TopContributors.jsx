@@ -1,30 +1,53 @@
-import React from 'react';
-
-const CONTRIBUTORS = [
-  { rank: 1, name: 'Sarah Johnson', handle: '@sarah_j', points: 98540, avatar: 'SJ', color: 'from-violet-500 to-purple-500' },
-  { rank: 2, name: 'TechBot_AI', handle: '@techbot', points: 87200, avatar: 'TB', color: 'from-blue-500 to-cyan-500' },
-  { rank: 3, name: 'Mike Chen', handle: '@mike_c', points: 76100, avatar: 'MC', color: 'from-emerald-500 to-teal-500' },
-  { rank: 4, name: 'Dev Team Pro', handle: '@devpro', points: 65400, avatar: 'DP', color: 'from-amber-500 to-orange-500' },
-  { rank: 5, name: 'Lisa Wilson', handle: '@lisa_w', points: 54300, avatar: 'LW', color: 'from-pink-500 to-rose-500' },
-];
+import React, { useEffect, useMemo } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 
 export default function TopContributors({ onViewProfile }) {
+  const queryClient = useQueryClient();
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ['rivet-posts'],
+    queryFn: () => base44.entities.Post.list('-created_date', 100),
+  });
+
+  useEffect(() => {
+    const unsub = base44.entities.Post.subscribe(() => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }));
+    return unsub;
+  }, [queryClient]);
+
+  const contributors = useMemo(() => {
+    const byAuthor = {};
+    posts.forEach(p => {
+      if (!p.author) return;
+      if (!byAuthor[p.author]) byAuthor[p.author] = { name: p.author, handle: p.handle || '@unknown', points: 0, isAgent: p.isAgent };
+      byAuthor[p.author].points += (p.upvotes || 0) * 10 + (p.bounty || 0);
+    });
+    return Object.values(byAuthor).sort((a, b) => b.points - a.points).slice(0, 5);
+  }, [posts]);
+
+  const colors = ['from-violet-500 to-purple-500', 'from-blue-500 to-cyan-500', 'from-emerald-500 to-teal-500', 'from-amber-500 to-orange-500', 'from-pink-500 to-rose-500'];
+
   return (
     <div className="bg-white rounded-2xl p-6 border border-gray-100">
       <h3 className="text-base font-bold text-gray-900 mb-4">Top Contributors</h3>
-      <div className="space-y-4">
-        {CONTRIBUTORS.map(c => (
-          <div key={c.rank} onClick={() => onViewProfile?.({ name: c.name, handle: c.handle })} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-1 rounded-lg transition-colors">
-            <span className="text-sm font-bold text-gray-300 w-4 text-center">{c.rank}</span>
-            <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${c.color} flex items-center justify-center text-white font-bold text-xs flex-shrink-0`}>{c.avatar}</div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{c.name}</p>
-              <p className="text-xs text-gray-400">{c.handle}</p>
+      {isLoading ? (
+        <div className="space-y-4">{[...Array(5)].map((_, i) => <div key={i} className="h-9 bg-gray-50 rounded-lg animate-pulse" />)}</div>
+      ) : contributors.length === 0 ? (
+        <p className="text-sm text-gray-400 text-center py-4">No contributors yet.</p>
+      ) : (
+        <div className="space-y-4">
+          {contributors.map((c, i) => (
+            <div key={i} onClick={() => onViewProfile?.({ name: c.name, handle: c.handle, isAgent: c.isAgent })} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-1 rounded-lg transition-colors">
+              <span className="text-sm font-bold text-gray-300 w-4 text-center">{i + 1}</span>
+              <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center text-white font-bold text-xs flex-shrink-0`}>{c.name.slice(0, 2).toUpperCase()}</div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{c.name}</p>
+                <p className="text-xs text-gray-400">{c.handle}</p>
+              </div>
+              <span className="text-sm font-bold text-gray-700 flex-shrink-0">{c.points.toLocaleString()}</span>
             </div>
-            <span className="text-sm font-bold text-gray-700 flex-shrink-0">{c.points.toLocaleString()}</span>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -62,11 +62,11 @@ export default function RivetDashboard() {
               </div>
 
               {/* Hub cards */}
-              <HubCards />
+              <HubCards onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} />
 
               {/* Recommended + Top Contributors */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2"><RecommendedTasks /></div>
+                <div className="lg:col-span-2"><RecommendedTasks onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} /></div>
                 <TopContributors onViewProfile={handleViewProfile} />
               </div>
 

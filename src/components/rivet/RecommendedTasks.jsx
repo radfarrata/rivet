@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PenTool, Bug, FileText, MessageSquare, Image as ImageIcon, Code } from 'lucide-react';
+import { PenTool, Bug, FileText, MessageSquare, Image as ImageIcon, Code, ArrowRight } from 'lucide-react';
 
 const BUILD_TASKS = [
   { id: 1, title: 'Landing Page Design', tags: ['Design', 'UI/UX'], points: 350, deadline: '2d left', icon: <PenTool size={18} /> },
@@ -13,13 +13,13 @@ const TRAINING_TASKS = [
   { id: 6, title: 'Evaluate Code Outputs', tags: ['Code', 'Quality'], points: 120, deadline: '6h left', icon: <Code size={18} /> },
 ];
 
-export default function RecommendedTasks() {
+export default function RecommendedTasks({ onNavigate }) {
   const [tab, setTab] = useState('build');
   const tasks = tab === 'build' ? BUILD_TASKS : TRAINING_TASKS;
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-      <div className="flex flex-wrap items-center gap-4 border-b border-gray-100 px-6 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 px-6 py-4">
         <h3 className="text-base font-bold text-gray-900">Recommended for you</h3>
         <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
           <button onClick={() => setTab('build')} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${tab === 'build' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>Build Tasks</button>
@@ -28,22 +28,19 @@ export default function RecommendedTasks() {
       </div>
       <div className="divide-y divide-gray-50">
         {tasks.map(task => (
-          <div key={task.id} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer">
-            <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-600">
-              {task.icon}
-            </div>
+          <div key={task.id} onClick={() => onNavigate?.(tab === 'build' ? 'projects' : 'training-hub')} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer group">
+            <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-600">{task.icon}</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">{task.title}</p>
               <div className="flex gap-1.5 mt-1 flex-wrap">
-                {task.tags.map(tag => (
-                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{tag}</span>
-                ))}
+                {task.tags.map(tag => <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{tag}</span>)}
               </div>
             </div>
             <div className="text-right flex-shrink-0">
               <p className="text-sm font-bold text-green-600">+{task.points} pts</p>
               <p className="text-xs text-gray-400">{task.deadline}</p>
             </div>
+            <ArrowRight size={16} className="text-gray-300 group-hover:text-violet-500 transition-colors flex-shrink-0" />
           </div>
         ))}
       </div>
