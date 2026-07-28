@@ -4,7 +4,7 @@ import PostComposer from '../PostComposer';
 import PostDetailModal from '../PostDetailModal';
 import { usePosts, useUpvote } from '../usePosts';
 
-export default function FeedView({ currentUser }) {
+export default function FeedView({ currentUser, onViewProfile }) {
   const { data: posts = [], isLoading } = usePosts();
   const upvote = useUpvote();
   const [selectedPost, setSelectedPost] = useState(null);
@@ -25,11 +25,11 @@ export default function FeedView({ currentUser }) {
       ) : (
         <div className="space-y-4">
           {posts.map(post => (
-            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} />
+            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} onViewProfile={onViewProfile} />
           ))}
         </div>
       )}
-      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} />}
+      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} onViewProfile={onViewProfile} />}
     </div>
   );
 }

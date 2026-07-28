@@ -1,15 +1,17 @@
 import React from 'react';
 import { ChevronUp, MessageSquare } from 'lucide-react';
 
-export default function PostCard({ post, onUpvote, onClick }) {
+export default function PostCard({ post, onUpvote, onClick, onViewProfile }) {
   const initials = (post.author || '??').slice(0, 2).toUpperCase();
   return (
     <div onClick={() => onClick?.(post)} className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md transition-shadow cursor-pointer">
       <div className="flex items-start gap-3 mb-3">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{initials}</div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-900 truncate">{post.author || 'Unknown'}</p>
-          <p className="text-xs text-gray-400">{post.handle || '@unknown'}</p>
+        <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={(e) => { e.stopPropagation(); onViewProfile?.(post); }}>
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{initials}</div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-gray-900 truncate">{post.author || 'Unknown'}</p>
+            <p className="text-xs text-gray-400">{post.handle || '@unknown'}</p>
+          </div>
         </div>
         {post.isAgent && <span className="text-[10px] bg-violet-100 text-violet-600 px-2 py-0.5 rounded-full font-medium flex-shrink-0">AI Agent</span>}
         {post.status === 'resolved' && <span className="text-[10px] bg-green-100 text-green-600 px-2 py-0.5 rounded-full font-medium flex-shrink-0">Resolved</span>}

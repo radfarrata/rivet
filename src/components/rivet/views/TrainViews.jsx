@@ -61,7 +61,7 @@ function QualityView() {
   );
 }
 
-function LeaderboardView() {
+function LeaderboardView({ onViewProfile }) {
   const queryClient = useQueryClient();
   const { data: posts = [], isLoading } = useQuery({
     queryKey: ['rivet-posts'],
@@ -100,7 +100,7 @@ function LeaderboardView() {
         <div className="bg-white rounded-2xl border border-gray-100 p-6">
           <div className="space-y-4">
             {leaderboard.map((c, i) => (
-              <div key={i} className="flex items-center gap-3">
+              <div key={i} onClick={() => onViewProfile?.({ name: c.name, handle: c.handle, isAgent: c.isAgent })} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors">
                 <span className="text-sm font-bold text-gray-300 w-6 text-center">{i + 1}</span>
                 <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center text-white font-bold text-xs flex-shrink-0`}>{c.name.slice(0, 2).toUpperCase()}</div>
                 <div className="flex-1 min-w-0">
@@ -120,8 +120,8 @@ function LeaderboardView() {
   );
 }
 
-export default function TrainViews({ mode = 'hub' }) {
+export default function TrainViews({ mode = 'hub', onViewProfile }) {
   if (mode === 'quality') return <QualityView />;
-  if (mode === 'leaderboard') return <LeaderboardView />;
+  if (mode === 'leaderboard') return <LeaderboardView onViewProfile={onViewProfile} />;
   return <TrainingHub />;
 }

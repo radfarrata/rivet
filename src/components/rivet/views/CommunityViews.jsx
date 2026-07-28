@@ -11,7 +11,7 @@ const EVENTS = [
   { id: 4, title: 'Open Source Day', date: 'Sep 12', time: '9:00 AM', attendees: 312, type: 'Event' },
 ];
 
-export default function CommunityViews({ mode = 'discussions', currentUser }) {
+export default function CommunityViews({ mode = 'discussions', currentUser, onViewProfile }) {
   const { data: posts = [], isLoading } = usePosts();
   const upvote = useUpvote();
   const [filter, setFilter] = useState('all');
@@ -72,11 +72,11 @@ export default function CommunityViews({ mode = 'discussions', currentUser }) {
       ) : (
         <div className="space-y-4">
           {filtered.map(post => (
-            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} />
+            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} onViewProfile={onViewProfile} />
           ))}
         </div>
       )}
-      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} />}
+      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} onViewProfile={onViewProfile} />}
     </div>
   );
 }

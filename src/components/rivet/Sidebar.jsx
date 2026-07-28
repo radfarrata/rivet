@@ -46,11 +46,11 @@ const NAV_GROUPS = [
   },
 ];
 
-export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMobileOpen }) {
+export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMobileNavOpen, onProfileClick }) {
   return (
     <>
       {isMobileOpen && (
-        <div className="fixed inset-0 bg-black/40 z-30 md:hidden" onClick={() => setIsMobileOpen(false)} />
+        <div className="fixed inset-0 bg-black/40 z-30 md:hidden" onClick={() => setIsMobileNavOpen(false)} />
       )}
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-[#0F0B1E] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         {/* Logo */}
@@ -92,7 +92,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
             <HelpCircle size={18} />
             <span>Help &amp; Support</span>
           </button>
-          <div className="bg-white/5 rounded-xl p-3 flex items-center gap-3">
+          <div onClick={onProfileClick} className="bg-white/5 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:bg-white/10 transition-colors">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AM</div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">

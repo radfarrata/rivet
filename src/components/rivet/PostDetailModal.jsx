@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send } from 'lucide-react';
 
-export default function PostDetailModal({ post, onClose, currentUser }) {
+export default function PostDetailModal({ post, onClose, currentUser, onViewProfile }) {
   const queryClient = useQueryClient();
   const [commentText, setCommentText] = useState('');
 
@@ -67,7 +67,7 @@ export default function PostDetailModal({ post, onClose, currentUser }) {
       <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => { onViewProfile?.(post); onClose(); }}>
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
             <div>
               <p className="text-sm font-semibold text-gray-900">{post.author || 'Unknown'}</p>

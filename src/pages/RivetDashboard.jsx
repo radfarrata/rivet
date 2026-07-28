@@ -3,6 +3,9 @@ import { base44 } from '@/api/base44Client';
 import Sidebar from '../components/rivet/Sidebar';
 import Header from '../components/rivet/Header';
 import ContentView from '../components/rivet/ContentView';
+import SearchResults from '../components/rivet/SearchResults';
+import ProfileView from '../components/rivet/ProfileView';
+import NotificationsPanel from '../components/rivet/NotificationsPanel';
 import { BalanceCard, TodayActivity } from '../components/rivet/BalanceCard';
 import HubCards from '../components/rivet/HubCards';
 import RecommendedTasks from '../components/rivet/RecommendedTasks';
@@ -13,20 +16,38 @@ export default function RivetDashboard() {
   const [activeNav, setActiveNav] = useState('home');
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [profileUser, setProfileUser] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
   useEffect(() => { base44.auth.me().then(setCurrentUser).catch(() => {}); }, []);
+
+  const handleViewProfile = (user) => {
+    setProfileUser({
+      name: user.author || user.name,
+      handle: user.handle,
+      isAgent: user.isAgent,
+      trustScore: user.trustScore,
+      uid: user.created_by_id || user.uid,
+    });
+  };
 
   return (
     <div className="flex h-screen bg-[#F8F9FC] overflow-hidden">
       <Sidebar
         activeNav={activeNav}
-        onNavChange={(id) => { setActiveNav(id); setIsMobileNavOpen(false); }}
+        onNavChange={(id) => { setActiveNav(id); setSearchQuery(''); setProfileUser(null); setIsMobileNavOpen(false); }}
         isMobileOpen={isMobileNavOpen}
         setIsMobileNavOpen={setIsMobileNavOpen}
+        onProfileClick={() => handleViewProfile({ name: currentUser?.full_name || 'You', handle: '@you', uid: currentUser?.id })}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header onMenuClick={() => setIsMobileNavOpen(true)} />
+        <Header onMenuClick={() => setIsMobileNavOpen(true)} onSearchChange={setSearchQuery} onBellClick={() => setShowNotifications(true)} onAvatarClick={() => handleViewProfile({ name: currentUser?.full_name || 'You', handle: '@you', uid: currentUser?.id })} />
         <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
-          {activeNav === 'home' ? (
+          {searchQuery ? (
+            <SearchResults query={searchQuery} currentUser={currentUser} onViewProfile={handleViewProfile} />
+          ) : profileUser ? (
+            <ProfileView user={profileUser} currentUser={currentUser} onBack={() => setProfileUser(null)} onViewProfile={handleViewProfile} />
+          ) : activeNav === 'home' ? (
             <>
               {/* Greeting */}
               <div>
@@ -46,7 +67,7 @@ export default function RivetDashboard() {
               {/* Recommended + Top Contributors */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2"><RecommendedTasks /></div>
-                <TopContributors />
+                <TopContributors onViewProfile={handleViewProfile} />
               </div>
 
               {/* Dashboard widgets */}
@@ -62,10 +83,11 @@ export default function RivetDashboard() {
               </div>
             </>
           ) : (
-            <ContentView activeNav={activeNav} currentUser={currentUser} />
+            <ContentView activeNav={activeNav} currentUser={currentUser} onViewProfile={handleViewProfile} />
           )}
         </main>
       </div>
+      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
     </div>
   );
 }

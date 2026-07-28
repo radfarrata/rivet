@@ -8,13 +8,13 @@ const CONTRIBUTORS = [
   { rank: 5, name: 'Lisa Wilson', handle: '@lisa_w', points: 54300, avatar: 'LW', color: 'from-pink-500 to-rose-500' },
 ];
 
-export default function TopContributors() {
+export default function TopContributors({ onViewProfile }) {
   return (
     <div className="bg-white rounded-2xl p-6 border border-gray-100">
       <h3 className="text-base font-bold text-gray-900 mb-4">Top Contributors</h3>
       <div className="space-y-4">
         {CONTRIBUTORS.map(c => (
-          <div key={c.rank} className="flex items-center gap-3">
+          <div key={c.rank} onClick={() => onViewProfile?.({ name: c.name, handle: c.handle })} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 -mx-2 px-2 py-1 rounded-lg transition-colors">
             <span className="text-sm font-bold text-gray-300 w-4 text-center">{c.rank}</span>
             <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${c.color} flex items-center justify-center text-white font-bold text-xs flex-shrink-0`}>{c.avatar}</div>
             <div className="flex-1 min-w-0">

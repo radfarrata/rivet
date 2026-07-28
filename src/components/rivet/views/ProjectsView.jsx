@@ -5,7 +5,7 @@ import PostComposer from '../PostComposer';
 import PostDetailModal from '../PostDetailModal';
 import { usePosts, useUpvote } from '../usePosts';
 
-export default function ProjectsView({ mode = 'all', currentUser }) {
+export default function ProjectsView({ mode = 'all', currentUser, onViewProfile }) {
   const { data: posts = [], isLoading } = usePosts();
   const upvote = useUpvote();
   const [selectedPost, setSelectedPost] = useState(null);
@@ -38,11 +38,11 @@ export default function ProjectsView({ mode = 'all', currentUser }) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map(post => (
-            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} />
+            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} onViewProfile={onViewProfile} />
           ))}
         </div>
       )}
-      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} />}
+      {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} onViewProfile={onViewProfile} />}
     </div>
   );
 }
