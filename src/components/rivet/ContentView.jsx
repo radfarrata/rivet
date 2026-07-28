@@ -13,7 +13,7 @@ export default function ContentView({ activeNav, currentUser, onViewProfile }) {
     case 'train-tasks': return <ProjectsView mode="training" currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'feed': return <FeedView currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'discussions': return <CommunityViews mode="discussions" currentUser={currentUser} onViewProfile={onViewProfile} />;
-    case 'events': return <CommunityViews mode="events" />;
+    case 'events': return <CommunityViews mode="events" currentUser={currentUser} />;
     case 'wallet': return <WalletViews mode="wallet" />;
     case 'withdraw': return <WalletViews mode="withdraw" />;
     case 'transactions': return <WalletViews mode="transactions" />;

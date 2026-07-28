@@ -1,0 +1,36 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "earned",
+        "withdrawn"
+      ],
+      "default": "earned"
+    },
+    "description": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "completed",
+        "pending"
+      ],
+      "default": "completed"
+    },
+    "method": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "description",
+    "amount"
+  ]
+}

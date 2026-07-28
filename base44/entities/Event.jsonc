@@ -1,0 +1,37 @@
+{
+  "name": "Event",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "default": "Event"
+    },
+    "description": {
+      "type": "string"
+    },
+    "baseAttendees": {
+      "type": "number",
+      "default": 0
+    },
+    "rsvpUserIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "title",
+    "date"
+  ]
+}

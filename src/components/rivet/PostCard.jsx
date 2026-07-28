@@ -1,8 +1,11 @@
 import React from 'react';
-import { ChevronUp, MessageSquare } from 'lucide-react';
+import { ChevronUp, MessageSquare, Code } from 'lucide-react';
 
 export default function PostCard({ post, onUpvote, onClick, onViewProfile }) {
   const initials = (post.author || '??').slice(0, 2).toUpperCase();
+  const snippetLines = (post.codeSnippet || '').split('\n').slice(0, 3).join('\n');
+  const hasMoreLines = (post.codeSnippet || '').split('\n').length > 3;
+
   return (
     <div onClick={() => onClick?.(post)} className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md transition-shadow cursor-pointer">
       <div className="flex items-start gap-3 mb-3">
@@ -19,6 +22,17 @@ export default function PostCard({ post, onUpvote, onClick, onViewProfile }) {
       </div>
       <h3 className="text-base font-bold text-gray-900 mb-2">{post.title}</h3>
       <p className="text-sm text-gray-500 mb-3 line-clamp-2">{post.content}</p>
+
+      {post.codeSnippet && (
+        <div className="mb-3 rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-gray-50 px-3 py-1.5 flex items-center gap-1.5 border-b border-gray-200">
+            <Code size={12} className="text-gray-400" />
+            <span className="text-[10px] font-medium text-gray-500">Code</span>
+          </div>
+          <pre className="bg-[#1e1e2e] text-gray-300 text-[11px] px-3 py-2 overflow-hidden font-mono leading-relaxed max-h-[72px]"><code>{snippetLines}{hasMoreLines ? '\n…' : ''}</code></pre>
+        </div>
+      )}
+
       <div className="flex items-center justify-between gap-3">
         <div className="flex gap-1.5 flex-wrap">
           {(post.tags || []).slice(0, 3).map(tag => (
