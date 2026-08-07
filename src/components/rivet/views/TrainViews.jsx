@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Brain, TrendingUp, Trophy, Target } from 'lucide-react';
+import AgentTrainingView from './AgentTrainingView';
 
 const QUALITY = [
   { id: 1, task: 'Chatbot Response Rating', accuracy: 96, total: 450, trend: '+2%' },
@@ -183,5 +184,6 @@ function LeaderboardView({ onViewProfile }) {
 export default function TrainViews({ mode = 'hub', onViewProfile }) {
   if (mode === 'quality') return <QualityView />;
   if (mode === 'leaderboard') return <LeaderboardView onViewProfile={onViewProfile} />;
+  if (mode === 'agents') return <AgentTrainingView />;
   return <TrainingHub />;
 }
