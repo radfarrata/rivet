@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Search, Gift, Bell, Menu } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 
-export default function Header({ onMenuClick, onSearchChange, onBellClick, onAvatarClick }) {
+export default function Header({ onMenuClick, onSearchChange, onAvatarClick, currentUser }) {
   const [search, setSearch] = useState('');
 
   const handleSearch = (e) => {
@@ -28,14 +28,7 @@ export default function Header({ onMenuClick, onSearchChange, onBellClick, onAva
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-            <Gift size={20} />
-          </button>
-          <button onClick={onBellClick} className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-            <Bell size={20} />
-            <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">3</span>
-          </button>
-          <div onClick={onAvatarClick} className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm cursor-pointer flex-shrink-0 hover:opacity-90 transition-opacity">AM</div>
+          <div onClick={onAvatarClick} className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm cursor-pointer flex-shrink-0 hover:opacity-90 transition-opacity">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
         </div>
       </div>
     </header>

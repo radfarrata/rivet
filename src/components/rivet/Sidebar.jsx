@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Home, Folder, CheckSquare, Bot, Users, Brain, Trophy, Cpu,
-  MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt, HelpCircle,
+  MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt,
 } from 'lucide-react';
 import RivetIcon from './RivetLogo';
 
@@ -25,7 +25,6 @@ const NAV_GROUPS = [
       { id: 'training-hub', label: 'Training Hub', icon: <Brain size={18} /> },
       { id: 'agent-training', label: 'Agent Training', icon: <Cpu size={18} /> },
       { id: 'train-tasks', label: 'My Tasks', icon: <CheckSquare size={18} /> },
-      { id: 'quality', label: 'Quality', icon: <Trophy size={18} /> },
       { id: 'leaderboard', label: 'Leaderboard', icon: <Trophy size={18} /> },
     ],
   },
@@ -47,7 +46,7 @@ const NAV_GROUPS = [
   },
 ];
 
-export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMobileNavOpen, onProfileClick }) {
+export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMobileNavOpen, onProfileClick, currentUser }) {
   return (
     <>
       {isMobileOpen && (
@@ -89,21 +88,11 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
 
         {/* Footer */}
         <div className="px-4 pb-4 pt-2 border-t border-white/5">
-          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors mb-3">
-            <HelpCircle size={18} />
-            <span>Help &amp; Support</span>
-          </button>
           <div onClick={onProfileClick} className="bg-white/5 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:bg-white/10 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AM</div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-white text-sm font-semibold truncate">Alex Morgan</span>
-                <span className="text-[10px] bg-violet-500/30 text-violet-300 px-1.5 py-0.5 rounded font-medium flex-shrink-0">Lv.12</span>
-              </div>
-              <div className="text-xs text-zinc-500 mb-1.5">12,480 / 15,000 pts</div>
-              <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                <div className="h-full bg-violet-500 rounded-full" style={{ width: '83%' }} />
-              </div>
+              <span className="text-white text-sm font-semibold truncate block">{currentUser?.full_name || 'You'}</span>
+              <span className="text-xs text-zinc-500 truncate block">{currentUser?.email || ''}</span>
             </div>
           </div>
         </div>

@@ -38,10 +38,6 @@ export function BalanceCard() {
           </div>
         )}
         <p className="text-xs text-white/50 mb-4">≈ ${(balance / 100).toFixed(2)} USD</p>
-        <div className="flex gap-2 mb-5">
-          <button className="bg-white text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/90 transition-colors">Withdraw</button>
-          <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/20 transition-colors">Wallet</button>
-        </div>
         <div className="mt-auto">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs text-white/60">Points to next payout</span>

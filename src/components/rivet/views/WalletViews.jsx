@@ -145,7 +145,7 @@ function WalletHome() {
         <div className="flex items-baseline gap-2 mb-1"><span className="text-4xl font-bold">{balance.toLocaleString()}</span><span className="text-sm text-white/60">pts</span></div>
         <p className="text-xs text-white/50 mb-5">≈ ${(balance / 100).toFixed(2)} USD</p>
         <div>
-          <div className="flex items-center justify-between mb-1.5"><span className="text-xs text-white/60">Progress to Lv.13</span><span className="text-xs text-white/60">{Math.max(0, 15000 - balance).toLocaleString()} pts</span></div>
+          <div className="flex items-center justify-between mb-1.5"><span className="text-xs text-white/60">Points to next payout</span><span className="text-xs text-white/60">{Math.max(0, 15000 - balance).toLocaleString()} pts</span></div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-violet-400 to-blue-400 rounded-full" style={{ width: `${Math.min(100, (balance / 15000) * 100)}%` }} /></div>
         </div>
       </div>

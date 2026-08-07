@@ -4,13 +4,6 @@ import { base44 } from '@/api/base44Client';
 import { Brain, TrendingUp, Trophy, Target } from 'lucide-react';
 import AgentTrainingView from './AgentTrainingView';
 
-const QUALITY = [
-  { id: 1, task: 'Chatbot Response Rating', accuracy: 96, total: 450, trend: '+2%' },
-  { id: 2, task: 'Image Label Verification', accuracy: 92, total: 320, trend: '+1%' },
-  { id: 3, task: 'Code Output Evaluation', accuracy: 89, total: 180, trend: '-1%' },
-  { id: 4, task: 'Translation Quality Check', accuracy: 94, total: 210, trend: '+3%' },
-];
-
 const TIME_FILTERS = [
   { id: 'all', label: 'All Time' },
   { id: 'week', label: 'This Week' },
@@ -31,13 +24,13 @@ function TrainingHub() {
 
   const trainingTasks = posts.filter(p => p.syndicate === 'bio' || p.syndicate === 'physics');
   const openTraining = trainingTasks.filter(p => p.status === 'open').length;
+  const completedTraining = trainingTasks.filter(p => p.status === 'resolved').length;
   const totalBounty = trainingTasks.reduce((s, t) => s + (t.bounty || 0), 0);
-  const avgAccuracy = Math.round(QUALITY.reduce((s, q) => s + q.accuracy, 0) / QUALITY.length);
 
   const stats = [
     { label: 'Available Tasks', value: openTraining, icon: <Brain size={16} />, color: 'text-violet-600', bg: 'bg-violet-50' },
     { label: 'Total Bounty Pool', value: `${totalBounty.toLocaleString()} pts`, icon: <Target size={16} />, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { label: 'Your Accuracy', value: `${avgAccuracy}%`, icon: <TrendingUp size={16} />, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'Completed', value: completedTraining, icon: <TrendingUp size={16} />, color: 'text-blue-600', bg: 'bg-blue-50' },
   ];
 
   return (
@@ -63,38 +56,9 @@ function TrainingHub() {
         </div>
         <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 rounded-2xl p-6 border border-gray-100">
           <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4"><TrendingUp className="w-6 h-6 text-emerald-600" /></div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Your Accuracy</h3>
-          <p className="text-sm text-gray-500 mb-4">Your average rating accuracy across all tasks.</p>
-          <p className="text-2xl font-bold text-emerald-600">{avgAccuracy}% <span className="text-sm font-normal text-gray-400">avg accuracy</span></p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function QualityView() {
-  return (
-    <div className="space-y-5">
-      <div><h2 className="text-xl font-bold text-gray-900">Quality Metrics</h2><p className="text-sm text-gray-500 mt-0.5">Your performance across training task types</p></div>
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="divide-y divide-gray-50">
-          {QUALITY.map(q => (
-            <div key={q.id} className="px-6 py-4 flex items-center gap-4">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900">{q.task}</p>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden max-w-[200px]">
-                    <div className={`h-full rounded-full ${q.accuracy >= 95 ? 'bg-green-500' : q.accuracy >= 90 ? 'bg-violet-500' : 'bg-amber-500'}`} style={{ width: `${q.accuracy}%` }} />
-                  </div>
-                  <span className="text-xs text-gray-400">{q.total} rated</span>
-                </div>
-              </div>
-              <div className="text-right flex-shrink-0">
-                <span className="text-base font-bold text-gray-900">{q.accuracy}%</span>
-                <span className="text-xs text-green-600 ml-2">{q.trend}</span>
-              </div>
-            </div>
-          ))}
+          <h3 className="text-lg font-bold text-gray-900 mb-1">Completed Tasks</h3>
+          <p className="text-sm text-gray-500 mb-4">Training tasks resolved across all syndicates.</p>
+          <p className="text-2xl font-bold text-emerald-600">{completedTraining} <span className="text-sm font-normal text-gray-400">resolved</span></p>
         </div>
       </div>
     </div>
@@ -182,7 +146,6 @@ function LeaderboardView({ onViewProfile }) {
 }
 
 export default function TrainViews({ mode = 'hub', onViewProfile }) {
-  if (mode === 'quality') return <QualityView />;
   if (mode === 'leaderboard') return <LeaderboardView onViewProfile={onViewProfile} />;
   if (mode === 'agents') return <AgentTrainingView />;
   return <TrainingHub />;
