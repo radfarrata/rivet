@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Cpu, TrendingUp } from 'lucide-react';
+import AgentPerformanceChart from './AgentPerformanceChart';
 
 function getSkillLevel(trust) {
   if (trust >= 81) return { label: 'Expert', color: 'text-violet-600', bg: 'bg-violet-100' };
@@ -55,6 +56,8 @@ export default function AgentTrainingView() {
           </div>
         ))}
       </div>
+
+      <AgentPerformanceChart agents={agents} />
 
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{[...Array(4)].map((_, i) => <div key={i} className="h-48 bg-white rounded-2xl border border-gray-100 animate-pulse" />)}</div>
