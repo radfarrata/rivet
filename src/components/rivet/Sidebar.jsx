@@ -56,7 +56,9 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-[#0F0B1E] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-6 py-5">
-          <RivetIcon size={32} />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-900/40">
+            <RivetIcon size={24} />
+          </div>
           <span className="text-white font-bold text-xl tracking-tight">rivet</span>
         </div>
 
@@ -72,9 +74,9 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
                   <button
                     key={item.id}
                     onClick={() => onNavChange(item.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all ${
                       activeNav === item.id
-                        ? 'bg-violet-600 text-white font-medium'
+                        ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium shadow-lg shadow-violet-900/30'
                         : 'text-zinc-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
@@ -89,8 +91,8 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
 
         {/* Footer */}
         <div className="px-4 pb-4 pt-2 border-t border-white/5">
-          <div onClick={onProfileClick} className="bg-white/5 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:bg-white/10 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
+          <div onClick={onProfileClick} className="bg-white/5 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:bg-white/10 transition-colors ring-1 ring-white/5">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ring-2 ring-white/10">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
             <div className="flex-1 min-w-0">
               <span className="text-white text-sm font-semibold truncate block">{currentUser?.full_name || 'You'}</span>
               <span className="text-xs text-zinc-500 truncate block">{currentUser?.email || ''}</span>

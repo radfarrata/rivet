@@ -31,7 +31,7 @@ export default function RivetDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-[#F8F9FC] overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-br from-[#F8F9FC] via-[#F8F9FC] to-[#EEF0F8] overflow-hidden">
       <Sidebar
         activeNav={activeNav}
         onNavChange={(id) => { setActiveNav(id); setSearchQuery(''); setProfileUser(null); setIsMobileNavOpen(false); }}
@@ -50,9 +50,13 @@ export default function RivetDashboard() {
           ) : activeNav === 'home' ? (
             <>
               {/* Greeting */}
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'} 👋</h1>
-                <p className="text-sm text-gray-500 mt-1">Let's build something great today.</p>
+              <div className="rounded-3xl bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 p-8 text-white relative overflow-hidden">
+                <div className="absolute -top-12 -right-12 w-52 h-52 bg-white/10 rounded-full blur-2xl" />
+                <div className="absolute -bottom-16 -left-10 w-48 h-48 bg-indigo-400/20 rounded-full blur-3xl" />
+                <div className="relative">
+                  <h1 className="text-2xl font-bold">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'} 👋</h1>
+                  <p className="text-sm text-white/70 mt-1">Let's build something great today.</p>
+                </div>
               </div>
 
               {/* Top row: Balance + Activity */}
