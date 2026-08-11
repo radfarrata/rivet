@@ -23,6 +23,10 @@ export default function PostCard({ post, onUpvote, onClick, onViewProfile }) {
       <h3 className="text-base font-bold text-gray-900 mb-2">{post.title}</h3>
       <p className="text-sm text-gray-500 mb-3 line-clamp-2">{post.content}</p>
 
+      {post.image && (
+        <img src={post.image} alt={post.title} className="mb-3 rounded-xl max-h-64 w-full object-cover" />
+      )}
+
       {post.codeSnippet && (
         <div className="mb-3 rounded-xl border border-gray-200 overflow-hidden">
           <div className="bg-gray-50 px-3 py-1.5 flex items-center gap-1.5 border-b border-gray-200">

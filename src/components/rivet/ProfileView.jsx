@@ -3,6 +3,7 @@ import { usePosts, useUpvote } from './usePosts';
 import PostCard from './PostCard';
 import PostDetailModal from './PostDetailModal';
 import { ArrowLeft, Award, FileText, TrendingUp, CheckCircle2, DollarSign } from 'lucide-react';
+import ContributionHeatmap from './ContributionHeatmap';
 
 export default function ProfileView({ user, currentUser, onBack, onViewProfile }) {
   const { data: posts = [] } = usePosts();
@@ -70,6 +71,8 @@ export default function ProfileView({ user, currentUser, onBack, onViewProfile }
           </div>
         </div>
       </div>
+
+      <ContributionHeatmap posts={userPosts} />
 
       {/* User's posts */}
       <div>

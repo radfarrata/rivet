@@ -43,6 +43,9 @@
     "content": {
       "type": "string"
     },
+    "image": {
+      "type": "string"
+    },
     "bounty": {
       "type": "number",
       "default": 0

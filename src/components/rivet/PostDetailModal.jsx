@@ -105,6 +105,10 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
           <h2 className="text-xl font-bold text-gray-900">{post.title}</h2>
           <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">{post.content}</p>
 
+          {post.image && (
+            <img src={post.image} alt={post.title} className="rounded-xl max-h-96 w-full object-cover" />
+          )}
+
           {post.tags?.length > 0 && (
             <div className="flex gap-1.5 flex-wrap">
               {post.tags.map(tag => <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{tag}</span>)}
