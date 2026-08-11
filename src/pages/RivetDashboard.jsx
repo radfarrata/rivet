@@ -5,6 +5,7 @@ import Header from '../components/rivet/Header';
 import ContentView from '../components/rivet/ContentView';
 import SearchResults from '../components/rivet/SearchResults';
 import ProfileView from '../components/rivet/ProfileView';
+import NotificationsPanel from '../components/rivet/NotificationsPanel';
 import { BalanceCard, TodayActivity } from '../components/rivet/BalanceCard';
 import HubCards from '../components/rivet/HubCards';
 import TopContributors from '../components/rivet/TopContributors';
@@ -16,6 +17,7 @@ export default function RivetDashboard() {
   const [currentUser, setCurrentUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [profileUser, setProfileUser] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
   useEffect(() => { base44.auth.me().then(setCurrentUser).catch(() => {}); }, []);
 
   const handleViewProfile = (user) => {
@@ -39,7 +41,7 @@ export default function RivetDashboard() {
         onProfileClick={() => handleViewProfile({ name: currentUser?.full_name || 'You', handle: '@you', uid: currentUser?.id })}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header currentUser={currentUser} onMenuClick={() => setIsMobileNavOpen(true)} onSearchChange={setSearchQuery} onAvatarClick={() => handleViewProfile({ name: currentUser?.full_name || 'You', handle: '@you', uid: currentUser?.id })} />
+        <Header currentUser={currentUser} onMenuClick={() => setIsMobileNavOpen(true)} onSearchChange={setSearchQuery} onBellClick={() => setShowNotifications(true)} onAvatarClick={() => handleViewProfile({ name: currentUser?.full_name || 'You', handle: '@you', uid: currentUser?.id })} />
         <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
           {searchQuery ? (
             <SearchResults query={searchQuery} currentUser={currentUser} onViewProfile={handleViewProfile} />
@@ -73,6 +75,7 @@ export default function RivetDashboard() {
           )}
         </main>
       </div>
+      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
     </div>
   );
 }

@@ -1,0 +1,38 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "userId",
+    "title",
+    "message"
+  ],
+  "rls": {
+    "read": {
+      "data.userId": "{{user.id}}"
+    },
+    "update": {
+      "data.userId": "{{user.id}}"
+    },
+    "delete": {
+      "data.userId": "{{user.id}}"
+    }
+  }
+}

@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import { useCreateTransaction } from './useTransactions';
+import { useCreateNotification } from './useNotifications';
 import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send } from 'lucide-react';
 
 export default function PostDetailModal({ post, onClose, currentUser, onViewProfile }) {
   const queryClient = useQueryClient();
   const [commentText, setCommentText] = useState('');
+
+  const createTxn = useCreateTransaction();
+  const createNotif = useCreateNotification();
+
+  const notifyOwner = (type, title, message) => {
+    const ownerId = post.created_by_id;
+    if (!ownerId || ownerId === currentUser?.id) return;
+    createNotif.mutate({ userId: ownerId, type, title, message, read: false });
+  };
 
   const { data: comments = [] } = useQuery({
     queryKey: ['rivet-comments', post.id],
@@ -31,6 +42,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
       base44.entities.Post.update(post.id, { replies: (post.replies || 0) + 1 });
       queryClient.invalidateQueries({ queryKey: ['rivet-posts'] });
       setCommentText('');
+      notifyOwner('comment', 'New comment', `${currentUser?.full_name || 'Someone'} commented on "${post.title}"`);
     },
   });
 
@@ -42,11 +54,16 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
   const handleClaim = () => {
     const log = [...(post.auditLog || []), { action: 'Claimed', user: currentUser?.full_name || 'You', time: 'Just now' }];
     updateStatus.mutate({ id: post.id, data: { status: 'pending_approval', forks: (post.forks || 0) + 1, auditLog: log } });
+    notifyOwner('claim', 'Task claimed', `${currentUser?.full_name || 'Someone'} claimed "${post.title}"`);
   };
 
   const handleComplete = () => {
     const log = [...(post.auditLog || []), { action: 'Completed', user: currentUser?.full_name || 'You', time: 'Just now' }];
     updateStatus.mutate({ id: post.id, data: { status: 'resolved', auditLog: log } });
+    if (post.bounty > 0) {
+      createTxn.mutate({ type: 'earned', description: `Bounty: ${post.title}`, amount: post.bounty, status: 'completed' });
+    }
+    notifyOwner('task', 'Task completed', `${currentUser?.full_name || 'Someone'} completed "${post.title}"`);
   };
 
   const handleComment = () => {

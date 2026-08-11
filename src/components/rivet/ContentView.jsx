@@ -17,8 +17,8 @@ export default function ContentView({ activeNav, currentUser, onViewProfile }) {
     case 'wallet': return <WalletViews mode="wallet" />;
     case 'withdraw': return <WalletViews mode="withdraw" />;
     case 'transactions': return <WalletViews mode="transactions" />;
-    case 'ai-assistants': return <BuildViews mode="assistants" />;
-    case 'teams': return <BuildViews mode="teams" />;
+    case 'ai-assistants': return <BuildViews mode="assistants" currentUser={currentUser} />;
+    case 'teams': return <BuildViews mode="teams" currentUser={currentUser} />;
     case 'training-hub': return <TrainViews mode="hub" />;
     case 'agent-training': return <TrainViews mode="agents" onViewProfile={onViewProfile} />;
     case 'leaderboard': return <TrainViews mode="leaderboard" onViewProfile={onViewProfile} />;
