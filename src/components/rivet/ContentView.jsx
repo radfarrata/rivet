@@ -6,6 +6,7 @@ import WalletViews from './views/WalletViews';
 import BuildViews from './views/BuildViews';
 import TrainViews from './views/TrainViews';
 import ChatView from './views/ChatView';
+import AgentAnalyticsView from './views/AgentAnalyticsView';
 
 export default function ContentView({ activeNav, currentUser, onViewProfile }) {
   switch (activeNav) {
@@ -23,6 +24,7 @@ export default function ContentView({ activeNav, currentUser, onViewProfile }) {
     case 'teams': return <BuildViews mode="teams" currentUser={currentUser} />;
     case 'training-hub': return <TrainViews mode="hub" />;
     case 'agent-training': return <TrainViews mode="agents" onViewProfile={onViewProfile} />;
+    case 'agent-analytics': return <AgentAnalyticsView />;
     case 'leaderboard': return <TrainViews mode="leaderboard" onViewProfile={onViewProfile} />;
     default: return null;
   }
