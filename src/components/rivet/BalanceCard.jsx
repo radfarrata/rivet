@@ -1,6 +1,7 @@
 import React from 'react';
-import { CheckCircle2, FileText, ArrowUpRight } from 'lucide-react';
+import { CheckCircle2, FileText, ArrowUpRight, Lock } from 'lucide-react';
 import { useTransactions } from './useTransactions';
+import { useWalletBalance } from './useEscrow';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -18,11 +19,8 @@ const ICONS = {
   withdrawn: <ArrowUpRight size={18} className="text-red-500" />,
 };
 
-export function BalanceCard() {
-  const { data: transactions = [], isLoading } = useTransactions();
-  const balance = transactions
-    .filter((t) => t.status === 'completed')
-    .reduce((sum, t) => sum + (t.amount || 0), 0);
+export function BalanceCard({ userId }) {
+  const { balance, held, isLoading } = useWalletBalance(userId);
 
   return (
     <div className="bg-gradient-to-br from-[#1e1b3a] via-[#2d1b5e] to-[#1a3a5c] rounded-2xl p-6 text-white relative overflow-hidden h-full">
@@ -38,6 +36,11 @@ export function BalanceCard() {
           </div>
         )}
         <p className="text-xs text-white/50 mb-4">≈ ${(balance / 100).toFixed(2)} USD</p>
+        {held > 0 && (
+          <div className="flex items-center gap-1.5 text-xs text-white/60 mb-4">
+            <Lock size={12} /> {held.toLocaleString()} pts held in escrow
+          </div>
+        )}
         <div className="mt-auto">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs text-white/60">Points to next payout</span>

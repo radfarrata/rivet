@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useCreateTransaction } from './useTransactions';
 import { useCreateNotification } from './useNotifications';
+import { useEscrows, useReleaseEscrow, useRefundEscrow } from './useEscrow';
 import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send } from 'lucide-react';
 
 export default function PostDetailModal({ post, onClose, currentUser, onViewProfile }) {
@@ -11,6 +12,11 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
 
   const createTxn = useCreateTransaction();
   const createNotif = useCreateNotification();
+  const { data: escrows = [] } = useEscrows();
+  const escrow = escrows.find(e => e.postId === post.id);
+  const releaseEscrow = useReleaseEscrow();
+  const refundEscrow = useRefundEscrow();
+  const isRequester = post.created_by_id === currentUser?.id;
 
   const notifyOwner = (type, title, message) => {
     const ownerId = post.created_by_id;
@@ -53,17 +59,18 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
 
   const handleClaim = () => {
     const log = [...(post.auditLog || []), { action: 'Claimed', user: currentUser?.full_name || 'You', time: 'Just now' }];
-    updateStatus.mutate({ id: post.id, data: { status: 'pending_approval', forks: (post.forks || 0) + 1, auditLog: log } });
+    updateStatus.mutate({ id: post.id, data: { status: 'pending_approval', forks: (post.forks || 0) + 1, resolverId: currentUser?.id, resolverName: currentUser?.full_name || 'You', auditLog: log } });
     notifyOwner('claim', 'Task claimed', `${currentUser?.full_name || 'Someone'} claimed "${post.title}"`);
   };
 
-  const handleComplete = () => {
-    const log = [...(post.auditLog || []), { action: 'Completed', user: currentUser?.full_name || 'You', time: 'Just now' }];
-    updateStatus.mutate({ id: post.id, data: { status: 'resolved', auditLog: log } });
-    if (post.bounty > 0) {
-      createTxn.mutate({ type: 'earned', description: `Bounty: ${post.title}`, amount: post.bounty, status: 'completed' });
-    }
-    notifyOwner('task', 'Task completed', `${currentUser?.full_name || 'Someone'} completed "${post.title}"`);
+  const handleVerify = () => {
+    if (!escrow) return;
+    releaseEscrow.mutate({ escrow, post, currentUser });
+  };
+
+  const handleRefund = () => {
+    if (!escrow) return;
+    refundEscrow.mutate({ escrow, post, currentUser });
   };
 
   const handleComment = () => {
@@ -99,7 +106,16 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
           <div className="flex items-center gap-2 flex-wrap">
             {post.isAgent && <span className="text-[10px] bg-violet-100 text-violet-600 px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium capitalize ${statusBadge}`}>{statusLabel}</span>
-            {post.bounty > 0 && <span className="text-sm font-bold text-green-600 ml-auto">{post.bounty} {post.token || 'USD'}</span>}
+            {post.bounty > 0 && (
+              <span className="ml-auto flex items-center gap-2">
+                {escrow && (
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${escrow.status === 'held' ? 'bg-amber-100 text-amber-600' : escrow.status === 'released' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'}`}>
+                    {escrow.status === 'held' ? 'In Escrow' : escrow.status === 'released' ? 'Released' : 'Refunded'}
+                  </span>
+                )}
+                <span className="text-sm font-bold text-green-600">{post.bounty} {post.token || 'USD'}</span>
+              </span>
+            )}
           </div>
 
           <h2 className="text-xl font-bold text-gray-900">{post.title}</h2>
@@ -158,15 +174,23 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
             <button onClick={() => upvote.mutate()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
               <ChevronUp size={16} /> {post.upvotes || 0}
             </button>
-            {post.status === 'open' && (
+            {post.status === 'open' && !isRequester && (
               <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-violet-600 text-white hover:bg-violet-700 transition-colors disabled:opacity-50">
                 <Lock size={16} /> Claim Task
               </button>
             )}
-            {post.status === 'pending_approval' && (
-              <button onClick={handleComplete} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50">
-                <CheckCircle2 size={16} /> Mark Complete
+            {post.status === 'open' && isRequester && post.bounty > 0 && (
+              <button onClick={handleRefund} disabled={refundEscrow.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors disabled:opacity-50">
+                Cancel & Refund
               </button>
+            )}
+            {post.status === 'pending_approval' && isRequester && (
+              <button onClick={handleVerify} disabled={releaseEscrow.isPending || !escrow} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50">
+                <CheckCircle2 size={16} /> Verify & Release
+              </button>
+            )}
+            {post.status === 'pending_approval' && !isRequester && (
+              <span className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-amber-100 text-amber-600"><Lock size={16} /> Awaiting verification</span>
             )}
             {post.status === 'resolved' && (
               <span className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-600"><CheckCircle2 size={16} /> Task Resolved</span>

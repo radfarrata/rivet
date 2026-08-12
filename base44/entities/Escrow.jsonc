@@ -1,0 +1,63 @@
+{
+  "name": "Escrow",
+  "type": "object",
+  "properties": {
+    "postId": {
+      "type": "string"
+    },
+    "taskTitle": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "held",
+        "released",
+        "refunded"
+      ],
+      "default": "held"
+    },
+    "requesterId": {
+      "type": "string"
+    },
+    "requesterName": {
+      "type": "string"
+    },
+    "resolverId": {
+      "type": "string"
+    },
+    "resolverName": {
+      "type": "string"
+    },
+    "releasedAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "postId",
+    "amount",
+    "requesterId"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.requesterId": "{{user.id}}"
+        },
+        {
+          "data.resolverId": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "data.requesterId": "{{user.id}}"
+    },
+    "delete": {
+      "data.requesterId": "{{user.id}}"
+    }
+  }
+}

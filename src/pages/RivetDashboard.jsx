@@ -61,7 +61,7 @@ export default function RivetDashboard() {
 
               {/* Top row: Balance + Activity */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2"><BalanceCard /></div>
+                <div className="lg:col-span-2"><BalanceCard userId={currentUser?.id} /></div>
                 <TodayActivity />
               </div>
 

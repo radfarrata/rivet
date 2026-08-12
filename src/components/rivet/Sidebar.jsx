@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Home, Folder, CheckSquare, Bot, Users, Brain, Trophy, Cpu, Hash, TrendingUp,
+  Home, Folder, CheckSquare, Bot, Users, Brain, Trophy, Cpu, Hash, TrendingUp, Lock,
   MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt,
 } from 'lucide-react';
 import RivetIcon from './RivetLogo';
@@ -42,6 +42,7 @@ const NAV_GROUPS = [
     label: 'WALLET',
     items: [
       { id: 'wallet', label: 'Wallet', icon: <Wallet size={18} /> },
+      { id: 'escrow', label: 'Escrow', icon: <Lock size={18} /> },
       { id: 'withdraw', label: 'Withdraw', icon: <ArrowUp size={18} /> },
       { id: 'transactions', label: 'Transactions', icon: <Receipt size={18} /> },
     ],

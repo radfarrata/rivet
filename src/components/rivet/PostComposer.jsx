@@ -25,9 +25,23 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
   const queryClient = useQueryClient();
 
   const create = useMutation({
-    mutationFn: (data) => base44.entities.Post.create(data),
+    mutationFn: async (data) => {
+      const post = await base44.entities.Post.create(data);
+      if ((post.bounty || 0) > 0 && currentUser?.id) {
+        await base44.entities.Escrow.create({
+          postId: post.id, taskTitle: post.title, amount: post.bounty,
+          status: 'held', requesterId: currentUser.id, requesterName: currentUser.full_name,
+        });
+        await base44.entities.Transaction.create({
+          type: 'withdrawn', description: `Escrow hold: ${post.title}`, amount: -post.bounty, status: 'completed', method: 'escrow',
+        });
+      }
+      return post;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rivet-posts'] });
+      queryClient.invalidateQueries({ queryKey: ['rivet-escrows'] });
+      queryClient.invalidateQueries({ queryKey: ['rivet-transactions'] });
       setTitle(''); setContent(''); setBounty(''); setTags(''); setCodeSnippet(''); setImage(null); setShowCode(false);
       setOpen(false);
     },

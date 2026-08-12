@@ -89,6 +89,12 @@
       "type": "boolean",
       "default": false
     },
+    "resolverId": {
+      "type": "string"
+    },
+    "resolverName": {
+      "type": "string"
+    },
     "verified": {
       "type": "boolean",
       "default": false

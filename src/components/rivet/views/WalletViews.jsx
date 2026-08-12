@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, CheckCircle2, Wallet as WalletIcon, TrendingUp, ArrowDown, Clock, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, Wallet as WalletIcon, TrendingUp, ArrowDown, Clock, ChevronRight, Lock, RotateCcw } from 'lucide-react';
 import { useTransactions, useCreateTransaction } from '../useTransactions';
+import { useEscrows, useReleaseEscrow, useRefundEscrow, useWalletBalance } from '../useEscrow';
+import { usePosts } from '../usePosts';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -133,9 +135,9 @@ function TransactionsTable() {
   );
 }
 
-function WalletHome() {
+function WalletHome({ currentUser }) {
   const { data: transactions = [], isLoading } = useTransactions();
-  const balance = transactions.filter(t => t.status === 'completed').reduce((sum, t) => sum + (t.amount || 0), 0);
+  const { balance, held } = useWalletBalance(currentUser?.id);
   const recent = transactions.slice(0, 5);
 
   return (
@@ -181,14 +183,12 @@ function WalletHome() {
   );
 }
 
-function WithdrawForm() {
+function WithdrawForm({ currentUser }) {
   const [amount, setAmount] = useState('');
   const [method, setMethod] = useState('paypal');
   const [done, setDone] = useState(false);
-  const { data: transactions = [] } = useTransactions();
+  const { balance } = useWalletBalance(currentUser?.id);
   const createTxn = useCreateTransaction();
-
-  const balance = transactions.filter(t => t.status === 'completed').reduce((sum, t) => sum + (t.amount || 0), 0);
 
   const handleWithdraw = () => {
     if (Number(amount) < 1000) return;
@@ -236,8 +236,100 @@ function WithdrawForm() {
   );
 }
 
-export default function WalletViews({ mode = 'wallet' }) {
-  if (mode === 'withdraw') return <WithdrawForm />;
+function EscrowStatusBadge({ status }) {
+  const styles = { held: 'bg-amber-100 text-amber-600', released: 'bg-green-100 text-green-600', refunded: 'bg-gray-100 text-gray-500' };
+  const labels = { held: 'Held', released: 'Released', refunded: 'Refunded' };
+  return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[status]}`}>{labels[status]}</span>;
+}
+
+function EscrowView({ currentUser }) {
+  const { data: escrows = [], isLoading } = useEscrows();
+  const { data: posts = [] } = usePosts();
+  const releaseEscrow = useReleaseEscrow();
+  const refundEscrow = useRefundEscrow();
+  const postById = (id) => posts.find(p => p.id === id);
+
+  const held = escrows.filter(e => e.status === 'held' && e.requesterId === currentUser?.id).reduce((s, e) => s + (e.amount || 0), 0);
+  const pending = escrows.filter(e => e.status === 'held' && e.requesterId === currentUser?.id && postById(e.postId)?.status === 'pending_approval').length;
+  const earned = escrows.filter(e => e.status === 'released' && e.resolverId === currentUser?.id).reduce((s, e) => s + (e.amount || 0), 0);
+
+  const stats = [
+    { label: 'Held in Escrow', value: held.toLocaleString(), unit: 'pts', icon: <Lock size={16} />, color: 'text-amber-600', bg: 'bg-amber-50' },
+    { label: 'Pending Verification', value: pending, unit: '', icon: <Clock size={16} />, color: 'text-violet-600', bg: 'bg-violet-50' },
+    { label: 'Earned via Bounties', value: earned.toLocaleString(), unit: 'pts', icon: <TrendingUp size={16} />, color: 'text-green-600', bg: 'bg-green-50' },
+  ];
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h2 className="text-xl font-bold text-gray-900">Escrow</h2>
+        <p className="text-sm text-gray-500 mt-0.5">Bounty payments held until you verify a task is complete</p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {stats.map(s => (
+          <div key={s.label} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4">
+            <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${s.bg} ${s.color}`}>{s.icon}</div>
+            <div>
+              <p className="text-xs text-gray-400 font-medium">{s.label}</p>
+              <p className="text-lg font-bold text-gray-900">{s.value} {s.unit && <span className="text-xs text-gray-400 font-normal">{s.unit}</span>}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <h3 className="text-base font-bold text-gray-900">Escrow Ledger</h3>
+          <span className="text-xs text-gray-400">{escrows.length} records</span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-50 text-xs text-gray-400 uppercase tracking-wide">
+                <th className="text-left font-medium px-5 py-3">Task</th>
+                <th className="text-left font-medium px-5 py-3">Your Role</th>
+                <th className="text-left font-medium px-5 py-3">Status</th>
+                <th className="text-right font-medium px-5 py-3">Amount</th>
+                <th className="text-right font-medium px-5 py-3">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {isLoading ? (
+                <tr><td colSpan={5} className="px-5 py-8 text-center text-gray-400">Loading escrow...</td></tr>
+              ) : escrows.length === 0 ? (
+                <tr><td colSpan={5} className="px-5 py-8 text-center text-gray-400">No escrow records yet.</td></tr>
+              ) : escrows.map(e => {
+                const task = postById(e.postId);
+                const isRequester = e.requesterId === currentUser?.id;
+                const taskStatus = task?.status;
+                const canRelease = isRequester && e.status === 'held' && taskStatus === 'pending_approval';
+                const canRefund = isRequester && e.status === 'held' && taskStatus === 'open';
+                return (
+                  <tr key={e.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-5 py-3.5"><span className="text-gray-800 font-medium">{e.taskTitle || 'Untitled'}</span></td>
+                    <td className="px-5 py-3.5 text-gray-500">{isRequester ? 'Requester' : 'Resolver'}</td>
+                    <td className="px-5 py-3.5"><EscrowStatusBadge status={e.status} /></td>
+                    <td className="px-5 py-3.5 text-right font-bold text-gray-900">{e.amount} pts</td>
+                    <td className="px-5 py-3.5 text-right">
+                      {canRelease && <button onClick={() => releaseEscrow.mutate({ escrow: e, post: task, currentUser })} disabled={releaseEscrow.isPending} className="text-xs font-semibold text-green-600 hover:text-green-700 disabled:opacity-50">Verify & Release</button>}
+                      {canRefund && <button onClick={() => refundEscrow.mutate({ escrow: e, post: task, currentUser })} disabled={refundEscrow.isPending} className="inline-flex items-center gap-1 text-xs font-semibold text-gray-500 hover:text-gray-700 disabled:opacity-50"><RotateCcw size={12} /> Refund</button>}
+                      {!canRelease && !canRefund && <span className="text-xs text-gray-300">—</span>}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function WalletViews({ mode = 'wallet', currentUser }) {
+  if (mode === 'withdraw') return <WithdrawForm currentUser={currentUser} />;
   if (mode === 'transactions') return <TransactionsTable />;
-  return <WalletHome />;
+  if (mode === 'escrow') return <EscrowView currentUser={currentUser} />;
+  return <WalletHome currentUser={currentUser} />;
 }
