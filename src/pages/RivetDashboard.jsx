@@ -31,7 +31,7 @@ export default function RivetDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-[#F8F9FC] via-[#F8F9FC] to-[#EEF0F8] overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-br from-[#FAFAFB] via-[#FAFAFB] to-[#F3F4F8] overflow-hidden">
       <Sidebar
         activeNav={activeNav}
         onNavChange={(id) => { setActiveNav(id); setSearchQuery(''); setProfileUser(null); setIsMobileNavOpen(false); }}
@@ -50,12 +50,12 @@ export default function RivetDashboard() {
           ) : activeNav === 'home' ? (
             <>
               {/* Greeting */}
-              <div className="rounded-3xl bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 p-8 text-white relative overflow-hidden">
-                <div className="absolute -top-12 -right-12 w-52 h-52 bg-white/10 rounded-full blur-2xl" />
-                <div className="absolute -bottom-16 -left-10 w-48 h-48 bg-indigo-400/20 rounded-full blur-3xl" />
+              <div className="rounded-3xl bg-gradient-to-br from-[#2e1065] via-[#1e1b4b] to-[#3730a3] p-8 text-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_60%)]" />
                 <div className="relative">
-                  <h1 className="text-2xl font-bold">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'} 👋</h1>
-                  <p className="text-sm text-white/70 mt-1">Let's build something great today.</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-300/80 mb-2">Dashboard</p>
+                  <h1 className="text-2xl font-bold tracking-tight">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'} 👋</h1>
+                  <p className="text-sm text-white/60 mt-1">Let's build something great today.</p>
                 </div>
               </div>
 

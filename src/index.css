@@ -30,7 +30,7 @@
     --chart-3: 160 60% 45%;
     --chart-4: 30 80% 55%;
     --chart-5: 0 70% 55%;
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
     --font-mono: 'JetBrains Mono', monospace;
     --font-sans: 'Inter', sans-serif;
@@ -103,4 +103,12 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+::selection {
+  background: hsl(var(--primary) / 0.25);
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.02em;
 }

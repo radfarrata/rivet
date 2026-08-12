@@ -53,7 +53,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       {isMobileOpen && (
         <div className="fixed inset-0 bg-black/40 z-30 md:hidden" onClick={() => setIsMobileNavOpen(false)} />
       )}
-      <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-[#0F0B1E] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+      <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-gradient-to-b from-[#120F24] to-[#0B0818] border-r border-white/5 flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-6 py-5">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-900/40">
