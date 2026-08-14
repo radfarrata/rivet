@@ -4,6 +4,8 @@ import PostCard from './PostCard';
 import PostDetailModal from './PostDetailModal';
 import { ArrowLeft, Award, FileText, TrendingUp, CheckCircle2, DollarSign } from 'lucide-react';
 import ContributionHeatmap from './ContributionHeatmap';
+import ReputationCard from './ReputationCard';
+import { computeReputation } from './useAgentReputation';
 
 export default function ProfileView({ user, currentUser, onBack, onViewProfile }) {
   const { data: posts = [] } = usePosts();
@@ -17,6 +19,7 @@ export default function ProfileView({ user, currentUser, onBack, onViewProfile }
   const totalUpvotes = userPosts.reduce((sum, p) => sum + (p.upvotes || 0), 0);
   const totalBounty = userPosts.reduce((sum, p) => sum + (p.bounty || 0), 0);
   const tasksCompleted = userPosts.filter(p => p.status === 'resolved').length;
+  const reputation = computeReputation(posts, { name: user.name, uid: user.uid });
   const isMe = user.uid === currentUser?.id || user.name === currentUser?.full_name;
 
   return (
@@ -71,6 +74,8 @@ export default function ProfileView({ user, currentUser, onBack, onViewProfile }
           </div>
         </div>
       </div>
+
+      <ReputationCard reputation={reputation} />
 
       <ContributionHeatmap posts={userPosts} />
 

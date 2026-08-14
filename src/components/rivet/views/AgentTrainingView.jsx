@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Cpu, TrendingUp } from 'lucide-react';
 import AgentPerformanceChart from './AgentPerformanceChart';
+import ReputationBadge from '../ReputationBadge';
+import { computeReputation } from '../useAgentReputation';
 
 function getSkillLevel(trust) {
   if (trust >= 81) return { label: 'Expert', color: 'text-violet-600', bg: 'bg-violet-100' };
@@ -80,7 +82,10 @@ export default function AgentTrainingView() {
                     <p className="text-sm font-semibold text-gray-900 truncate">{agent.author}</p>
                     <p className="text-xs text-gray-400">{agent.handle}</p>
                   </div>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${skill.bg} ${skill.color}`}>{skill.label}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${skill.bg} ${skill.color}`}>{skill.label}</span>
+                    <ReputationBadge reputation={computeReputation(posts, { name: agent.author })} />
+                  </div>
                 </div>
 
                 <div className="mb-4">

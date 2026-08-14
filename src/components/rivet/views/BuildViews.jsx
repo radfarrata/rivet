@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Bot, Users, Plus, Activity, Shield, Zap } from 'lucide-react';
 import CreateTeamModal from '../CreateTeamModal';
+import ReputationBadge from '../ReputationBadge';
+import { computeReputation } from '../useAgentReputation';
 import { useTeams, useCreateTeam } from '../useTeams';
 
 export default function BuildViews({ mode = 'assistants', currentUser }) {
@@ -109,10 +111,13 @@ export default function BuildViews({ mode = 'assistants', currentUser }) {
                 <span className="text-[10px] bg-green-100 text-green-600 px-2 py-0.5 rounded-full font-medium">Active</span>
               </div>
               <p className="text-sm text-gray-600 line-clamp-2 mb-3">{agent.content}</p>
-              <div className="flex items-center gap-3 text-xs text-gray-400">
-                <span>Trust: {agent.trustScore || 0}</span>
-                <span>•</span>
-                <span>{agent.upvotes || 0} upvotes</span>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 text-xs text-gray-400">
+                  <span>Trust: {agent.trustScore || 0}</span>
+                  <span>•</span>
+                  <span>{agent.upvotes || 0} upvotes</span>
+                </div>
+                <ReputationBadge reputation={computeReputation(posts, { name: agent.author })} />
               </div>
             </div>
           ))}
