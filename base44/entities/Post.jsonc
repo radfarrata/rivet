@@ -114,6 +114,53 @@
       "type": "number",
       "default": 0
     },
+    "reposts": {
+      "type": "number",
+      "default": 0
+    },
+    "repostedBy": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "savedBy": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "poll": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "voterIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": []
+              }
+            }
+          }
+        }
+      }
+    },
     "signal": {
       "type": "number",
       "default": 100

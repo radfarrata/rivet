@@ -4,7 +4,10 @@ import { base44 } from '@/api/base44Client';
 import { useCreateTransaction } from './useTransactions';
 import { useCreateNotification } from './useNotifications';
 import { useEscrows, useReleaseEscrow, useRefundEscrow } from './useEscrow';
-import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send } from 'lucide-react';
+import { useToggleSave, useToggleRepost, useVotePoll } from './usePosts';
+import PollBlock from './PollBlock';
+import ThreadedComments from './ThreadedComments';
+import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send, Bookmark, Repeat2 } from 'lucide-react';
 
 export default function PostDetailModal({ post, onClose, currentUser, onViewProfile }) {
   const queryClient = useQueryClient();
@@ -17,6 +20,11 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
   const releaseEscrow = useReleaseEscrow();
   const refundEscrow = useRefundEscrow();
   const isRequester = post.created_by_id === currentUser?.id;
+  const toggleSave = useToggleSave(currentUser);
+  const toggleRepost = useToggleRepost(currentUser);
+  const votePoll = useVotePoll(currentUser);
+  const saved = (post.savedBy || []).includes(currentUser?.id);
+  const reposted = (post.repostedBy || []).includes(currentUser?.id);
 
   const notifyOwner = (type, title, message) => {
     const ownerId = post.created_by_id;
@@ -153,6 +161,8 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
             </div>
           )}
 
+          {post.poll && <PollBlock post={post} currentUser={currentUser} onVote={(optionId) => votePoll.mutate({ post, optionId })} />}
+
           {/* Audit Log */}
           {post.auditLog?.length > 0 && (
             <div className="bg-gray-50 rounded-xl p-4">
@@ -173,6 +183,12 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
           <div className="flex gap-2 pt-2">
             <button onClick={() => upvote.mutate()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
               <ChevronUp size={16} /> {post.upvotes || 0}
+            </button>
+            <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#1d9bf0]/10 text-[#1d9bf0]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+              <Bookmark size={16} /> {saved ? 'Saved' : 'Save'}
+            </button>
+            <button onClick={() => toggleRepost.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reposted ? 'bg-[#1d9bf0]/10 text-[#1d9bf0]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+              <Repeat2 size={16} /> {post.reposts || 0}
             </button>
             {post.status === 'open' && !isRequester && (
               <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-violet-600 text-white hover:bg-violet-700 transition-colors disabled:opacity-50">
@@ -199,34 +215,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
 
           {/* Comments */}
           <div className="border-t border-gray-100 pt-4">
-            <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2"><MessageSquare size={16} className="text-gray-400" /> Comments ({comments.length})</h3>
-            <div className="space-y-3 mb-4">
-              {comments.map(c => (
-                <div key={c.id} className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-[10px] flex-shrink-0">{(c.authorName || '??').slice(0, 2).toUpperCase()}</div>
-                  <div className="flex-1 bg-gray-50 rounded-xl px-3 py-2">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-xs font-semibold text-gray-900">{c.authorName}</span>
-                      {c.handle && <span className="text-[10px] text-gray-400">{c.handle}</span>}
-                    </div>
-                    <p className="text-sm text-gray-700">{c.content}</p>
-                  </div>
-                </div>
-              ))}
-              {comments.length === 0 && <p className="text-sm text-gray-400 text-center py-4">No comments yet. Be the first to comment!</p>}
-            </div>
-            <div className="flex gap-2">
-              <input
-                value={commentText}
-                onChange={e => setCommentText(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleComment(); } }}
-                placeholder="Write a comment..."
-                className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-400"
-              />
-              <button onClick={handleComment} disabled={addComment.isPending || !commentText.trim()} className="bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white p-2.5 rounded-lg transition-colors">
-                <Send size={16} />
-              </button>
-            </div>
+            <ThreadedComments post={post} currentUser={currentUser} notifyOwner={notifyOwner} />
           </div>
         </div>
       </div>

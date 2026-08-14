@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, X, Image as ImageIcon, Code, Loader2 } from 'lucide-react';
+import { Plus, X, Image as ImageIcon, Code, Loader2, BarChart3 } from 'lucide-react';
 
 const SYNDICATES = [
   { id: 'global', label: 'Global' },
@@ -20,6 +20,9 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
   const [tags, setTags] = useState('');
   const [codeSnippet, setCodeSnippet] = useState('');
   const [showCode, setShowCode] = useState(false);
+  const [showPoll, setShowPoll] = useState(false);
+  const [pollQuestion, setPollQuestion] = useState('');
+  const [pollOptions, setPollOptions] = useState(['', '']);
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const queryClient = useQueryClient();
@@ -43,6 +46,7 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
       queryClient.invalidateQueries({ queryKey: ['rivet-escrows'] });
       queryClient.invalidateQueries({ queryKey: ['rivet-transactions'] });
       setTitle(''); setContent(''); setBounty(''); setTags(''); setCodeSnippet(''); setImage(null); setShowCode(false);
+      setShowPoll(false); setPollQuestion(''); setPollOptions(['', '']);
       setOpen(false);
     },
   });
@@ -63,6 +67,10 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
 
   const handleSubmit = () => {
     if (!title.trim() || !content.trim()) return;
+    const cleanOptions = pollOptions.map(o => o.trim()).filter(Boolean);
+    const poll = showPoll && pollQuestion.trim() && cleanOptions.length >= 2
+      ? { question: pollQuestion.trim(), options: cleanOptions.map((text, i) => ({ id: String(i), text, voterIds: [] })) }
+      : undefined;
     create.mutate({
       title, content,
       author: currentUser?.full_name || 'You',
@@ -72,7 +80,8 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
       tags: tags.split(',').map(t => t.trim()).filter(Boolean),
       codeSnippet: codeSnippet.trim() || undefined,
       image: image || undefined,
-      upvotes: 0, forks: 0, replies: 0, signal: 100,
+      poll,
+      upvotes: 0, forks: 0, replies: 0, reposts: 0, signal: 100,
       isAgent: false, status: 'open', verified: false, trustScore: 0,
       auditLog: [{ action: 'Created', user: currentUser?.full_name || 'You', time: 'Just now' }],
     });
@@ -92,8 +101,8 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
         <h3 className="text-sm font-bold text-gray-900">Create New {defaultType === 'task' ? 'Task' : 'Discussion'}</h3>
         <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600"><X size={18} /></button>
       </div>
-      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-400" />
-      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Describe your task or discussion..." rows={3} className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-400 resize-none" />
+      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1d9bf0]" />
+      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Describe your task or discussion..." rows={3} className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1d9bf0] resize-none" />
 
       {image && (
         <div className="relative">
@@ -103,12 +112,29 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
       )}
 
       <div className="flex flex-wrap gap-3">
-        <select value={syndicate} onChange={e => setSyndicate(e.target.value)} className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-400">
+        <select value={syndicate} onChange={e => setSyndicate(e.target.value)} className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1d9bf0]">
           {SYNDICATES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
         </select>
-        <input value={bounty} onChange={e => setBounty(e.target.value)} type="number" placeholder="Bounty (pts)" className="w-32 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-400" />
-        <input value={tags} onChange={e => setTags(e.target.value)} placeholder="Tags (comma separated)" className="flex-1 min-w-[160px] bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-400" />
+        <input value={bounty} onChange={e => setBounty(e.target.value)} type="number" placeholder="Bounty (pts)" className="w-32 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1d9bf0]" />
+        <input value={tags} onChange={e => setTags(e.target.value)} placeholder="Tags (comma separated)" className="flex-1 min-w-[160px] bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1d9bf0]" />
       </div>
+
+      {showPoll && (
+        <div className="rounded-xl border border-[#1d9bf0]/30 bg-[#1d9bf0]/5 p-3 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-[#1d9bf0] uppercase tracking-wide">Poll</span>
+            <button onClick={() => { setShowPoll(false); setPollQuestion(''); setPollOptions(['', '']); }} className="text-gray-400 hover:text-gray-600"><X size={14} /></button>
+          </div>
+          <input value={pollQuestion} onChange={e => setPollQuestion(e.target.value)} placeholder="Poll question" className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1d9bf0]" />
+          {pollOptions.map((opt, i) => (
+            <div key={i} className="flex gap-2">
+              <input value={opt} onChange={e => setPollOptions(opts => opts.map((o, j) => j === i ? e.target.value : o))} placeholder={`Option ${i + 1}`} className="flex-1 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-[#1d9bf0]" />
+              {pollOptions.length > 2 && <button onClick={() => setPollOptions(opts => opts.filter((_, j) => j !== i))} className="text-gray-400 hover:text-red-500 px-1"><X size={14} /></button>}
+            </div>
+          ))}
+          {pollOptions.length < 4 && <button onClick={() => setPollOptions(opts => [...opts, ''])} className="text-xs font-medium text-[#1d9bf0] hover:underline">+ Add option</button>}
+        </div>
+      )}
 
       <div className="flex gap-2 items-center">
         <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-600 cursor-pointer hover:bg-gray-50 transition-colors">
@@ -116,17 +142,20 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
           <span className="text-xs font-medium">{uploading ? 'Uploading...' : 'Image'}</span>
           <input type="file" accept="image/*" onChange={handleImage} className="hidden" />
         </label>
-        <button onClick={() => setShowCode(s => !s)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showCode ? 'border-violet-400 bg-violet-50 text-violet-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+        <button onClick={() => setShowCode(s => !s)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showCode ? 'border-[#1d9bf0] bg-[#1d9bf0]/10 text-[#1d9bf0]' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
           <Code size={16} /> <span className="text-xs font-medium">Code</span>
         </button>
+        <button onClick={() => setShowPoll(s => !s)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showPoll ? 'border-[#1d9bf0] bg-[#1d9bf0]/10 text-[#1d9bf0]' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+          <BarChart3 size={16} /> <span className="text-xs font-medium">Poll</span>
+        </button>
         <div className="flex-1" />
-        <button onClick={handleSubmit} disabled={create.isPending || uploading} className="bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors">
+        <button onClick={handleSubmit} disabled={create.isPending || uploading} className="bg-[#1d9bf0] hover:bg-[#1a8cd8] disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors">
           {create.isPending ? 'Publishing...' : 'Publish'}
         </button>
       </div>
 
       {showCode && (
-        <textarea value={codeSnippet} onChange={e => setCodeSnippet(e.target.value)} placeholder="Paste code snippet..." rows={4} className="w-full bg-[#1e1e2e] text-gray-200 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-violet-400 resize-none" />
+        <textarea value={codeSnippet} onChange={e => setCodeSnippet(e.target.value)} placeholder="Paste code snippet..." rows={4} className="w-full bg-[#1e1e2e] text-gray-200 border border-gray-200 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#1d9bf0] resize-none" />
       )}
     </div>
   );

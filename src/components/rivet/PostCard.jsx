@@ -1,10 +1,13 @@
 import React from 'react';
-import { ChevronUp, MessageSquare, Code } from 'lucide-react';
+import { ChevronUp, MessageSquare, Code, Bookmark, Repeat2 } from 'lucide-react';
+import PollBlock from './PollBlock';
 
-export default function PostCard({ post, onUpvote, onClick, onViewProfile }) {
+export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost, onVote, onTagClick, onClick, onViewProfile }) {
   const initials = (post.author || '??').slice(0, 2).toUpperCase();
   const snippetLines = (post.codeSnippet || '').split('\n').slice(0, 3).join('\n');
   const hasMoreLines = (post.codeSnippet || '').split('\n').length > 3;
+  const saved = (post.savedBy || []).includes(currentUser?.id);
+  const reposted = (post.repostedBy || []).includes(currentUser?.id);
 
   return (
     <div onClick={() => onClick?.(post)} className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md transition-shadow cursor-pointer">
@@ -23,9 +26,9 @@ export default function PostCard({ post, onUpvote, onClick, onViewProfile }) {
       <h3 className="text-base font-bold text-gray-900 mb-2">{post.title}</h3>
       <p className="text-sm text-gray-500 mb-3 line-clamp-2">{post.content}</p>
 
-      {post.image && (
-        <img src={post.image} alt={post.title} className="mb-3 rounded-xl max-h-64 w-full object-cover" />
-      )}
+      {post.image && <img src={post.image} alt={post.title} className="mb-3 rounded-xl max-h-64 w-full object-cover" />}
+
+      <PollBlock post={post} currentUser={currentUser} onVote={onVote} />
 
       {post.codeSnippet && (
         <div className="mb-3 rounded-xl border border-gray-200 overflow-hidden">
@@ -39,16 +42,30 @@ export default function PostCard({ post, onUpvote, onClick, onViewProfile }) {
 
       <div className="flex items-center justify-between gap-3">
         <div className="flex gap-1.5 flex-wrap">
-          {(post.tags || []).slice(0, 3).map(tag => (
-            <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{tag}</span>
-          ))}
+          {(post.tags || []).slice(0, 3).map(tag =>
+            onTagClick ? (
+              <button key={tag} onClick={(e) => { e.stopPropagation(); onTagClick(tag); }} className="text-[10px] px-2 py-0.5 rounded-full bg-[#1d9bf0]/10 text-[#1d9bf0] font-medium hover:bg-[#1d9bf0]/20">{tag}</button>
+            ) : (
+              <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">{tag}</span>
+            )
+          )}
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
           {post.bounty > 0 && <span className="text-sm font-bold text-green-600">{post.bounty} {post.token || 'USD'}</span>}
           <span className="flex items-center gap-1 text-xs text-gray-400"><MessageSquare size={14} /> {post.replies || 0}</span>
+          {onRepost && (
+            <button onClick={(e) => { e.stopPropagation(); onRepost(post); }} className={`flex items-center gap-1 text-xs transition-colors ${reposted ? 'text-[#1d9bf0]' : 'text-gray-400 hover:text-[#1d9bf0]'}`}>
+              <Repeat2 size={15} /> {post.reposts || 0}
+            </button>
+          )}
           <button onClick={(e) => { e.stopPropagation(); onUpvote?.(post); }} className="flex items-center gap-1 text-xs text-gray-400 hover:text-violet-600 transition-colors">
             <ChevronUp size={16} /> {post.upvotes || 0}
           </button>
+          {onSave && (
+            <button onClick={(e) => { e.stopPropagation(); onSave(post); }} className={`flex items-center gap-1 text-xs transition-colors ${saved ? 'text-[#1d9bf0]' : 'text-gray-400 hover:text-[#1d9bf0]'}`}>
+              <Bookmark size={15} />
+            </button>
+          )}
         </div>
       </div>
     </div>

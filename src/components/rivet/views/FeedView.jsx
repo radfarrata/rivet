@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PostCard from '../PostCard';
 import PostComposer from '../PostComposer';
 import PostDetailModal from '../PostDetailModal';
-import { usePosts, useUpvote } from '../usePosts';
+import { usePosts, useUpvote, useToggleSave, useToggleRepost, useVotePoll } from '../usePosts';
+import { Sparkles, X } from 'lucide-react';
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -15,19 +16,38 @@ const SORTS = [
   { id: 'upvotes', label: 'Most Upvoted' },
 ];
 
+const TABS = [
+  { id: 'foryou', label: 'For You' },
+  { id: 'rivet', label: 'Rivet' },
+  { id: 'saved', label: 'Saved' },
+];
+
 export default function FeedView({ currentUser, onViewProfile }) {
   const { data: posts = [], isLoading } = usePosts();
   const upvote = useUpvote();
+  const save = useToggleSave(currentUser);
+  const repost = useToggleRepost(currentUser);
+  const votePoll = useVotePoll(currentUser);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [tab, setTab] = useState('foryou');
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
+  const [activeTag, setActiveTag] = useState(null);
 
-  const filtered = posts
-    .filter(p => (filter === 'all' ? true : p.postType === filter))
-    .sort((a, b) => {
+  const score = (p) => (p.upvotes || 0) * 2 + (p.replies || 0) + (p.reposts || 0) + (p.bounty || 0) / 10;
+
+  const filtered = useMemo(() => {
+    let list = posts;
+    if (activeTag) list = list.filter(p => (p.tags || []).includes(activeTag));
+    if (tab === 'saved') list = list.filter(p => (p.savedBy || []).includes(currentUser?.id));
+    list = list.filter(p => (filter === 'all' ? true : p.postType === filter));
+    list = [...list].sort((a, b) => {
+      if (tab === 'rivet') return score(b) - score(a);
       if (sortBy === 'upvotes') return (b.upvotes || 0) - (a.upvotes || 0);
       return new Date(b.created_date) - new Date(a.created_date);
     });
+    return list;
+  }, [posts, tab, filter, sortBy, activeTag, currentUser]);
 
   return (
     <div className="space-y-5">
@@ -42,22 +62,56 @@ export default function FeedView({ currentUser, onViewProfile }) {
               <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>{f.label}</button>
             ))}
           </div>
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-gray-100 border-0 rounded-lg text-xs font-medium px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-violet-400 cursor-pointer">
-            {SORTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
-          </select>
+          {tab !== 'rivet' && (
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-gray-100 border-0 rounded-lg text-xs font-medium px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#1d9bf0] cursor-pointer">
+              {SORTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+            </select>
+          )}
         </div>
       </div>
-      <PostComposer defaultType="discussion" currentUser={currentUser} />
+
+      <div className="flex items-center gap-1 border-b border-gray-100">
+        {TABS.map(t => (
+          <button key={t.id} onClick={() => { setTab(t.id); setActiveTag(null); }} className={`px-4 py-2.5 text-sm font-semibold transition-colors relative ${tab === t.id ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}>
+            {t.id === 'rivet' && <Sparkles size={13} className="inline mr-1 text-[#1d9bf0]" />}{t.label}
+            {tab === t.id && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#1d9bf0] rounded-full" />}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'rivet' && <p className="text-xs text-gray-500 -mt-2">High-signal posts ranked by upvotes, replies, reposts, and bounties.</p>}
+
+      {activeTag && (
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-gray-500">Filtered by</span>
+          <span className="inline-flex items-center gap-1 bg-[#1d9bf0]/10 text-[#1d9bf0] px-2.5 py-1 rounded-full text-xs font-medium">#{activeTag}</span>
+          <button onClick={() => setActiveTag(null)} className="text-gray-400 hover:text-gray-600"><X size={14} /></button>
+        </div>
+      )}
+
+      {tab !== 'saved' && <PostComposer defaultType="discussion" currentUser={currentUser} />}
+
       {isLoading ? (
         [...Array(3)].map((_, i) => <div key={i} className="h-40 bg-white rounded-2xl border border-gray-100 animate-pulse" />)
       ) : filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-          <p className="text-gray-500 text-sm">No posts yet. Be the first to share something!</p>
+          <p className="text-gray-500 text-sm">{tab === 'saved' ? 'No saved posts yet. Bookmark posts to find them here.' : 'No posts yet. Be the first to share something!'}</p>
         </div>
       ) : (
         <div className="space-y-4">
           {filtered.map(post => (
-            <PostCard key={post.id} post={post} onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })} onClick={setSelectedPost} onViewProfile={onViewProfile} />
+            <PostCard
+              key={post.id}
+              post={post}
+              currentUser={currentUser}
+              onUpvote={(p) => upvote.mutate({ id: p.id, upvotes: p.upvotes })}
+              onSave={(p) => save.mutate({ post: p })}
+              onRepost={(p) => repost.mutate({ post: p })}
+              onVote={(oid) => votePoll.mutate({ post, optionId: oid })}
+              onTagClick={(tag) => { setTab('foryou'); setActiveTag(tag); }}
+              onClick={setSelectedPost}
+              onViewProfile={onViewProfile}
+            />
           ))}
         </div>
       )}
