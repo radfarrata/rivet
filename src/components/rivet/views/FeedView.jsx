@@ -53,49 +53,49 @@ export default function FeedView({ currentUser, onViewProfile }) {
     <div className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Community Feed</h2>
-          <p className="text-sm text-gray-500 mt-0.5">{filtered.length} posts • Latest updates from the Rivet community</p>
+          <h2 className="text-xl font-bold text-white">Community Feed</h2>
+          <p className="text-sm text-[#888] mt-0.5">{filtered.length} posts • Latest updates from the Rivet community</p>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+          <div className="flex gap-1 bg-[#16181c] border border-[#2f3336] p-1 rounded-lg">
             {FILTERS.map(f => (
-              <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>{f.label}</button>
+              <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-[#1d9bf0] text-white' : 'text-[#888] hover:text-white'}`}>{f.label}</button>
             ))}
           </div>
           {tab !== 'rivet' && (
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-gray-100 border-0 rounded-lg text-xs font-medium px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#1d9bf0] cursor-pointer">
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-[#16181c] border border-[#2f3336] rounded-lg text-xs font-medium px-3 py-1.5 text-[#e7e9ea] focus:outline-none focus:ring-2 focus:ring-[#1d9bf0] cursor-pointer">
               {SORTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
             </select>
           )}
         </div>
       </div>
 
-      <div className="flex items-center gap-1 border-b border-gray-100">
+      <div className="flex items-center gap-1 border-b border-[#2f3336]">
         {TABS.map(t => (
-          <button key={t.id} onClick={() => { setTab(t.id); setActiveTag(null); }} className={`px-4 py-2.5 text-sm font-semibold transition-colors relative ${tab === t.id ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}>
+          <button key={t.id} onClick={() => { setTab(t.id); setActiveTag(null); }} className={`px-4 py-2.5 text-sm font-semibold transition-colors relative ${tab === t.id ? 'text-white' : 'text-[#888] hover:text-white'}`}>
             {t.id === 'rivet' && <Sparkles size={13} className="inline mr-1 text-[#1d9bf0]" />}{t.label}
             {tab === t.id && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#1d9bf0] rounded-full" />}
           </button>
         ))}
       </div>
 
-      {tab === 'rivet' && <p className="text-xs text-gray-500 -mt-2">High-signal posts ranked by upvotes, replies, reposts, and bounties.</p>}
+      {tab === 'rivet' && <p className="text-xs text-[#888] -mt-2">High-signal posts ranked by upvotes, replies, reposts, and bounties.</p>}
 
       {activeTag && (
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-gray-500">Filtered by</span>
+          <span className="text-[#888]">Filtered by</span>
           <span className="inline-flex items-center gap-1 bg-[#1d9bf0]/10 text-[#1d9bf0] px-2.5 py-1 rounded-full text-xs font-medium">#{activeTag}</span>
-          <button onClick={() => setActiveTag(null)} className="text-gray-400 hover:text-gray-600"><X size={14} /></button>
+          <button onClick={() => setActiveTag(null)} className="text-[#888] hover:text-white"><X size={14} /></button>
         </div>
       )}
 
       {tab !== 'saved' && <PostComposer defaultType="discussion" currentUser={currentUser} />}
 
       {isLoading ? (
-        [...Array(3)].map((_, i) => <div key={i} className="h-40 bg-white rounded-2xl border border-gray-100 animate-pulse" />)
+        [...Array(3)].map((_, i) => <div key={i} className="h-40 bg-[#16181c] rounded-2xl border border-[#2f3336] animate-pulse" />)
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-          <p className="text-gray-500 text-sm">{tab === 'saved' ? 'No saved posts yet. Bookmark posts to find them here.' : 'No posts yet. Be the first to share something!'}</p>
+        <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-12 text-center">
+          <p className="text-[#888] text-sm">{tab === 'saved' ? 'No saved posts yet. Bookmark posts to find them here.' : 'No posts yet. Be the first to share something!'}</p>
         </div>
       ) : (
         <div className="space-y-4">

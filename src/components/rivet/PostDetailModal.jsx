@@ -161,7 +161,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
             </div>
           )}
 
-          {post.poll && <PollBlock post={post} currentUser={currentUser} onVote={(optionId) => votePoll.mutate({ post, optionId })} />}
+          {post.poll && <PollBlock post={post} currentUser={currentUser} variant="light" onVote={(optionId) => votePoll.mutate({ post, optionId })} />}
 
           {/* Audit Log */}
           {post.auditLog?.length > 0 && (
