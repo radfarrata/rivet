@@ -3,6 +3,7 @@ import { ArrowUpRight, CheckCircle2, Wallet as WalletIcon, TrendingUp, ArrowDown
 import { useTransactions, useCreateTransaction } from '../useTransactions';
 import { useEscrows, useReleaseEscrow, useRefundEscrow, useWalletBalance } from '../useEscrow';
 import { usePosts } from '../usePosts';
+import CashFlowChart from '../CashFlowChart';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -151,6 +152,8 @@ function WalletHome({ currentUser }) {
           <div className="h-2 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-violet-400 to-blue-400 rounded-full" style={{ width: `${Math.min(100, (balance / 15000) * 100)}%` }} /></div>
         </div>
       </div>
+
+      <CashFlowChart />
 
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
