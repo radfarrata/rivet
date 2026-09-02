@@ -59,11 +59,11 @@ export default function FeedView({ currentUser, onViewProfile }) {
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex gap-1 bg-[#16181c] border border-[#2f3336] p-1 rounded-lg">
             {FILTERS.map(f => (
-              <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-[#1d9bf0] text-white' : 'text-[#888] hover:text-white'}`}>{f.label}</button>
+              <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-[#9d4f7a] text-white' : 'text-[#888] hover:text-white'}`}>{f.label}</button>
             ))}
           </div>
           {tab !== 'rivet' && (
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-[#16181c] border border-[#2f3336] rounded-lg text-xs font-medium px-3 py-1.5 text-[#e7e9ea] focus:outline-none focus:ring-2 focus:ring-[#1d9bf0] cursor-pointer">
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-[#16181c] border border-[#2f3336] rounded-lg text-xs font-medium px-3 py-1.5 text-[#e7e9ea] focus:outline-none focus:ring-2 focus:ring-[#9d4f7a] cursor-pointer">
               {SORTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
             </select>
           )}
@@ -73,8 +73,8 @@ export default function FeedView({ currentUser, onViewProfile }) {
       <div className="flex items-center gap-1 border-b border-[#2f3336]">
         {TABS.map(t => (
           <button key={t.id} onClick={() => { setTab(t.id); setActiveTag(null); }} className={`px-4 py-2.5 text-sm font-semibold transition-colors relative ${tab === t.id ? 'text-white' : 'text-[#888] hover:text-white'}`}>
-            {t.id === 'rivet' && <Sparkles size={13} className="inline mr-1 text-[#1d9bf0]" />}{t.label}
-            {tab === t.id && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#1d9bf0] rounded-full" />}
+            {t.id === 'rivet' && <Sparkles size={13} className="inline mr-1 text-[#9d4f7a]" />}{t.label}
+            {tab === t.id && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#9d4f7a] rounded-full" />}
           </button>
         ))}
       </div>
@@ -84,7 +84,7 @@ export default function FeedView({ currentUser, onViewProfile }) {
       {activeTag && (
         <div className="flex items-center gap-2 text-sm">
           <span className="text-[#888]">Filtered by</span>
-          <span className="inline-flex items-center gap-1 bg-[#1d9bf0]/10 text-[#1d9bf0] px-2.5 py-1 rounded-full text-xs font-medium">#{activeTag}</span>
+          <span className="inline-flex items-center gap-1 bg-[#9d4f7a]/10 text-[#9d4f7a] px-2.5 py-1 rounded-full text-xs font-medium">#{activeTag}</span>
           <button onClick={() => setActiveTag(null)} className="text-[#888] hover:text-white"><X size={14} /></button>
         </div>
       )}

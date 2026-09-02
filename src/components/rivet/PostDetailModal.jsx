@@ -100,7 +100,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
         {/* Header */}
         <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => { onViewProfile?.(post); onClose(); }}>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6a3a5a] to-[#9d4f7a] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
             <div>
               <p className="text-sm font-semibold text-gray-900">{post.author || 'Unknown'}</p>
               <p className="text-xs text-gray-400">{post.handle || '@unknown'}</p>
@@ -184,14 +184,14 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
             <button onClick={() => upvote.mutate()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
               <ChevronUp size={16} /> {post.upvotes || 0}
             </button>
-            <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#1d9bf0]/10 text-[#1d9bf0]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+            <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#9d4f7a]/10 text-[#9d4f7a]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
               <Bookmark size={16} /> {saved ? 'Saved' : 'Save'}
             </button>
-            <button onClick={() => toggleRepost.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reposted ? 'bg-[#1d9bf0]/10 text-[#1d9bf0]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+            <button onClick={() => toggleRepost.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reposted ? 'bg-[#9d4f7a]/10 text-[#9d4f7a]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
               <Repeat2 size={16} /> {post.reposts || 0}
             </button>
             {post.status === 'open' && !isRequester && (
-              <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-violet-600 text-white hover:bg-violet-700 transition-colors disabled:opacity-50">
+              <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-[#6a3a5a] text-white hover:bg-[#7d4a6a] transition-colors disabled:opacity-50">
                 <Lock size={16} /> Claim Task
               </button>
             )}

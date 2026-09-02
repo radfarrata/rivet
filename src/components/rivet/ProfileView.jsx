@@ -31,7 +31,7 @@ export default function ProfileView({ user, currentUser, onBack, onViewProfile }
       {/* Profile header */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#6a3a5a] to-[#9d4f7a] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
             {(user.name || '??').slice(0, 2).toUpperCase()}
           </div>
           <div className="flex-1">

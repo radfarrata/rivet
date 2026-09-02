@@ -1,35 +1,31 @@
-import { useId } from 'react';
-
 export function RivetIcon({ size = 32, className = "" }) {
-  const uid = useId().replace(/:/g, '');
-  const bodyGrad = `rivetBody-${uid}`;
-  const shineGrad = `rivetShine-${uid}`;
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id={bodyGrad} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f5f5f8" />
-          <stop offset="45%" stopColor="#b0b3c0" />
-          <stop offset="100%" stopColor="#5a5d6e" />
-        </linearGradient>
-        <radialGradient id={shineGrad} cx="35%" cy="25%" r="55%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.9)" />
-          <stop offset="35%" stopColor="rgba(255,255,255,0.15)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </radialGradient>
-      </defs>
-      <circle cx="24" cy="24" r="23" fill="#2a2d3a" />
-      <circle cx="24" cy="24" r="21.5" fill={`url(#${bodyGrad})`} />
-      <circle cx="24" cy="24" r="15" fill="#3a3d4e" stroke="#2a2d3a" strokeWidth="0.5" />
-      <g stroke="#6a6d7e" strokeWidth="2" strokeLinecap="round">
-        <line x1="24" y1="11" x2="24" y2="37" />
-        <line x1="11" y1="24" x2="37" y2="24" />
-        <line x1="15" y1="15" x2="33" y2="33" />
-        <line x1="33" y1="15" x2="15" y2="33" />
+      {/* Head dome */}
+      <path d="M14 20 C14 11 34 11 34 20 L34 29 L14 29 Z" fill="#ffffff" />
+      {/* Panel seams */}
+      <g stroke="#6a3a5a" strokeWidth="1.6" strokeLinecap="round">
+        <line x1="19.3" y1="11.5" x2="19.3" y2="29" />
+        <line x1="24" y1="10.5" x2="24" y2="29" />
+        <line x1="28.7" y1="11.5" x2="28.7" y2="29" />
       </g>
-      <circle cx="24" cy="24" r="5" fill="#4a4d5e" stroke="#2a2d3a" strokeWidth="0.5" />
-      <circle cx="24" cy="24" r="2" fill="#6a6d7e" />
-      <circle cx="24" cy="24" r="21.5" fill={`url(#${shineGrad})`} />
+      {/* Eyes */}
+      <rect x="20.8" y="17" width="2.4" height="5" rx="1.2" fill="#6a3a5a" />
+      <rect x="24.8" y="17" width="2.4" height="5" rx="1.2" fill="#6a3a5a" />
+      {/* Tentacles */}
+      <g stroke="#ffffff" strokeWidth="2" strokeLinecap="round" fill="none">
+        <path d="M17 29 C16 34 15 37 15.5 41" />
+        <path d="M21 29 C20.5 34 20 37 21 41" />
+        <path d="M27 29 C27.5 34 28 37 27 41" />
+        <path d="M31 29 C32 34 33 37 32.5 41" />
+      </g>
+      {/* Terminals */}
+      <g fill="#ffffff">
+        <circle cx="15.5" cy="41.5" r="2" />
+        <circle cx="21" cy="41.5" r="2" />
+        <circle cx="27" cy="41.5" r="2" />
+        <circle cx="32.5" cy="41.5" r="2" />
+      </g>
     </svg>
   );
 }

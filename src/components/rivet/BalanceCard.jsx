@@ -46,7 +46,7 @@ export function BalanceCard({ userId }) {
             <span className="text-xs text-[#71767b]">{Math.max(0, 15000 - balance).toLocaleString()} pts</span>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-[#1d9bf0] rounded-full" style={{ width: `${Math.min(100, (balance / 15000) * 100)}%` }} />
+            <div className="h-full bg-[#9d4f7a] rounded-full" style={{ width: `${Math.min(100, (balance / 15000) * 100)}%` }} />
           </div>
           <p className="text-[10px] text-[#71767b] mt-1">Payout threshold: 15,000 pts</p>
         </div>

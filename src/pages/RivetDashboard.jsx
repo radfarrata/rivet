@@ -51,7 +51,7 @@ export default function RivetDashboard() {
             <>
               {/* Greeting */}
               <div className="rounded-2xl border border-[#2f3336] bg-[#16181c] p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1d9bf0] mb-2">Dashboard</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9d4f7a] mb-2">Dashboard</p>
                 <h1 className="text-2xl font-bold tracking-tight text-[#e7e9ea]">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'}</h1>
                 <p className="text-sm text-[#71767b] mt-1">Let's build something great today.</p>
               </div>

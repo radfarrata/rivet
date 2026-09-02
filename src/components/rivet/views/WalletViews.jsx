@@ -143,7 +143,7 @@ function WalletHome({ currentUser }) {
 
   return (
     <div className="space-y-5">
-      <div className="bg-gradient-to-br from-[#1e1b3a] via-[#2d1b5e] to-[#1a3a5c] rounded-2xl p-6 text-white">
+      <div className="bg-gradient-to-br from-[#3a1f2e] via-[#6a3a5a] to-[#3a2540] rounded-2xl p-6 text-white">
         <div className="flex items-center gap-2 mb-4"><WalletIcon size={20} className="text-white/70" /><p className="text-sm text-white/60 font-medium">My Wallet</p></div>
         <div className="flex items-baseline gap-2 mb-1"><span className="text-4xl font-bold">{balance.toLocaleString()}</span><span className="text-sm text-white/60">pts</span></div>
         <p className="text-xs text-white/50 mb-5">≈ ${(balance / 100).toFixed(2)} USD</p>
@@ -211,7 +211,7 @@ function WithdrawForm({ currentUser }) {
         <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-4" />
         <h3 className="text-lg font-bold text-gray-900 mb-1">Withdrawal Requested!</h3>
         <p className="text-sm text-gray-500">{amount} pts ({(Number(amount) / 100).toFixed(2)} USD) will be sent to your {method === 'paypal' ? 'PayPal' : 'bank account'} within 2-3 business days.</p>
-        <button onClick={() => { setDone(false); setAmount(''); }} className="mt-4 text-sm font-semibold text-violet-600 hover:text-violet-700">Make another withdrawal</button>
+        <button onClick={() => { setDone(false); setAmount(''); }} className="mt-4 text-sm font-semibold text-[#9d4f7a] hover:text-[#b85e92]">Make another withdrawal</button>
       </div>
     );
   }
@@ -229,11 +229,11 @@ function WithdrawForm({ currentUser }) {
         <div>
           <label className="text-sm font-medium text-gray-700 mb-1.5 block">Withdrawal Method</label>
           <div className="flex gap-2">
-            <button onClick={() => setMethod('paypal')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'paypal' ? 'border-violet-400 bg-violet-50 text-violet-700' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>PayPal</button>
-            <button onClick={() => setMethod('bank')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'bank' ? 'border-violet-400 bg-violet-50 text-violet-700' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>Bank Transfer</button>
+            <button onClick={() => setMethod('paypal')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'paypal' ? 'border-[#9d4f7a] bg-[#9d4f7a]/10 text-[#9d4f7a]' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>PayPal</button>
+            <button onClick={() => setMethod('bank')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'bank' ? 'border-[#9d4f7a] bg-[#9d4f7a]/10 text-[#9d4f7a]' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>Bank Transfer</button>
           </div>
         </div>
-        <button onClick={handleWithdraw} disabled={Number(amount) < 1000 || createTxn.isPending} className="w-full bg-violet-600 hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">Withdraw {amount && `${amount} pts`}</button>
+        <button onClick={handleWithdraw} disabled={Number(amount) < 1000 || createTxn.isPending} className="w-full bg-[#6a3a5a] hover:bg-[#7d4a6a] disabled:opacity-40 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">Withdraw {amount && `${amount} pts`}</button>
       </div>
     </div>
   );

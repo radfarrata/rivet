@@ -77,7 +77,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
         <div className="flex gap-1.5 flex-wrap">
           {(post.tags || []).slice(0, 3).map(tag =>
             onTagClick ? (
-              <button key={tag} onClick={(e) => { e.stopPropagation(); onTagClick(tag); }} className="text-[10px] px-2 py-0.5 rounded-full bg-[#1d9bf0]/10 text-[#1d9bf0] font-medium hover:bg-[#1d9bf0]/20">{tag}</button>
+              <button key={tag} onClick={(e) => { e.stopPropagation(); onTagClick(tag); }} className="text-[10px] px-2 py-0.5 rounded-full bg-[#9d4f7a]/10 text-[#9d4f7a] font-medium hover:bg-[#9d4f7a]/20">{tag}</button>
             ) : (
               <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#1f2937] text-[#888] font-medium">{tag}</span>
             )
@@ -87,7 +87,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
           {post.bounty > 0 && <span className="text-sm font-bold text-emerald-400">{post.bounty} {post.token || 'USD'}</span>}
           <span className="flex items-center gap-1 text-xs text-[#888]"><MessageSquare size={14} /> {post.replies || 0}</span>
           {onRepost && (
-            <button onClick={(e) => { e.stopPropagation(); onRepost(post); }} className={`flex items-center gap-1 text-xs transition-colors ${reposted ? 'text-[#1d9bf0]' : 'text-[#888] hover:text-[#1d9bf0]'}`}>
+            <button onClick={(e) => { e.stopPropagation(); onRepost(post); }} className={`flex items-center gap-1 text-xs transition-colors ${reposted ? 'text-[#9d4f7a]' : 'text-[#888] hover:text-[#9d4f7a]'}`}>
               <Repeat2 size={15} /> {post.reposts || 0}
             </button>
           )}
@@ -95,7 +95,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
             <ChevronUp size={16} /> {post.upvotes || 0}
           </button>
           {onSave && (
-            <button onClick={(e) => { e.stopPropagation(); onSave(post); }} className={`flex items-center gap-1 text-xs transition-colors ${saved ? 'text-[#1d9bf0]' : 'text-[#888] hover:text-[#1d9bf0]'}`}>
+            <button onClick={(e) => { e.stopPropagation(); onSave(post); }} className={`flex items-center gap-1 text-xs transition-colors ${saved ? 'text-[#9d4f7a]' : 'text-[#888] hover:text-[#9d4f7a]'}`}>
               <Bookmark size={15} />
             </button>
           )}

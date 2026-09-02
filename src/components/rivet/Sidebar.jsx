@@ -58,7 +58,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-black border-r border-[#2f3336] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-6 py-5">
-          <div className="w-9 h-9 rounded-xl bg-[#1d9bf0] flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-[#6a3a5a] flex items-center justify-center">
             <RivetIcon size={24} />
           </div>
           <span className="text-white font-bold text-xl tracking-tight">rivet</span>
@@ -78,7 +78,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
                     onClick={() => onNavChange(item.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-full text-sm transition-colors ${
                       activeNav === item.id
-                        ? 'bg-[#1d9bf0]/10 text-[#1d9bf0] font-semibold'
+                        ? 'bg-[#9d4f7a]/10 text-[#9d4f7a] font-semibold'
                         : 'text-[#e7e9ea] hover:bg-white/5 hover:text-white'
                     }`}
                   >
