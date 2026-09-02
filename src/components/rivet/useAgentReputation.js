@@ -2,15 +2,15 @@ import { useMemo } from 'react';
 import { usePosts } from './usePosts';
 
 export const TIERS = [
-  { name: 'Platinum', min: 2000, stars: 5, color: 'text-cyan-500', bg: 'bg-cyan-50', ring: 'border-cyan-200' },
-  { name: 'Gold', min: 700, stars: 4, color: 'text-amber-500', bg: 'bg-amber-50', ring: 'border-amber-200' },
-  { name: 'Silver', min: 250, stars: 3, color: 'text-slate-400', bg: 'bg-slate-100', ring: 'border-slate-200' },
-  { name: 'Bronze', min: 50, stars: 2, color: 'text-orange-500', bg: 'bg-orange-50', ring: 'border-orange-200' },
-  { name: 'Rising', min: 1, stars: 1, color: 'text-violet-500', bg: 'bg-violet-50', ring: 'border-violet-200' },
+  { name: 'Platinum', min: 2000, stars: 5, color: 'text-cyan-300', bg: 'bg-cyan-500/15', ring: 'border-cyan-500/30' },
+  { name: 'Gold', min: 700, stars: 4, color: 'text-amber-300', bg: 'bg-amber-500/15', ring: 'border-amber-500/30' },
+  { name: 'Silver', min: 250, stars: 3, color: 'text-slate-300', bg: 'bg-slate-500/15', ring: 'border-slate-500/30' },
+  { name: 'Bronze', min: 50, stars: 2, color: 'text-orange-300', bg: 'bg-orange-500/15', ring: 'border-orange-500/30' },
+  { name: 'Rising', min: 1, stars: 1, color: 'text-[#e7a9c8]', bg: 'bg-[#9d4f7a]/15', ring: 'border-[#9d4f7a]/30' },
 ];
 
 export function tierFor(score) {
-  return TIERS.find(t => score >= t.min) || { name: 'Unrated', stars: 0, color: 'text-gray-400', bg: 'bg-gray-100', ring: 'border-gray-200', min: 0 };
+  return TIERS.find(t => score >= t.min) || { name: 'Unrated', stars: 0, color: 'text-[#71767b]', bg: 'bg-white/5', ring: 'border-[#2f3336]', min: 0 };
 }
 
 export function computeReputation(posts, { name, uid } = {}) {

@@ -14,7 +14,7 @@ function Stat({ label, value, color, dot }) {
     <div className="flex items-center gap-2">
       <span className={`w-2 h-2 rounded-full ${dot} flex-shrink-0`} />
       <div>
-        <p className="text-[10px] text-gray-400 uppercase tracking-wide">{label}</p>
+        <p className="text-[10px] text-[#71767b] uppercase tracking-wide">{label}</p>
         <p className={`text-sm font-bold ${color}`}>{value.toLocaleString()}</p>
       </div>
     </div>
@@ -64,40 +64,40 @@ export default function CashFlowChart() {
   const empty = data.every(d => !d.earnings && !d.withdrawals && !d.escrowHeld && !d.escrowReleased);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5">
+    <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <TrendingUp size={18} className="text-violet-600" />
-          <h3 className="text-base font-bold text-gray-900">Cash Flow</h3>
+          <TrendingUp size={18} className="text-[#9d4f7a]" />
+          <h3 className="text-base font-bold text-[#e7e9ea]">Cash Flow</h3>
         </div>
-        <span className="text-xs text-gray-400">Last 14 days</span>
+        <span className="text-xs text-[#71767b]">Last 14 days</span>
       </div>
-      <p className="text-xs text-gray-400 mb-4 mt-0.5">Transaction volumes and escrow activity over time</p>
+      <p className="text-xs text-[#71767b] mb-4 mt-0.5">Transaction volumes and escrow activity over time</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-        <Stat label="Earned" value={totals.earnings} color="text-green-600" dot="bg-green-500" />
-        <Stat label="Withdrawn" value={totals.withdrawals} color="text-red-600" dot="bg-red-500" />
-        <Stat label="Escrow Held" value={totals.held} color="text-amber-600" dot="bg-amber-500" />
-        <Stat label="Escrow Released" value={totals.released} color="text-blue-600" dot="bg-blue-500" />
+        <Stat label="Earned" value={totals.earnings} color="text-emerald-400" dot="bg-emerald-500" />
+        <Stat label="Withdrawn" value={totals.withdrawals} color="text-red-400" dot="bg-red-500" />
+        <Stat label="Escrow Held" value={totals.held} color="text-amber-400" dot="bg-amber-500" />
+        <Stat label="Escrow Released" value={totals.released} color="text-blue-400" dot="bg-blue-500" />
       </div>
 
       <div className="h-64">
         {(txLoading || escLoading) ? (
-          <div className="h-full flex items-center justify-center text-sm text-gray-400">Loading cash flow…</div>
+          <div className="h-full flex items-center justify-center text-sm text-[#71767b]">Loading cash flow…</div>
         ) : empty ? (
-          <div className="h-full flex items-center justify-center text-sm text-gray-400">No activity in this period.</div>
+          <div className="h-full flex items-center justify-center text-sm text-[#71767b]">No activity in this period.</div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={data} margin={{ top: 5, right: 8, left: -10, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
-              <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#9ca3af' }} tickLine={false} axisLine={{ stroke: '#f0f0f0' }} interval="preserveStartEnd" />
-              <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} tickLine={false} axisLine={false} width={40} />
-              <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #eee', fontSize: 12 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#2f3336" vertical={false} />
+              <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#71767b' }} tickLine={false} axisLine={{ stroke: '#2f3336' }} interval="preserveStartEnd" />
+              <YAxis tick={{ fontSize: 11, fill: '#71767b' }} tickLine={false} axisLine={false} width={40} />
+              <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #2f3336', backgroundColor: '#16181c', fontSize: 12 }} />
               <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
               <Bar dataKey="escrowHeld" name="Escrow Held" fill="#fbbf24" radius={[4, 4, 0, 0]} barSize={8} />
               <Bar dataKey="escrowReleased" name="Escrow Released" fill="#60a5fa" radius={[4, 4, 0, 0]} barSize={8} />
-              <Line type="monotone" dataKey="earnings" name="Earned" stroke="#22c55e" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="withdrawals" name="Withdrawn" stroke="#ef4444" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="earnings" name="Earned" stroke="#10b981" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="withdrawals" name="Withdrawn" stroke="#f87171" strokeWidth={2} dot={false} />
             </ComposedChart>
           </ResponsiveContainer>
         )}

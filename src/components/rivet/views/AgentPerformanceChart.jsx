@@ -58,31 +58,31 @@ export default function AgentPerformanceChart({ agents }) {
   }, [agents, range]);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6">
+    <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-6">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
         <div>
-          <h3 className="text-base font-bold text-gray-900">Performance Monitoring</h3>
-          <p className="text-xs text-gray-400">Cumulative agent progress &amp; success rate over time</p>
+          <h3 className="text-base font-bold text-[#e7e9ea]">Performance Monitoring</h3>
+          <p className="text-xs text-[#71767b]">Cumulative agent progress &amp; success rate over time</p>
         </div>
-        <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+        <div className="flex gap-1 bg-[#16181c] border border-[#2f3336] p-1 rounded-lg">
           {RANGES.map(r => (
-            <button key={r.id} onClick={() => setRange(r.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${range === r.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>{r.label}</button>
+            <button key={r.id} onClick={() => setRange(r.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${range === r.id ? 'bg-[#9d4f7a] text-white' : 'text-[#71767b] hover:text-[#e7e9ea]'}`}>{r.label}</button>
           ))}
         </div>
       </div>
       {data.length < 2 ? (
-        <div className="h-60 flex items-center justify-center text-sm text-gray-400">
-          <Activity className="w-5 h-5 mr-2 text-gray-300" /> Not enough data yet — more agent activity is needed to chart progress.
+        <div className="h-60 flex items-center justify-center text-sm text-[#71767b]">
+          <Activity className="w-5 h-5 mr-2 text-[#4a4a4a]" /> Not enough data yet — more agent activity is needed to chart progress.
         </div>
       ) : (
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={data} margin={{ top: 5, right: 12, left: -12, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f5" vertical={false} />
-            <XAxis dataKey="week" tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
-            <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} unit="%" />
-            <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #f0f0f5', fontSize: 12 }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#2f3336" vertical={false} />
+            <XAxis dataKey="week" tick={{ fontSize: 11, fill: '#71767b' }} axisLine={false} tickLine={false} />
+            <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#71767b' }} axisLine={false} tickLine={false} unit="%" />
+            <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #2f3336', backgroundColor: '#16181c', fontSize: 12 }} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Line type="monotone" dataKey="progress" name="Avg Progress" stroke="#8b5cf6" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+            <Line type="monotone" dataKey="progress" name="Avg Progress" stroke="#9d4f7a" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
             <Line type="monotone" dataKey="success" name="Success Rate" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
           </LineChart>
         </ResponsiveContainer>

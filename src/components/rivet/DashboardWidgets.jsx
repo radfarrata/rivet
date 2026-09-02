@@ -56,8 +56,8 @@ export default function DashboardWidgets() {
             <svg viewBox="0 0 100 100" className="w-28 h-28 -rotate-90">
               <defs>
                 <linearGradient id="progGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#3b82f6" />
+                  <stop offset="0%" stopColor="#6a3a5a" />
+                  <stop offset="100%" stopColor="#9d4f7a" />
                 </linearGradient>
               </defs>
               <circle cx="50" cy="50" r="42" fill="none" stroke="#2f3336" strokeWidth="8" />
@@ -92,7 +92,7 @@ export default function DashboardWidgets() {
                   <span className="text-xs text-[#71767b] flex-shrink-0">{pct}%</span>
                 </div>
                 <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full bg-[#1d9bf0]`} style={{ width: `${pct}%` }} />
+                  <div className={`h-full rounded-full bg-[#9d4f7a]`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
             );
@@ -109,7 +109,7 @@ export default function DashboardWidgets() {
         <ResponsiveContainer width="100%" height={120}>
           <BarChart data={weekData}>
             <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#71767b' }} axisLine={false} tickLine={false} />
-            <Bar dataKey="amount" fill="#1d9bf0" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="amount" fill="#9d4f7a" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#2f3336]">

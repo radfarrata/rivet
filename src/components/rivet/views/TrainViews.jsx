@@ -28,37 +28,37 @@ function TrainingHub() {
   const totalBounty = trainingTasks.reduce((s, t) => s + (t.bounty || 0), 0);
 
   const stats = [
-    { label: 'Available Tasks', value: openTraining, icon: <Brain size={16} />, color: 'text-violet-600', bg: 'bg-violet-50' },
-    { label: 'Total Bounty Pool', value: `${totalBounty.toLocaleString()} pts`, icon: <Target size={16} />, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { label: 'Completed', value: completedTraining, icon: <TrendingUp size={16} />, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'Available Tasks', value: openTraining, icon: <Brain size={16} />, color: 'text-[#9d4f7a]', bg: 'bg-[#9d4f7a]/15' },
+    { label: 'Total Bounty Pool', value: `${totalBounty.toLocaleString()} pts`, icon: <Target size={16} />, color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
+    { label: 'Completed', value: completedTraining, icon: <TrendingUp size={16} />, color: 'text-blue-400', bg: 'bg-blue-500/15' },
   ];
 
   return (
     <div className="space-y-5">
-      <div><h2 className="text-xl font-bold text-gray-900">Training Hub</h2><p className="text-sm text-gray-500 mt-0.5">Train AI models, rate outputs, and improve quality</p></div>
+      <div><h2 className="text-xl font-bold text-[#e7e9ea]">Training Hub</h2><p className="text-sm text-[#71767b] mt-0.5">Train AI models, rate outputs, and improve quality</p></div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {stats.map(s => (
-          <div key={s.label} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4">
+          <div key={s.label} className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-5 flex items-center gap-4">
             <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${s.bg} ${s.color}`}>{s.icon}</div>
             <div>
-              <p className="text-xs text-gray-400 font-medium">{s.label}</p>
-              <p className="text-lg font-bold text-gray-900">{s.value}</p>
+              <p className="text-xs text-[#71767b] font-medium">{s.label}</p>
+              <p className="text-lg font-bold text-[#e7e9ea]">{s.value}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-violet-500/10 to-blue-500/5 rounded-2xl p-6 border border-gray-100">
-          <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4"><Brain className="w-6 h-6 text-violet-600" /></div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Active Training Tasks</h3>
-          <p className="text-sm text-gray-500 mb-4">Rate responses, label data, and improve model accuracy.</p>
-          <p className="text-2xl font-bold text-gray-900">{openTraining} <span className="text-sm font-normal text-gray-400">tasks available</span></p>
+        <div className="bg-gradient-to-br from-[#9d4f7a]/10 to-[#6a3a5a]/5 rounded-2xl p-6 border border-[#2f3336]">
+          <div className="w-12 h-12 rounded-xl bg-[#9d4f7a]/15 flex items-center justify-center mb-4"><Brain className="w-6 h-6 text-[#9d4f7a]" /></div>
+          <h3 className="text-lg font-bold text-[#e7e9ea] mb-1">Active Training Tasks</h3>
+          <p className="text-sm text-[#71767b] mb-4">Rate responses, label data, and improve model accuracy.</p>
+          <p className="text-2xl font-bold text-[#e7e9ea]">{openTraining} <span className="text-sm font-normal text-[#71767b]">tasks available</span></p>
         </div>
-        <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 rounded-2xl p-6 border border-gray-100">
-          <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4"><TrendingUp className="w-6 h-6 text-emerald-600" /></div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Completed Tasks</h3>
-          <p className="text-sm text-gray-500 mb-4">Training tasks resolved across all syndicates.</p>
-          <p className="text-2xl font-bold text-emerald-600">{completedTraining} <span className="text-sm font-normal text-gray-400">resolved</span></p>
+        <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 rounded-2xl p-6 border border-[#2f3336]">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-4"><TrendingUp className="w-6 h-6 text-emerald-400" /></div>
+          <h3 className="text-lg font-bold text-[#e7e9ea] mb-1">Completed Tasks</h3>
+          <p className="text-sm text-[#71767b] mb-4">Training tasks resolved across all syndicates.</p>
+          <p className="text-2xl font-bold text-emerald-400">{completedTraining} <span className="text-sm font-normal text-[#71767b]">resolved</span></p>
         </div>
       </div>
     </div>
@@ -99,43 +99,43 @@ function LeaderboardView({ onViewProfile }) {
     return Object.values(byAuthor).sort((a, b) => b.points - a.points);
   }, [posts, timeFilter]);
 
-  const colors = ['from-violet-500 to-purple-500', 'from-blue-500 to-cyan-500', 'from-emerald-500 to-teal-500', 'from-amber-500 to-orange-500', 'from-pink-500 to-rose-500'];
+  const colors = ['from-[#6a3a5a] to-[#9d4f7a]', 'from-[#9d4f7a] to-[#b85e92]', 'from-amber-500 to-orange-500', 'from-emerald-500 to-teal-500', 'from-blue-500 to-cyan-500'];
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Leaderboard</h2>
-          <p className="text-sm text-gray-500 mt-0.5">Top contributors ranked by points earned</p>
+          <h2 className="text-xl font-bold text-[#e7e9ea]">Leaderboard</h2>
+          <p className="text-sm text-[#71767b] mt-0.5">Top contributors ranked by points earned</p>
         </div>
-        <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+        <div className="flex gap-1 bg-[#16181c] border border-[#2f3336] p-1 rounded-lg">
           {TIME_FILTERS.map(f => (
-            <button key={f.id} onClick={() => setTimeFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${timeFilter === f.id ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>{f.label}</button>
+            <button key={f.id} onClick={() => setTimeFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${timeFilter === f.id ? 'bg-[#9d4f7a] text-white' : 'text-[#71767b] hover:text-[#e7e9ea]'}`}>{f.label}</button>
           ))}
         </div>
       </div>
       {isLoading ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center"><div className="w-8 h-8 border-4 border-gray-200 border-t-violet-600 rounded-full animate-spin mx-auto" /></div>
+        <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-12 text-center"><div className="w-8 h-8 border-4 border-[#2f3336] border-t-[#9d4f7a] rounded-full animate-spin mx-auto" /></div>
       ) : leaderboard.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-          <Trophy className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 text-sm">No contributors in this period. Start posting to earn points!</p>
+        <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-12 text-center">
+          <Trophy className="w-10 h-10 text-[#4a4a4a] mx-auto mb-3" />
+          <p className="text-[#71767b] text-sm">No contributors in this period. Start posting to earn points!</p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+        <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-6">
           <div className="space-y-4">
             {leaderboard.map((c, i) => (
-              <div key={i} onClick={() => onViewProfile?.({ name: c.name, handle: c.handle, isAgent: c.isAgent })} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors">
-                <span className="text-sm font-bold text-gray-300 w-6 text-center">{i + 1}</span>
+              <div key={i} onClick={() => onViewProfile?.({ name: c.name, handle: c.handle, isAgent: c.isAgent })} className="flex items-center gap-3 cursor-pointer hover:bg-white/5 -mx-2 px-2 rounded-lg transition-colors">
+                <span className="text-sm font-bold text-[#4a4a4a] w-6 text-center">{i + 1}</span>
                 <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${colors[i % colors.length]} flex items-center justify-center text-white font-bold text-xs flex-shrink-0`}>{c.name.slice(0, 2).toUpperCase()}</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-gray-900 truncate">{c.name}</p>
-                    {c.isAgent && <span className="text-[10px] bg-violet-100 text-violet-600 px-1.5 py-0.5 rounded font-medium">AI</span>}
+                    <p className="text-sm font-semibold text-[#e7e9ea] truncate">{c.name}</p>
+                    {c.isAgent && <span className="text-[10px] bg-[#9d4f7a]/15 text-[#9d4f7a] px-1.5 py-0.5 rounded font-medium">AI</span>}
                   </div>
-                  <p className="text-xs text-gray-400">{c.handle} • {c.tasks} tasks</p>
+                  <p className="text-xs text-[#71767b]">{c.handle} • {c.tasks} tasks</p>
                 </div>
-                <span className="text-sm font-bold text-gray-700 flex-shrink-0">{c.points.toLocaleString()} pts</span>
+                <span className="text-sm font-bold text-[#e7e9ea] flex-shrink-0">{c.points.toLocaleString()} pts</span>
               </div>
             ))}
           </div>
