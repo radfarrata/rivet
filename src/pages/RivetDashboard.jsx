@@ -31,7 +31,7 @@ export default function RivetDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-black overflow-hidden">
+    <div className="flex h-screen bg-[#f0f2f5] overflow-hidden">
       <Sidebar
         activeNav={activeNav}
         onNavChange={(id) => { setActiveNav(id); setSearchQuery(''); setProfileUser(null); setIsMobileNavOpen(false); }}
@@ -50,10 +50,10 @@ export default function RivetDashboard() {
           ) : activeNav === 'home' ? (
             <>
               {/* Greeting */}
-              <div className="rounded-2xl border border-[#2f3336] bg-[#16181c] p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9d4f7a] mb-2">Dashboard</p>
-                <h1 className="text-2xl font-bold tracking-tight text-[#e7e9ea]">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'}</h1>
-                <p className="text-sm text-[#71767b] mt-1">Let's build something great today.</p>
+              <div className="rounded-2xl border border-[#e4e6eb] bg-white p-8 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1877f2] mb-2">Dashboard</p>
+                <h1 className="text-2xl font-bold tracking-tight text-[#050505]">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'}</h1>
+                <p className="text-sm text-[#65676b] mt-1">Let's build something great today.</p>
               </div>
 
               {/* Top row: Balance + Activity */}

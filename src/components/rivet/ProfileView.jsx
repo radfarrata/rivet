@@ -24,53 +24,53 @@ export default function ProfileView({ user, currentUser, onBack, onViewProfile }
 
   return (
     <div className="space-y-5">
-      <button onClick={onBack} className="flex items-center gap-2 text-sm text-[#71767b] hover:text-[#e7e9ea] transition-colors">
+      <button onClick={onBack} className="flex items-center gap-2 text-sm text-[#65676b] hover:text-[#e7e9ea] transition-colors">
         <ArrowLeft size={16} /> Back
       </button>
 
       {/* Profile header */}
-      <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-6">
+      <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-6">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#6a3a5a] to-[#9d4f7a] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#1877f2] to-[#1877f2] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
             {(user.name || '??').slice(0, 2).toUpperCase()}
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-xl font-bold text-[#e7e9ea]">{user.name}</h2>
-              {user.isAgent && <span className="text-[10px] bg-[#9d4f7a]/15 text-[#9d4f7a] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
-              {isMe && <span className="text-[10px] bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded-full font-medium">You</span>}
+              {user.isAgent && <span className="text-[10px] bg-[#1877f2]/15 text-[#1877f2] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
+              {isMe && <span className="text-[10px] bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium">You</span>}
             </div>
-            <p className="text-sm text-[#71767b]">{user.handle}</p>
+            <p className="text-sm text-[#65676b]">{user.handle}</p>
             {user.trustScore != null && (
               <div className="flex items-center gap-1 mt-2">
-                <Award size={14} className="text-amber-400" />
-                <span className="text-xs text-[#71767b]">Trust Score: <span className="font-semibold text-[#e7e9ea]">{user.trustScore}</span></span>
+                <Award size={14} className="text-amber-600" />
+                <span className="text-xs text-[#65676b]">Trust Score: <span className="font-semibold text-[#e7e9ea]">{user.trustScore}</span></span>
               </div>
             )}
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-[#2f3336]">
+        <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-[#e4e6eb]">
           <div className="text-center">
-            <FileText className="w-5 h-5 text-[#4a4a4a] mx-auto mb-1" />
+            <FileText className="w-5 h-5 text-[#bcc0c4] mx-auto mb-1" />
             <p className="text-lg font-bold text-[#e7e9ea]">{userPosts.length}</p>
-            <p className="text-xs text-[#71767b]">Posts</p>
+            <p className="text-xs text-[#65676b]">Posts</p>
           </div>
           <div className="text-center">
-            <TrendingUp className="w-5 h-5 text-[#4a4a4a] mx-auto mb-1" />
+            <TrendingUp className="w-5 h-5 text-[#bcc0c4] mx-auto mb-1" />
             <p className="text-lg font-bold text-[#e7e9ea]">{totalUpvotes}</p>
-            <p className="text-xs text-[#71767b]">Upvotes</p>
+            <p className="text-xs text-[#65676b]">Upvotes</p>
           </div>
           <div className="text-center">
-            <CheckCircle2 className="w-5 h-5 text-[#4a4a4a] mx-auto mb-1" />
+            <CheckCircle2 className="w-5 h-5 text-[#bcc0c4] mx-auto mb-1" />
             <p className="text-lg font-bold text-[#e7e9ea]">{tasksCompleted}</p>
-            <p className="text-xs text-[#71767b]">Completed</p>
+            <p className="text-xs text-[#65676b]">Completed</p>
           </div>
           <div className="text-center">
-            <DollarSign className="w-5 h-5 text-[#4a4a4a] mx-auto mb-1" />
+            <DollarSign className="w-5 h-5 text-[#bcc0c4] mx-auto mb-1" />
             <p className="text-lg font-bold text-[#e7e9ea]">{totalBounty}</p>
-            <p className="text-xs text-[#71767b]">Earned</p>
+            <p className="text-xs text-[#65676b]">Earned</p>
           </div>
         </div>
       </div>
@@ -83,8 +83,8 @@ export default function ProfileView({ user, currentUser, onBack, onViewProfile }
       <div>
         <h3 className="text-base font-bold text-[#e7e9ea] mb-3">Posts by {user.name}</h3>
         {userPosts.length === 0 ? (
-          <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-12 text-center">
-            <p className="text-[#71767b] text-sm">No posts yet.</p>
+          <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-12 text-center">
+            <p className="text-[#65676b] text-sm">No posts yet.</p>
           </div>
         ) : (
           <div className="space-y-4">

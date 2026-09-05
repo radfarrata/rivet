@@ -91,73 +91,73 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
     });
   };
 
-  const statusBadge = post.status === 'open' ? 'bg-[#9d4f7a]/15 text-[#9d4f7a]' : post.status === 'pending_approval' ? 'bg-amber-500/15 text-amber-400' : 'bg-emerald-500/15 text-emerald-400';
+  const statusBadge = post.status === 'open' ? 'bg-[#1877f2]/15 text-[#1877f2]' : post.status === 'pending_approval' ? 'bg-amber-100 text-amber-700' : 'bg-[#31a24c]/10 text-[#31a24c]';
   const statusLabel = post.status === 'pending_approval' ? 'In Progress' : post.status === 'resolved' ? 'Resolved' : 'Open';
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in" onClick={onClose}>
-      <div className="bg-[#16181c] rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto border border-[#2f3336]" onClick={e => e.stopPropagation()}>
+      <div className="bg-[#ffffff] rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto border border-[#e4e6eb]" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className="sticky top-0 bg-[#16181c]/90 backdrop-blur-md border-b border-[#2f3336] px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e4e6eb] px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => { onViewProfile?.(post); onClose(); }}>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6a3a5a] to-[#9d4f7a] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1877f2] to-[#1877f2] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
             <div>
-              <p className="text-sm font-semibold text-[#e7e9ea]">{post.author || 'Unknown'}</p>
-              <p className="text-xs text-[#71767b]">{post.handle || '@unknown'}</p>
+              <p className="text-sm font-semibold text-[#050505]">{post.author || 'Unknown'}</p>
+              <p className="text-xs text-[#65676b]">{post.handle || '@unknown'}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-[#71767b] hover:text-[#e7e9ea] hover:bg-white/5 rounded-lg transition-colors"><X size={18} /></button>
+          <button onClick={onClose} className="p-2 text-[#65676b] hover:text-[#050505] hover:bg-[#f0f2f5] rounded-lg transition-colors"><X size={18} /></button>
         </div>
 
         {/* Body */}
         <div className="p-6 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
-            {post.isAgent && <span className="text-[10px] bg-[#9d4f7a]/15 text-[#9d4f7a] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
+            {post.isAgent && <span className="text-[10px] bg-[#1877f2]/15 text-[#1877f2] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium capitalize ${statusBadge}`}>{statusLabel}</span>
             {post.bounty > 0 && (
               <span className="ml-auto flex items-center gap-2">
                 {escrow && (
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${escrow.status === 'held' ? 'bg-amber-500/15 text-amber-400' : escrow.status === 'released' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-white/5 text-[#71767b]'}`}>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${escrow.status === 'held' ? 'bg-amber-100 text-amber-700' : escrow.status === 'released' ? 'bg-[#31a24c]/10 text-[#31a24c]' : 'bg-[#f0f2f5] text-[#65676b]'}`}>
                     {escrow.status === 'held' ? 'In Escrow' : escrow.status === 'released' ? 'Released' : 'Refunded'}
                   </span>
                 )}
-                <span className="text-sm font-bold text-emerald-400">{post.bounty} {post.token || 'USD'}</span>
+                <span className="text-sm font-bold text-[#31a24c]">{post.bounty} {post.token || 'USD'}</span>
               </span>
             )}
           </div>
 
-          <h2 className="text-xl font-bold text-[#e7e9ea]">{post.title}</h2>
-          <p className="text-sm text-[#d1d5db] leading-relaxed whitespace-pre-wrap">{post.content}</p>
+          <h2 className="text-xl font-bold text-[#050505]">{post.title}</h2>
+          <p className="text-sm text-[#1c1e21] leading-relaxed whitespace-pre-wrap">{post.content}</p>
 
           {post.image && (
-            <img src={post.image} alt={post.title} className="rounded-xl max-h-96 w-full object-cover border border-[#2f3336]" />
+            <img src={post.image} alt={post.title} className="rounded-xl max-h-96 w-full object-cover border border-[#e4e6eb]" />
           )}
 
           {post.tags?.length > 0 && (
             <div className="flex gap-1.5 flex-wrap">
-              {post.tags.map(tag => <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-[#71767b] font-medium">{tag}</span>)}
+              {post.tags.map(tag => <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#f0f2f5] text-[#65676b] font-medium">{tag}</span>)}
             </div>
           )}
 
           {/* Code Snippet */}
           {post.codeSnippet && (
-            <div className="rounded-xl border border-[#2f3336] overflow-hidden">
-              <div className="bg-[#0d0d12] px-4 py-2 flex items-center gap-2 border-b border-[#2f3336]">
-                <Code size={14} className="text-[#71767b]" />
-                <span className="text-xs font-medium text-[#71767b]">Code</span>
+            <div className="rounded-xl border border-[#e4e6eb] overflow-hidden">
+              <div className="bg-[#f0f2f5] px-4 py-2 flex items-center gap-2 border-b border-[#e4e6eb]">
+                <Code size={14} className="text-[#65676b]" />
+                <span className="text-xs font-medium text-[#65676b]">Code</span>
               </div>
-              <pre className="bg-[#0d0d12] text-gray-300 text-xs p-4 overflow-x-auto font-mono"><code>{post.codeSnippet}</code></pre>
+              <pre className="bg-[#f0f2f5] text-gray-700 text-xs p-4 overflow-x-auto font-mono"><code>{post.codeSnippet}</code></pre>
             </div>
           )}
 
           {/* Proposed Fix */}
           {post.proposedFix && (
-            <div className="rounded-xl border border-emerald-500/30 overflow-hidden">
-              <div className="bg-emerald-500/10 px-4 py-2 flex items-center gap-2 border-b border-emerald-500/30">
-                <CheckCircle2 size={14} className="text-emerald-400" />
-                <span className="text-xs font-medium text-emerald-400">Proposed Solution</span>
+            <div className="rounded-xl border border-[#31a24c]/40 overflow-hidden">
+              <div className="bg-[#31a24c]/10 px-4 py-2 flex items-center gap-2 border-b border-[#31a24c]/40">
+                <CheckCircle2 size={14} className="text-[#31a24c]" />
+                <span className="text-xs font-medium text-[#31a24c]">Proposed Solution</span>
               </div>
-              <pre className="bg-[#0d0d12] text-emerald-300 text-xs p-4 overflow-x-auto font-mono"><code>{post.proposedFix}</code></pre>
+              <pre className="bg-[#f0f2f5] text-emerald-700 text-xs p-4 overflow-x-auto font-mono"><code>{post.proposedFix}</code></pre>
             </div>
           )}
 
@@ -165,14 +165,14 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
 
           {/* Audit Log */}
           {post.auditLog?.length > 0 && (
-            <div className="bg-white/5 rounded-xl p-4">
-              <p className="text-xs font-semibold text-[#71767b] uppercase tracking-wide mb-2">Activity Log</p>
+            <div className="bg-[#f0f2f5] rounded-xl p-4">
+              <p className="text-xs font-semibold text-[#65676b] uppercase tracking-wide mb-2">Activity Log</p>
               <div className="space-y-1.5">
                 {post.auditLog.map((entry, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs">
-                    <span className="text-[#71767b] w-20 flex-shrink-0">{entry.time || '—'}</span>
-                    <span className="font-medium text-[#e7e9ea]">{entry.action}</span>
-                    {entry.user && <span className="text-[#71767b]">by {entry.user}</span>}
+                    <span className="text-[#65676b] w-20 flex-shrink-0">{entry.time || '—'}</span>
+                    <span className="font-medium text-[#050505]">{entry.action}</span>
+                    {entry.user && <span className="text-[#65676b]">by {entry.user}</span>}
                   </div>
                 ))}
               </div>
@@ -181,40 +181,40 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
 
           {/* Actions */}
           <div className="flex gap-2 pt-2">
-            <button onClick={() => upvote.mutate()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-white/5 text-[#e7e9ea] hover:bg-white/10 transition-colors">
+            <button onClick={() => upvote.mutate()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb] transition-colors">
               <ChevronUp size={16} /> {post.upvotes || 0}
             </button>
-            <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#9d4f7a]/15 text-[#9d4f7a]' : 'bg-white/5 text-[#e7e9ea] hover:bg-white/10'}`}>
+            <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#1877f2]/15 text-[#1877f2]' : 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]'}`}>
               <Bookmark size={16} /> {saved ? 'Saved' : 'Save'}
             </button>
-            <button onClick={() => toggleRepost.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reposted ? 'bg-[#9d4f7a]/15 text-[#9d4f7a]' : 'bg-white/5 text-[#e7e9ea] hover:bg-white/10'}`}>
+            <button onClick={() => toggleRepost.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reposted ? 'bg-[#1877f2]/15 text-[#1877f2]' : 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]'}`}>
               <Repeat2 size={16} /> {post.reposts || 0}
             </button>
             {post.status === 'open' && !isRequester && (
-              <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-[#6a3a5a] text-white hover:bg-[#7d4a6a] transition-colors disabled:opacity-50">
+              <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-[#1877f2] text-white hover:bg-[#166fe5] transition-colors disabled:opacity-50">
                 <Lock size={16} /> Claim Task
               </button>
             )}
             {post.status === 'open' && isRequester && post.bounty > 0 && (
-              <button onClick={handleRefund} disabled={refundEscrow.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-white/5 text-[#e7e9ea] hover:bg-white/10 transition-colors disabled:opacity-50">
+              <button onClick={handleRefund} disabled={refundEscrow.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb] transition-colors disabled:opacity-50">
                 Cancel & Refund
               </button>
             )}
             {post.status === 'pending_approval' && isRequester && (
-              <button onClick={handleVerify} disabled={releaseEscrow.isPending || !escrow} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition-colors disabled:opacity-50">
+              <button onClick={handleVerify} disabled={releaseEscrow.isPending || !escrow} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-[#42b72a] text-white hover:bg-[#36a420] transition-colors disabled:opacity-50">
                 <CheckCircle2 size={16} /> Verify & Release
               </button>
             )}
             {post.status === 'pending_approval' && !isRequester && (
-              <span className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-amber-500/15 text-amber-400"><Lock size={16} /> Awaiting verification</span>
+              <span className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-amber-100 text-amber-700"><Lock size={16} /> Awaiting verification</span>
             )}
             {post.status === 'resolved' && (
-              <span className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-emerald-500/15 text-emerald-400"><CheckCircle2 size={16} /> Task Resolved</span>
+              <span className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#31a24c]/10 text-[#31a24c]"><CheckCircle2 size={16} /> Task Resolved</span>
             )}
           </div>
 
           {/* Comments */}
-          <div className="border-t border-[#2f3336] pt-4">
+          <div className="border-t border-[#e4e6eb] pt-4">
             <ThreadedComments post={post} currentUser={currentUser} notifyOwner={notifyOwner} />
           </div>
         </div>

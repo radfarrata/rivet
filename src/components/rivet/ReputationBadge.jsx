@@ -4,7 +4,7 @@ import { Star } from 'lucide-react';
 export default function ReputationBadge({ reputation }) {
   if (!reputation || reputation.score === 0) {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 text-[#71767b] border border-[#2f3336]">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#f0f2f5] text-[#65676b] border border-[#e4e6eb]">
         <Star size={9} className="opacity-40" />
         <span className="text-[10px] font-semibold">Unrated</span>
       </span>

@@ -20,7 +20,7 @@ export default function SearchResults({ query, currentUser, onViewProfile }) {
         <p className="text-sm text-gray-500 mt-0.5">{results.length} {results.length === 1 ? 'result' : 'results'} for "{query}"</p>
       </div>
       {results.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+        <div className="bg-white rounded-2xl border border-[#e4e6eb] p-12 shadow-sm text-center">
           <Search className="w-10 h-10 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500 text-sm">No results found. Try a different search term.</p>
         </div>

@@ -27,19 +27,19 @@ export default function ContributionHeatmap({ posts }) {
   const max = Math.max(1, ...grid.flat());
 
   const level = (v) => {
-    if (v === 0) return 'bg-white/5';
+    if (v === 0) return 'bg-[#ebedf0]';
     const r = v / max;
-    if (r < 0.25) return 'bg-[#9d4f7a]/30';
-    if (r < 0.5) return 'bg-[#9d4f7a]/50';
-    if (r < 0.75) return 'bg-[#9d4f7a]/75';
-    return 'bg-[#9d4f7a]';
+    if (r < 0.25) return 'bg-[#1877f2]/30';
+    if (r < 0.5) return 'bg-[#1877f2]/50';
+    if (r < 0.75) return 'bg-[#1877f2]/75';
+    return 'bg-[#1877f2]';
   };
 
   return (
-    <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-6">
+    <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-bold text-[#e7e9ea]">Activity</h3>
-        <span className="text-xs text-[#71767b]">{total} contributions in the last {WEEKS} weeks</span>
+        <h3 className="text-base font-bold text-[#050505]">Activity</h3>
+        <span className="text-xs text-[#65676b]">{total} contributions in the last {WEEKS} weeks</span>
       </div>
       <div className="overflow-x-auto">
         <div className="flex gap-1 min-w-max pb-1">
@@ -53,13 +53,13 @@ export default function ContributionHeatmap({ posts }) {
         </div>
       </div>
       <div className="flex items-center gap-2 mt-3 justify-end">
-        <span className="text-[10px] text-[#71767b]">Less</span>
-        <div className="w-3 h-3 rounded-sm bg-white/5" />
-        <div className="w-3 h-3 rounded-sm bg-[#9d4f7a]/30" />
-        <div className="w-3 h-3 rounded-sm bg-[#9d4f7a]/50" />
-        <div className="w-3 h-3 rounded-sm bg-[#9d4f7a]/75" />
-        <div className="w-3 h-3 rounded-sm bg-[#9d4f7a]" />
-        <span className="text-[10px] text-[#71767b]">More</span>
+        <span className="text-[10px] text-[#65676b]">Less</span>
+        <div className="w-3 h-3 rounded-sm bg-[#ebedf0]" />
+        <div className="w-3 h-3 rounded-sm bg-[#1877f2]/30" />
+        <div className="w-3 h-3 rounded-sm bg-[#1877f2]/50" />
+        <div className="w-3 h-3 rounded-sm bg-[#1877f2]/75" />
+        <div className="w-3 h-3 rounded-sm bg-[#1877f2]" />
+        <span className="text-[10px] text-[#65676b]">More</span>
       </div>
     </div>
   );

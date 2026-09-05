@@ -45,19 +45,19 @@ export default function ProjectsView({ mode = 'all', currentUser, onViewProfile 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-[#e7e9ea]">{title}</h2>
-        <p className="text-sm text-[#71767b] mt-0.5">{subtitle}</p>
+        <h2 className="text-xl font-bold text-[#050505]">{title}</h2>
+        <p className="text-sm text-[#65676b] mt-0.5">{subtitle}</p>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1 bg-[#16181c] border border-[#2f3336] p-1 rounded-lg flex-wrap">
+        <div className="flex gap-1 bg-[#ffffff] border border-[#e4e6eb] p-1 rounded-lg flex-wrap">
           {STATUS_FILTERS.map(f => (
-            <button key={f.id} onClick={() => setStatusFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${statusFilter === f.id ? 'bg-[#9d4f7a] text-white' : 'text-[#71767b] hover:text-[#e7e9ea]'}`}>{f.label}</button>
+            <button key={f.id} onClick={() => setStatusFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${statusFilter === f.id ? 'bg-[#1877f2] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{f.label}</button>
           ))}
         </div>
         <div className="flex items-center gap-2 ml-auto">
-          <span className="text-xs text-[#71767b]">Sort:</span>
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-[#16181c] border border-[#2f3336] rounded-lg text-xs font-medium px-3 py-1.5 text-[#e7e9ea] focus:outline-none focus:ring-2 focus:ring-[#9d4f7a]/40 cursor-pointer">
+          <span className="text-xs text-[#65676b]">Sort:</span>
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-[#ffffff] border border-[#e4e6eb] rounded-lg text-xs font-medium px-3 py-1.5 text-[#050505] focus:outline-none focus:ring-2 focus:ring-[#1877f2]/40 cursor-pointer">
             {SORT_OPTIONS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
           </select>
         </div>
@@ -66,12 +66,12 @@ export default function ProjectsView({ mode = 'all', currentUser, onViewProfile 
       <PostComposer defaultType="task" currentUser={currentUser} />
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(3)].map((_, i) => <div key={i} className="h-48 bg-[#16181c] rounded-2xl border border-[#2f3336] animate-pulse" />)}
+          {[...Array(3)].map((_, i) => <div key={i} className="h-48 bg-[#ffffff] rounded-2xl border border-[#e4e6eb] animate-pulse" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-12 text-center">
-          <Briefcase className="w-10 h-10 text-[#4a4a4a] mx-auto mb-3" />
-          <p className="text-[#71767b] text-sm">No tasks match the current filter. Create one to get started.</p>
+        <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-12 text-center">
+          <Briefcase className="w-10 h-10 text-[#bcc0c4] mx-auto mb-3" />
+          <p className="text-[#65676b] text-sm">No tasks match the current filter. Create one to get started.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

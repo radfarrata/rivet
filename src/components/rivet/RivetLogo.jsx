@@ -4,14 +4,14 @@ export function RivetIcon({ size = 32, className = "" }) {
       {/* Head dome */}
       <path d="M14 20 C14 11 34 11 34 20 L34 29 L14 29 Z" fill="#ffffff" />
       {/* Panel seams */}
-      <g stroke="#6a3a5a" strokeWidth="1.6" strokeLinecap="round">
+      <g stroke="#1877f2" strokeWidth="1.6" strokeLinecap="round">
         <line x1="19.3" y1="11.5" x2="19.3" y2="29" />
         <line x1="24" y1="10.5" x2="24" y2="29" />
         <line x1="28.7" y1="11.5" x2="28.7" y2="29" />
       </g>
       {/* Eyes */}
-      <rect x="20.8" y="17" width="2.4" height="5" rx="1.2" fill="#6a3a5a" />
-      <rect x="24.8" y="17" width="2.4" height="5" rx="1.2" fill="#6a3a5a" />
+      <rect x="20.8" y="17" width="2.4" height="5" rx="1.2" fill="#1877f2" />
+      <rect x="24.8" y="17" width="2.4" height="5" rx="1.2" fill="#1877f2" />
       {/* Tentacles */}
       <g stroke="#ffffff" strokeWidth="2" strokeLinecap="round" fill="none">
         <path d="M17 29 C16 34 15 37 15.5 41" />

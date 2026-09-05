@@ -89,73 +89,73 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="w-full bg-[#9d4f7a] hover:bg-[#b85e92] text-white rounded-xl py-3 px-4 text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+      <button onClick={() => setOpen(true)} className="w-full bg-[#1877f2] hover:bg-[#166fe5] text-white rounded-xl py-3 px-4 text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
         <Plus size={18} /> New {defaultType === 'task' ? 'Task' : 'Post'}
       </button>
     );
   }
 
   return (
-    <div className="bg-[#16181c] rounded-2xl border border-[#2f3336] p-5 space-y-3">
+    <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-white">Create New {defaultType === 'task' ? 'Task' : 'Discussion'}</h3>
-        <button onClick={() => setOpen(false)} className="text-[#888] hover:text-white"><X size={18} /></button>
+        <h3 className="text-sm font-bold text-[#050505]">Create New {defaultType === 'task' ? 'Task' : 'Discussion'}</h3>
+        <button onClick={() => setOpen(false)} className="text-[#65676b] hover:text-[#050505]"><X size={18} /></button>
       </div>
-      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="w-full bg-[#0d0d12] border border-[#2f3336] rounded-lg px-3 py-2 text-sm text-[#e7e9ea] placeholder-[#666] focus:outline-none focus:border-[#9d4f7a]" />
-      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Describe your task or discussion..." rows={3} className="w-full bg-[#0d0d12] border border-[#2f3336] rounded-lg px-3 py-2 text-sm text-[#e7e9ea] placeholder-[#666] focus:outline-none focus:border-[#9d4f7a] resize-none" />
+      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Describe your task or discussion..." rows={3} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2] resize-none" />
 
       {image && (
         <div className="relative">
-          <img src={image} alt="preview" className="rounded-lg max-h-60 w-full object-cover border border-[#2f3336]" />
+          <img src={image} alt="preview" className="rounded-lg max-h-60 w-full object-cover border border-[#e4e6eb]" />
           <button onClick={() => setImage(null)} className="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-lg hover:bg-black/80"><X size={14} /></button>
         </div>
       )}
 
       <div className="flex flex-wrap gap-3">
-        <select value={syndicate} onChange={e => setSyndicate(e.target.value)} className="bg-[#0d0d12] border border-[#2f3336] rounded-lg px-3 py-2 text-sm text-[#e7e9ea] focus:outline-none focus:border-[#9d4f7a]">
+        <select value={syndicate} onChange={e => setSyndicate(e.target.value)} className="bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] focus:outline-none focus:border-[#1877f2]">
           {SYNDICATES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
         </select>
-        <input value={bounty} onChange={e => setBounty(e.target.value)} type="number" placeholder="Bounty (pts)" className="w-32 bg-[#0d0d12] border border-[#2f3336] rounded-lg px-3 py-2 text-sm text-[#e7e9ea] placeholder-[#666] focus:outline-none focus:border-[#9d4f7a]" />
-        <input value={tags} onChange={e => setTags(e.target.value)} placeholder="Tags (comma separated)" className="flex-1 min-w-[160px] bg-[#0d0d12] border border-[#2f3336] rounded-lg px-3 py-2 text-sm text-[#e7e9ea] placeholder-[#666] focus:outline-none focus:border-[#9d4f7a]" />
+        <input value={bounty} onChange={e => setBounty(e.target.value)} type="number" placeholder="Bounty (pts)" className="w-32 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+        <input value={tags} onChange={e => setTags(e.target.value)} placeholder="Tags (comma separated)" className="flex-1 min-w-[160px] bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
       </div>
 
       {showPoll && (
-        <div className="rounded-xl border border-[#9d4f7a]/30 bg-[#9d4f7a]/5 p-3 space-y-2">
+        <div className="rounded-xl border border-[#1877f2]/30 bg-[#1877f2]/5 p-3 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#9d4f7a] uppercase tracking-wide">Poll</span>
-            <button onClick={() => { setShowPoll(false); setPollQuestion(''); setPollOptions(['', '']); }} className="text-[#888] hover:text-white"><X size={14} /></button>
+            <span className="text-xs font-semibold text-[#1877f2] uppercase tracking-wide">Poll</span>
+            <button onClick={() => { setShowPoll(false); setPollQuestion(''); setPollOptions(['', '']); }} className="text-[#65676b] hover:text-[#050505]"><X size={14} /></button>
           </div>
-          <input value={pollQuestion} onChange={e => setPollQuestion(e.target.value)} placeholder="Poll question" className="w-full bg-[#0d0d12] border border-[#2f3336] rounded-lg px-3 py-2 text-sm text-[#e7e9ea] placeholder-[#666] focus:outline-none focus:border-[#9d4f7a]" />
+          <input value={pollQuestion} onChange={e => setPollQuestion(e.target.value)} placeholder="Poll question" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
           {pollOptions.map((opt, i) => (
             <div key={i} className="flex gap-2">
-              <input value={opt} onChange={e => setPollOptions(opts => opts.map((o, j) => j === i ? e.target.value : o))} placeholder={`Option ${i + 1}`} className="flex-1 bg-[#0d0d12] border border-[#2f3336] rounded-lg px-3 py-1.5 text-sm text-[#e7e9ea] placeholder-[#666] focus:outline-none focus:border-[#9d4f7a]" />
-              {pollOptions.length > 2 && <button onClick={() => setPollOptions(opts => opts.filter((_, j) => j !== i))} className="text-[#888] hover:text-red-400 px-1"><X size={14} /></button>}
+              <input value={opt} onChange={e => setPollOptions(opts => opts.map((o, j) => j === i ? e.target.value : o))} placeholder={`Option ${i + 1}`} className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-1.5 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+              {pollOptions.length > 2 && <button onClick={() => setPollOptions(opts => opts.filter((_, j) => j !== i))} className="text-[#65676b] hover:text-red-400 px-1"><X size={14} /></button>}
             </div>
           ))}
-          {pollOptions.length < 4 && <button onClick={() => setPollOptions(opts => [...opts, ''])} className="text-xs font-medium text-[#9d4f7a] hover:underline">+ Add option</button>}
+          {pollOptions.length < 4 && <button onClick={() => setPollOptions(opts => [...opts, ''])} className="text-xs font-medium text-[#1877f2] hover:underline">+ Add option</button>}
         </div>
       )}
 
       <div className="flex gap-2 items-center">
-        <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#2f3336] text-sm text-[#888] cursor-pointer hover:bg-white/5 transition-colors">
+        <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#e4e6eb] text-sm text-[#65676b] cursor-pointer hover:bg-[#f0f2f5] transition-colors">
           {uploading ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={16} />}
           <span className="text-xs font-medium">{uploading ? 'Uploading...' : 'Image'}</span>
           <input type="file" accept="image/*" onChange={handleImage} className="hidden" />
         </label>
-        <button onClick={() => setShowCode(s => !s)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showCode ? 'border-[#9d4f7a] bg-[#9d4f7a]/10 text-[#9d4f7a]' : 'border-[#2f3336] text-[#888] hover:bg-white/5'}`}>
+        <button onClick={() => setShowCode(s => !s)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showCode ? 'border-[#1877f2] bg-[#1877f2]/10 text-[#1877f2]' : 'border-[#e4e6eb] text-[#65676b] hover:bg-[#f0f2f5]'}`}>
           <Code size={16} /> <span className="text-xs font-medium">Code</span>
         </button>
-        <button onClick={() => setShowPoll(s => !s)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showPoll ? 'border-[#9d4f7a] bg-[#9d4f7a]/10 text-[#9d4f7a]' : 'border-[#2f3336] text-[#888] hover:bg-white/5'}`}>
+        <button onClick={() => setShowPoll(s => !s)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showPoll ? 'border-[#1877f2] bg-[#1877f2]/10 text-[#1877f2]' : 'border-[#e4e6eb] text-[#65676b] hover:bg-[#f0f2f5]'}`}>
           <BarChart3 size={16} /> <span className="text-xs font-medium">Poll</span>
         </button>
         <div className="flex-1" />
-        <button onClick={handleSubmit} disabled={create.isPending || uploading} className="bg-[#9d4f7a] hover:bg-[#b85e92] disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors">
+        <button onClick={handleSubmit} disabled={create.isPending || uploading} className="bg-[#1877f2] hover:bg-[#166fe5] disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors">
           {create.isPending ? 'Publishing...' : 'Publish'}
         </button>
       </div>
 
       {showCode && (
-        <textarea value={codeSnippet} onChange={e => setCodeSnippet(e.target.value)} placeholder="Paste code snippet..." rows={4} className="w-full bg-[#0d0d12] text-gray-200 border border-[#2f3336] rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#9d4f7a] resize-none" />
+        <textarea value={codeSnippet} onChange={e => setCodeSnippet(e.target.value)} placeholder="Paste code snippet..." rows={4} className="w-full bg-[#f0f2f5] text-gray-800 border border-[#e4e6eb] rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#1877f2] resize-none" />
       )}
     </div>
   );
