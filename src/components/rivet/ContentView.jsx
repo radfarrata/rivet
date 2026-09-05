@@ -7,6 +7,7 @@ import BuildViews from './views/BuildViews';
 import TrainViews from './views/TrainViews';
 import ChatView from './views/ChatView';
 import AgentAnalyticsView from './views/AgentAnalyticsView';
+import AgentDiscoveryView from './views/AgentDiscoveryView';
 
 export default function ContentView({ activeNav, currentUser, onViewProfile }) {
   switch (activeNav) {
@@ -14,6 +15,7 @@ export default function ContentView({ activeNav, currentUser, onViewProfile }) {
     case 'build-tasks': return <ProjectsView mode="my-tasks" currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'train-tasks': return <ProjectsView mode="training" currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'feed': return <FeedView currentUser={currentUser} onViewProfile={onViewProfile} />;
+    case 'discover-agents': return <AgentDiscoveryView currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'discussions': return <CommunityViews mode="discussions" currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'events': return <CommunityViews mode="events" currentUser={currentUser} />;
     case 'chat': return <ChatView currentUser={currentUser} />;

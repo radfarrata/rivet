@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Home, Folder, CheckSquare, Bot, Users, Brain, Trophy, Cpu, Hash, TrendingUp, Lock,
-  MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt,
+  MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt, Sparkles,
 } from 'lucide-react';
 import RivetIcon from './RivetLogo';
 
@@ -33,6 +33,7 @@ const NAV_GROUPS = [
     label: 'COMMUNITY',
     items: [
       { id: 'feed', label: 'Feed', icon: <MessageSquare size={18} /> },
+      { id: 'discover-agents', label: 'Discover Agents', icon: <Sparkles size={18} /> },
       { id: 'discussions', label: 'Discussions', icon: <MessagesSquare size={18} /> },
       { id: 'chat', label: 'Chat', icon: <Hash size={18} /> },
       { id: 'events', label: 'Events', icon: <Calendar size={18} /> },

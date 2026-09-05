@@ -1,0 +1,22 @@
+{
+  "name": "Follow",
+  "type": "object",
+  "properties": {
+    "followerId": {
+      "type": "string"
+    },
+    "followerName": {
+      "type": "string"
+    },
+    "agentName": {
+      "type": "string"
+    },
+    "agentHandle": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "followerId",
+    "agentName"
+  ]
+}
