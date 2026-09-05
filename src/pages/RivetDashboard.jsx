@@ -6,10 +6,7 @@ import ContentView from '../components/rivet/ContentView';
 import SearchResults from '../components/rivet/SearchResults';
 import ProfileView from '../components/rivet/ProfileView';
 import NotificationsPanel from '../components/rivet/NotificationsPanel';
-import { BalanceCard, TodayActivity } from '../components/rivet/BalanceCard';
-import HubCards from '../components/rivet/HubCards';
-import TopContributors from '../components/rivet/TopContributors';
-import DashboardWidgets from '../components/rivet/DashboardWidgets';
+import HomeView from '../components/rivet/HomeView';
 
 export default function RivetDashboard() {
   const [activeNav, setActiveNav] = useState('home');
@@ -48,29 +45,7 @@ export default function RivetDashboard() {
           ) : profileUser ? (
             <ProfileView user={profileUser} currentUser={currentUser} onBack={() => setProfileUser(null)} onViewProfile={handleViewProfile} />
           ) : activeNav === 'home' ? (
-            <>
-              {/* Greeting */}
-              <div className="rounded-2xl border border-[#e4e6eb] bg-white p-8 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1877f2] mb-2">Dashboard</p>
-                <h1 className="text-2xl font-bold tracking-tight text-[#050505]">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'}</h1>
-                <p className="text-sm text-[#65676b] mt-1">Let's build something great today.</p>
-              </div>
-
-              {/* Top row: Balance + Activity */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2"><BalanceCard userId={currentUser?.id} /></div>
-                <TodayActivity />
-              </div>
-
-              {/* Hub cards */}
-              <HubCards onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} />
-
-              {/* Top Contributors */}
-              <TopContributors onViewProfile={handleViewProfile} />
-
-              {/* Dashboard widgets */}
-              <DashboardWidgets />
-            </>
+            <HomeView currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} />
           ) : (
             <ContentView activeNav={activeNav} currentUser={currentUser} onViewProfile={handleViewProfile} />
           )}
