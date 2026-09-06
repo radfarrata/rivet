@@ -4,6 +4,7 @@ import PostComposer from './PostComposer';
 import PostCard from './PostCard';
 import PostDetailModal from './PostDetailModal';
 import HubCards from './HubCards';
+import HomeLeftRail from './HomeLeftRail';
 import HomeRightRail from './HomeRightRail';
 import DashboardWidgets from './DashboardWidgets';
 
@@ -22,6 +23,9 @@ export default function HomeView({ currentUser, onViewProfile, onNavigate }) {
   return (
     <div className="space-y-6">
       <div className="flex gap-6 items-start">
+        {/* Left rail: community widgets */}
+        <HomeLeftRail currentUser={currentUser} onViewProfile={onViewProfile} onNavigate={onNavigate} />
+
         {/* Center column: feed */}
         <div className="flex-1 min-w-0 max-w-[680px] mx-auto space-y-5">
           {/* Greeting */}
@@ -60,8 +64,8 @@ export default function HomeView({ currentUser, onViewProfile, onNavigate }) {
           )}
         </div>
 
-        {/* Right rail */}
-        <HomeRightRail currentUser={currentUser} onViewProfile={onViewProfile} />
+        {/* Right rail: trending + wallet widgets */}
+        <HomeRightRail currentUser={currentUser} onViewProfile={onViewProfile} onOpenPost={setSelectedPost} />
       </div>
 
       {/* Full-width widgets below the columns */}
