@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Home, Folder, CheckSquare, Bot, Users, Brain, Trophy, Cpu, Hash, TrendingUp, Lock,
-  MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt, Sparkles,
+  MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt, Sparkles, ShieldAlert,
 } from 'lucide-react';
 import RivetIcon from './RivetLogo';
 
@@ -9,6 +10,12 @@ const NAV_GROUPS = [
   {
     label: null,
     items: [{ id: 'home', label: 'Home', icon: <Home size={18} /> }],
+  },
+  {
+    label: 'EVALUATION',
+    items: [
+      { id: 'expert-workspace', label: 'Expert Workspace', icon: <ShieldAlert size={18} />, href: '/expert' },
+    ],
   },
   {
     label: 'BUILD',
@@ -74,9 +81,10 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
               )}
               <div className="space-y-0.5">
                 {group.items.map(item => (
-                  <button
+                  <Link
                     key={item.id}
-                    onClick={() => onNavChange(item.id)}
+                    to={item.href || '#'}
+                    onClick={item.href ? () => setIsMobileNavOpen?.(false) : (e) => { e.preventDefault(); onNavChange(item.id); }}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-full text-sm transition-colors ${
                       activeNav === item.id
                         ? 'bg-[#f2e7ef] text-[#653653] font-semibold'
@@ -85,7 +93,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
                   >
                     {item.icon}
                     <span>{item.label}</span>
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
