@@ -1,0 +1,59 @@
+{
+  "name": "ReleaseCandidate",
+  "type": "object",
+  "properties": {
+    "agentId": {
+      "type": "string"
+    },
+    "agentName": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "passed",
+        "blocked"
+      ],
+      "default": "running"
+    },
+    "totalTests": {
+      "type": "number",
+      "default": 0
+    },
+    "passedTests": {
+      "type": "number",
+      "default": 0
+    },
+    "failedTests": {
+      "type": "number",
+      "default": 0
+    },
+    "blockingTestId": {
+      "type": "string"
+    },
+    "blockingTestName": {
+      "type": "string"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "triggeredBy": {
+      "type": "string"
+    },
+    "completedAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "agentId",
+    "version",
+    "status"
+  ]
+}

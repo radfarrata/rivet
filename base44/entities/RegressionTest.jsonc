@@ -1,0 +1,44 @@
+{
+  "name": "RegressionTest",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "sourceEvaluationId": {
+      "type": "string"
+    },
+    "traceId": {
+      "type": "string"
+    },
+    "rule": {
+      "type": "string"
+    },
+    "inputContext": {
+      "type": "string"
+    },
+    "expectedBehavior": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "verifiedByExpertName": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "rule"
+  ]
+}

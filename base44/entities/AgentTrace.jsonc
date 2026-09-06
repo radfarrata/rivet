@@ -1,0 +1,101 @@
+{
+  "name": "AgentTrace",
+  "type": "object",
+  "properties": {
+    "runId": {
+      "type": "string"
+    },
+    "caseId": {
+      "type": "string"
+    },
+    "caseTitle": {
+      "type": "string"
+    },
+    "agentName": {
+      "type": "string"
+    },
+    "agentVersion": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "passed",
+        "failed",
+        "needs_review",
+        "adjudicated"
+      ],
+      "default": "passed"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "finalOutput": {
+      "type": "string"
+    },
+    "flaggedReason": {
+      "type": "string"
+    },
+    "flaggedStepIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "input",
+              "reasoning",
+              "search",
+              "retrieval",
+              "tool_call",
+              "tool_result",
+              "output"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string"
+          },
+          "meta": {
+            "type": "string"
+          },
+          "durationMs": {
+            "type": "number"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "caseTitle",
+    "steps"
+  ]
+}

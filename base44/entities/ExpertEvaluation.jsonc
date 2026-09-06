@@ -1,0 +1,54 @@
+{
+  "name": "ExpertEvaluation",
+  "type": "object",
+  "properties": {
+    "traceId": {
+      "type": "string"
+    },
+    "expertId": {
+      "type": "string"
+    },
+    "expertName": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "confirmed_failure",
+        "false_positive",
+        "needs_info"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "failureType": {
+      "type": "string",
+      "enum": [
+        "hallucination",
+        "tool_misuse",
+        "safety_violation",
+        "non_compliance",
+        "logic_error",
+        "not_applicable",
+        "other"
+      ]
+    },
+    "structuredFeedback": {
+      "type": "string"
+    },
+    "ruleDefinition": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "traceId",
+    "verdict"
+  ]
+}

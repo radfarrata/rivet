@@ -1,0 +1,63 @@
+{
+  "name": "TestRun",
+  "type": "object",
+  "properties": {
+    "suiteId": {
+      "type": "string"
+    },
+    "suiteName": {
+      "type": "string"
+    },
+    "agentId": {
+      "type": "string"
+    },
+    "agentName": {
+      "type": "string"
+    },
+    "agentVersion": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "passed",
+        "failed"
+      ],
+      "default": "running"
+    },
+    "totalCases": {
+      "type": "number",
+      "default": 0
+    },
+    "passed": {
+      "type": "number",
+      "default": 0
+    },
+    "failed": {
+      "type": "number",
+      "default": 0
+    },
+    "needsReview": {
+      "type": "number",
+      "default": 0
+    },
+    "passRate": {
+      "type": "number",
+      "default": 0
+    },
+    "durationMs": {
+      "type": "number"
+    },
+    "startedAt": {
+      "type": "string"
+    },
+    "triggeredBy": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "suiteId",
+    "status"
+  ]
+}

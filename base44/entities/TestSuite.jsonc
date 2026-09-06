@@ -1,0 +1,40 @@
+{
+  "name": "TestSuite",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "agentId": {
+      "type": "string"
+    },
+    "agentName": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "safety",
+        "compliance",
+        "data_integrity",
+        "reasoning",
+        "tool_use"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "draft",
+        "paused"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

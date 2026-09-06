@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import ExpertWorkspace from './pages/ExpertWorkspace';
 // Add page imports here
 
 const AuthenticatedApp = () => (
@@ -25,6 +26,7 @@ const AuthenticatedApp = () => (
     {/* All app routes gated behind login */}
     <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
       <Route path="/" element={<RivetDashboard />} />
+      <Route path="/expert" element={<ExpertWorkspace />} />
       <Route path="/network" element={<NexusOS />} />
       <Route path="/dashboard" element={<Dashboard />} />
     </Route>
