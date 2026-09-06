@@ -59,10 +59,10 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-white border-r border-[#e4e6eb] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         {/* Logo */}
         <div className="flex items-center gap-2.5 px-6 py-5">
-          <div className="w-9 h-9 rounded-xl bg-[#1877f2] flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-[#653653] flex items-center justify-center">
             <RivetIcon size={24} />
           </div>
-          <span className="text-[#1877f2] font-bold text-xl tracking-tight">rivet</span>
+          <span className="text-[#653653] font-bold text-xl tracking-tight">rivet</span>
         </div>
 
         {/* Navigation */}

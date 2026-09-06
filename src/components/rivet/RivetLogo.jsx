@@ -2,29 +2,28 @@ export function RivetIcon({ size = 32, className = "" }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
       {/* Head dome */}
-      <path d="M14 20 C14 11 34 11 34 20 L34 29 L14 29 Z" fill="#ffffff" />
-      {/* Panel seams */}
-      <g stroke="#1877f2" strokeWidth="1.6" strokeLinecap="round">
-        <line x1="19.3" y1="11.5" x2="19.3" y2="29" />
-        <line x1="24" y1="10.5" x2="24" y2="29" />
-        <line x1="28.7" y1="11.5" x2="28.7" y2="29" />
+      <path d="M12 20 C12 8 36 8 36 20 L36 28 L12 28 Z" fill="#ffffff" />
+      {/* X panel seams */}
+      <g stroke="#653653" strokeWidth="1.8" strokeLinecap="round">
+        <line x1="15" y1="10.5" x2="33" y2="19" />
+        <line x1="33" y1="10.5" x2="15" y2="19" />
       </g>
       {/* Eyes */}
-      <rect x="20.8" y="17" width="2.4" height="5" rx="1.2" fill="#1877f2" />
-      <rect x="24.8" y="17" width="2.4" height="5" rx="1.2" fill="#1877f2" />
-      {/* Tentacles */}
+      <rect x="20.8" y="18" width="2.4" height="5" rx="1.2" fill="#653653" />
+      <rect x="24.8" y="18" width="2.4" height="5" rx="1.2" fill="#653653" />
+      {/* Circuit lines */}
       <g stroke="#ffffff" strokeWidth="2" strokeLinecap="round" fill="none">
-        <path d="M17 29 C16 34 15 37 15.5 41" />
-        <path d="M21 29 C20.5 34 20 37 21 41" />
-        <path d="M27 29 C27.5 34 28 37 27 41" />
-        <path d="M31 29 C32 34 33 37 32.5 41" />
+        <path d="M15.5 28 C13.5 33 12.5 36 13 41" />
+        <path d="M19.5 28 C18.5 33 18 36 18.5 41" />
+        <path d="M28.5 28 C29.5 33 30 36 29.5 41" />
+        <path d="M32.5 28 C34.5 33 35.5 36 35 41" />
       </g>
-      {/* Terminals */}
+      {/* Terminal nodes */}
       <g fill="#ffffff">
-        <circle cx="15.5" cy="41.5" r="2" />
-        <circle cx="21" cy="41.5" r="2" />
-        <circle cx="27" cy="41.5" r="2" />
-        <circle cx="32.5" cy="41.5" r="2" />
+        <circle cx="13" cy="41.5" r="2" />
+        <circle cx="18.5" cy="41.5" r="2" />
+        <circle cx="29.5" cy="41.5" r="2" />
+        <circle cx="35" cy="41.5" r="2" />
       </g>
     </svg>
   );
