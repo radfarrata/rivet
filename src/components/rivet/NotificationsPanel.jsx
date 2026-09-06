@@ -32,7 +32,7 @@ export default function NotificationsPanel({ onClose }) {
           <div className="flex items-center gap-2">
             <Bell size={16} className="text-[#65676b]" />
             <h3 className="text-sm font-bold text-[#050505]">Notifications</h3>
-            {unread.length > 0 && <span className="text-[10px] bg-[#1877f2]/15 text-[#1877f2] px-1.5 py-0.5 rounded-full font-bold">{unread.length} new</span>}
+            {unread.length > 0 && <span className="text-[10px] bg-[#653653]/15 text-[#653653] px-1.5 py-0.5 rounded-full font-bold">{unread.length} new</span>}
           </div>
           <button onClick={onClose} className="text-[#65676b] hover:text-[#050505]"><X size={16} /></button>
         </div>
@@ -43,21 +43,21 @@ export default function NotificationsPanel({ onClose }) {
             <p className="px-4 py-8 text-center text-sm text-[#65676b]">No notifications yet.</p>
           ) : (
             notifications.map(n => (
-              <div key={n.id} className={`flex gap-3 px-4 py-3 border-b border-[#e4e6eb] hover:bg-[#f0f2f5] transition-colors ${!n.read ? 'bg-[#1877f2]/10' : ''}`}>
+              <div key={n.id} className={`flex gap-3 px-4 py-3 border-b border-[#e4e6eb] hover:bg-[#f0f2f5] transition-colors ${!n.read ? 'bg-[#653653]/10' : ''}`}>
                 <div className="w-9 h-9 rounded-lg bg-[#f0f2f5] flex items-center justify-center text-base flex-shrink-0">{ICONS[n.type] || ICONS.default}</div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-[#050505]">{n.title}</p>
                   <p className="text-xs text-[#65676b]">{n.message}</p>
                   <p className="text-[10px] text-[#65676b] mt-0.5">{formatRelative(n.created_date)}</p>
                 </div>
-                {!n.read && <div className="w-2 h-2 rounded-full bg-[#1877f2] flex-shrink-0 mt-1.5" />}
+                {!n.read && <div className="w-2 h-2 rounded-full bg-[#653653] flex-shrink-0 mt-1.5" />}
               </div>
             ))
           )}
         </div>
         {unread.length > 0 && (
           <div className="px-4 py-2.5 border-t border-[#e4e6eb]">
-            <button onClick={() => markAll.mutate(notifications)} disabled={markAll.isPending} className="w-full text-xs font-medium text-[#1877f2] hover:text-[#166fe5] transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50">
+            <button onClick={() => markAll.mutate(notifications)} disabled={markAll.isPending} className="w-full text-xs font-medium text-[#653653] hover:text-[#522b42] transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50">
               <Check size={14} /> Mark all as read
             </button>
           </div>

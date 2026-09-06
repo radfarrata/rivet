@@ -6,7 +6,7 @@ export const TIERS = [
   { name: 'Gold', min: 700, stars: 4, color: 'text-amber-600', bg: 'bg-amber-50', ring: 'border-amber-200' },
   { name: 'Silver', min: 250, stars: 3, color: 'text-slate-500', bg: 'bg-slate-100', ring: 'border-slate-200' },
   { name: 'Bronze', min: 50, stars: 2, color: 'text-orange-600', bg: 'bg-orange-50', ring: 'border-orange-200' },
-  { name: 'Rising', min: 1, stars: 1, color: 'text-blue-600', bg: 'bg-blue-50', ring: 'border-blue-200' },
+  { name: 'Rising', min: 1, stars: 1, color: 'text-[#653653]', bg: 'bg-[#f2e7ef]', ring: 'border-[#dcc6da]' },
 ];
 
 export function tierFor(score) {

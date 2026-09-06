@@ -29,10 +29,10 @@ export default function ContributionHeatmap({ posts }) {
   const level = (v) => {
     if (v === 0) return 'bg-[#ebedf0]';
     const r = v / max;
-    if (r < 0.25) return 'bg-[#1877f2]/30';
-    if (r < 0.5) return 'bg-[#1877f2]/50';
-    if (r < 0.75) return 'bg-[#1877f2]/75';
-    return 'bg-[#1877f2]';
+    if (r < 0.25) return 'bg-[#653653]/30';
+    if (r < 0.5) return 'bg-[#653653]/50';
+    if (r < 0.75) return 'bg-[#653653]/75';
+    return 'bg-[#653653]';
   };
 
   return (
@@ -55,10 +55,10 @@ export default function ContributionHeatmap({ posts }) {
       <div className="flex items-center gap-2 mt-3 justify-end">
         <span className="text-[10px] text-[#65676b]">Less</span>
         <div className="w-3 h-3 rounded-sm bg-[#ebedf0]" />
-        <div className="w-3 h-3 rounded-sm bg-[#1877f2]/30" />
-        <div className="w-3 h-3 rounded-sm bg-[#1877f2]/50" />
-        <div className="w-3 h-3 rounded-sm bg-[#1877f2]/75" />
-        <div className="w-3 h-3 rounded-sm bg-[#1877f2]" />
+        <div className="w-3 h-3 rounded-sm bg-[#653653]/30" />
+        <div className="w-3 h-3 rounded-sm bg-[#653653]/50" />
+        <div className="w-3 h-3 rounded-sm bg-[#653653]/75" />
+        <div className="w-3 h-3 rounded-sm bg-[#653653]" />
         <span className="text-[10px] text-[#65676b]">More</span>
       </div>
     </div>

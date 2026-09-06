@@ -66,7 +66,7 @@ export default function AgentPerformanceChart({ agents }) {
         </div>
         <div className="flex gap-1 bg-[#ffffff] border border-[#e4e6eb] p-1 rounded-lg">
           {RANGES.map(r => (
-            <button key={r.id} onClick={() => setRange(r.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${range === r.id ? 'bg-[#1877f2] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{r.label}</button>
+            <button key={r.id} onClick={() => setRange(r.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${range === r.id ? 'bg-[#653653] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{r.label}</button>
           ))}
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function AgentPerformanceChart({ agents }) {
             <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#65676b' }} axisLine={false} tickLine={false} unit="%" />
             <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid #e4e6eb', backgroundColor: '#ffffff', fontSize: 12 }} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Line type="monotone" dataKey="progress" name="Avg Progress" stroke="#1877f2" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+            <Line type="monotone" dataKey="progress" name="Avg Progress" stroke="#653653" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
             <Line type="monotone" dataKey="success" name="Success Rate" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
           </LineChart>
         </ResponsiveContainer>

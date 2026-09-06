@@ -67,7 +67,7 @@ export default function CashFlowChart() {
     <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <TrendingUp size={18} className="text-[#1877f2]" />
+          <TrendingUp size={18} className="text-[#653653]" />
           <h3 className="text-base font-bold text-[#050505]">Cash Flow</h3>
         </div>
         <span className="text-xs text-[#65676b]">Last 14 days</span>
@@ -78,7 +78,7 @@ export default function CashFlowChart() {
         <Stat label="Earned" value={totals.earnings} color="text-[#31a24c]" dot="bg-emerald-500" />
         <Stat label="Withdrawn" value={totals.withdrawals} color="text-red-600" dot="bg-red-500" />
         <Stat label="Escrow Held" value={totals.held} color="text-amber-600" dot="bg-amber-500" />
-        <Stat label="Escrow Released" value={totals.released} color="text-blue-600" dot="bg-blue-500" />
+        <Stat label="Escrow Released" value={totals.released} color="text-[#653653]" dot="bg-[#653653]" />
       </div>
 
       <div className="h-64">

@@ -42,7 +42,7 @@ export default function ChatView({ currentUser }) {
         <h3 className="text-xs font-bold text-[#65676b] uppercase tracking-wider px-2 mb-2">Channels</h3>
         <div className="space-y-0.5">
           {CHANNELS.map(c => (
-            <button key={c.id} onClick={() => setChannelId(c.id)} className={`w-full flex items-center gap-2 px-2 py-2 rounded-lg text-sm transition-colors ${channelId === c.id ? 'bg-[#1877f2]/15 text-[#1877f2] font-medium' : 'text-[#050505] hover:bg-[#f0f2f5]'}`}>
+            <button key={c.id} onClick={() => setChannelId(c.id)} className={`w-full flex items-center gap-2 px-2 py-2 rounded-lg text-sm transition-colors ${channelId === c.id ? 'bg-[#653653]/15 text-[#653653] font-medium' : 'text-[#050505] hover:bg-[#f0f2f5]'}`}>
               <Hash size={16} className="flex-shrink-0" /> {c.label}
             </button>
           ))}
@@ -65,13 +65,13 @@ export default function ChatView({ currentUser }) {
             const isMe = m.authorName === (currentUser?.full_name || 'You');
             return (
               <div key={m.id} className={`flex gap-3 ${isMe ? 'flex-row-reverse' : ''}`}>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1877f2] to-[#1877f2] flex items-center justify-center text-white font-bold text-[10px] flex-shrink-0">{(m.authorName || '??').slice(0, 2).toUpperCase()}</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#653653] to-[#653653] flex items-center justify-center text-white font-bold text-[10px] flex-shrink-0">{(m.authorName || '??').slice(0, 2).toUpperCase()}</div>
                 <div className={`max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                   <div className="flex items-center gap-2 mb-0.5">
                     <span className="text-xs font-semibold text-[#050505]">{isMe ? 'You' : m.authorName}</span>
                     <span className="text-[10px] text-[#65676b]">{formatTime(m.created_date)}</span>
                   </div>
-                  <div className={`rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap break-words ${isMe ? 'bg-[#1877f2] text-white' : 'bg-[#f0f2f5] text-[#050505]'}`}>{m.text}</div>
+                  <div className={`rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap break-words ${isMe ? 'bg-[#653653] text-white' : 'bg-[#f0f2f5] text-[#050505]'}`}>{m.text}</div>
                 </div>
               </div>
             );
@@ -80,8 +80,8 @@ export default function ChatView({ currentUser }) {
 
         <div className="px-4 py-3 border-t border-[#e4e6eb]">
           <div className="flex gap-2">
-            <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }} placeholder={`Message #${channelId}`} className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-xl px-4 py-2.5 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
-            <button onClick={handleSend} disabled={!text.trim() || sendMessage.isPending} className="bg-[#1877f2] hover:bg-[#166fe5] disabled:opacity-40 text-white p-2.5 rounded-xl transition-colors"><Send size={18} /></button>
+            <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }} placeholder={`Message #${channelId}`} className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-xl px-4 py-2.5 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
+            <button onClick={handleSend} disabled={!text.trim() || sendMessage.isPending} className="bg-[#653653] hover:bg-[#522b42] disabled:opacity-40 text-white p-2.5 rounded-xl transition-colors"><Send size={18} /></button>
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default function BuildViews({ mode = 'assistants', currentUser }) {
   }, [queryClient]);
 
   const handleCreateTeam = (team) => {
-    const colors = ['from-[#1877f2] to-[#42a5f5]', 'from-[#42a5f5] to-[#1877f2]', 'from-[#31a24c] to-[#42b810]', 'from-[#f7b928] to-[#f0a029]', 'from-[#e41e3f] to-[#f02849]'];
+    const colors = ['from-[#653653] to-[#a06b97]', 'from-[#a06b97] to-[#653653]', 'from-[#31a24c] to-[#42b810]', 'from-[#f7b928] to-[#f0a029]', 'from-[#e41e3f] to-[#f02849]'];
     createTeam.mutate({
       name: team.name,
       description: team.description || 'New team',
@@ -38,7 +38,7 @@ export default function BuildViews({ mode = 'assistants', currentUser }) {
       <div className="space-y-5">
         <div className="flex items-center justify-between">
           <div><h2 className="text-xl font-bold text-[#050505]">Teams</h2><p className="text-sm text-[#65676b] mt-0.5">{teams.length} teams • Collaborate with your team members</p></div>
-          <button onClick={() => setShowCreate(true)} className="bg-[#1877f2] hover:bg-[#166fe5] text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1.5 transition-colors"><Plus size={16} /> New Team</button>
+          <button onClick={() => setShowCreate(true)} className="bg-[#653653] hover:bg-[#522b42] text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1.5 transition-colors"><Plus size={16} /> New Team</button>
         </div>
         {teamsLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">{[...Array(3)].map((_, i) => <div key={i} className="h-40 bg-[#ffffff] rounded-2xl border border-[#e4e6eb] animate-pulse" />)}</div>
@@ -52,7 +52,7 @@ export default function BuildViews({ mode = 'assistants', currentUser }) {
             {teams.map(team => (
               <div key={team.id} className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-5 hover:bg-[#f0f2f5] transition-colors cursor-pointer">
                 <div className="flex items-start justify-between mb-3">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${team.color || 'from-[#1877f2] to-[#1877f2]'} flex items-center justify-center text-white font-bold text-sm`}>{(team.name || '??').slice(0, 2).toUpperCase()}</div>
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${team.color || 'from-[#653653] to-[#653653]'} flex items-center justify-center text-white font-bold text-sm`}>{(team.name || '??').slice(0, 2).toUpperCase()}</div>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#31a24c]/10 text-[#31a24c] font-medium">Active</span>
                 </div>
                 <h3 className="text-base font-bold text-[#050505] mb-1">{team.name}</h3>
@@ -75,8 +75,8 @@ export default function BuildViews({ mode = 'assistants', currentUser }) {
   const totalUpvotes = agents.reduce((s, a) => s + (a.upvotes || 0), 0);
 
   const stats = [
-    { label: 'Active Agents', value: agents.length, icon: <Bot size={16} />, color: 'text-[#1877f2]', bg: 'bg-[#1877f2]/15' },
-    { label: 'Avg Trust Score', value: avgTrust, icon: <Shield size={16} />, color: 'text-blue-600', bg: 'bg-blue-100' },
+    { label: 'Active Agents', value: agents.length, icon: <Bot size={16} />, color: 'text-[#653653]', bg: 'bg-[#653653]/15' },
+    { label: 'Avg Trust Score', value: avgTrust, icon: <Shield size={16} />, color: 'text-[#653653]', bg: 'bg-[#f2e7ef]' },
     { label: 'Total Upvotes', value: totalUpvotes, icon: <Zap size={16} />, color: 'text-amber-600', bg: 'bg-amber-100' },
   ];
 
@@ -106,7 +106,7 @@ export default function BuildViews({ mode = 'assistants', currentUser }) {
           {agents.map(agent => (
             <div key={agent.id} className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-5 hover:bg-[#f0f2f5] transition-colors">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1877f2] to-[#1877f2] flex items-center justify-center text-white"><Bot size={18} /></div>
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#653653] to-[#653653] flex items-center justify-center text-white"><Bot size={18} /></div>
                 <div className="flex-1 min-w-0"><p className="text-sm font-semibold text-[#050505] truncate">{agent.author}</p><p className="text-xs text-[#65676b]">{agent.handle}</p></div>
                 <span className="text-[10px] bg-[#31a24c]/10 text-[#31a24c] px-2 py-0.5 rounded-full font-medium">Active</span>
               </div>

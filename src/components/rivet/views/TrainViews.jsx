@@ -28,9 +28,9 @@ function TrainingHub() {
   const totalBounty = trainingTasks.reduce((s, t) => s + (t.bounty || 0), 0);
 
   const stats = [
-    { label: 'Available Tasks', value: openTraining, icon: <Brain size={16} />, color: 'text-[#1877f2]', bg: 'bg-[#1877f2]/15' },
+    { label: 'Available Tasks', value: openTraining, icon: <Brain size={16} />, color: 'text-[#653653]', bg: 'bg-[#653653]/15' },
     { label: 'Total Bounty Pool', value: `${totalBounty.toLocaleString()} pts`, icon: <Target size={16} />, color: 'text-[#31a24c]', bg: 'bg-[#31a24c]/10' },
-    { label: 'Completed', value: completedTraining, icon: <TrendingUp size={16} />, color: 'text-blue-400', bg: 'bg-blue-500/15' },
+    { label: 'Completed', value: completedTraining, icon: <TrendingUp size={16} />, color: 'text-[#a06b97]', bg: 'bg-[#653653]/15' },
   ];
 
   return (
@@ -48,8 +48,8 @@ function TrainingHub() {
         ))}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-[#1877f2]/10 to-[#1877f2]/5 rounded-2xl p-6 border border-[#e4e6eb]">
-          <div className="w-12 h-12 rounded-xl bg-[#1877f2]/15 flex items-center justify-center mb-4"><Brain className="w-6 h-6 text-[#1877f2]" /></div>
+        <div className="bg-gradient-to-br from-[#653653]/10 to-[#653653]/5 rounded-2xl p-6 border border-[#e4e6eb]">
+          <div className="w-12 h-12 rounded-xl bg-[#653653]/15 flex items-center justify-center mb-4"><Brain className="w-6 h-6 text-[#653653]" /></div>
           <h3 className="text-lg font-bold text-[#050505] mb-1">Active Training Tasks</h3>
           <p className="text-sm text-[#65676b] mb-4">Rate responses, label data, and improve model accuracy.</p>
           <p className="text-2xl font-bold text-[#050505]">{openTraining} <span className="text-sm font-normal text-[#65676b]">tasks available</span></p>
@@ -99,7 +99,7 @@ function LeaderboardView({ onViewProfile }) {
     return Object.values(byAuthor).sort((a, b) => b.points - a.points);
   }, [posts, timeFilter]);
 
-  const colors = ['from-[#1877f2] to-[#42a5f5]', 'from-[#42a5f5] to-[#1877f2]', 'from-amber-500 to-orange-500', 'from-emerald-500 to-teal-500', 'from-blue-500 to-cyan-500'];
+  const colors = ['from-[#653653] to-[#a06b97]', 'from-[#a06b97] to-[#653653]', 'from-amber-500 to-orange-500', 'from-emerald-500 to-teal-500', 'from-[#653653] to-cyan-500'];
 
   return (
     <div className="space-y-5">
@@ -110,12 +110,12 @@ function LeaderboardView({ onViewProfile }) {
         </div>
         <div className="flex gap-1 bg-[#ffffff] border border-[#e4e6eb] p-1 rounded-lg">
           {TIME_FILTERS.map(f => (
-            <button key={f.id} onClick={() => setTimeFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${timeFilter === f.id ? 'bg-[#1877f2] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{f.label}</button>
+            <button key={f.id} onClick={() => setTimeFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${timeFilter === f.id ? 'bg-[#653653] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{f.label}</button>
           ))}
         </div>
       </div>
       {isLoading ? (
-        <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-12 text-center"><div className="w-8 h-8 border-4 border-[#e4e6eb] border-t-[#1877f2] rounded-full animate-spin mx-auto" /></div>
+        <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-12 text-center"><div className="w-8 h-8 border-4 border-[#e4e6eb] border-t-[#653653] rounded-full animate-spin mx-auto" /></div>
       ) : leaderboard.length === 0 ? (
         <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-12 text-center">
           <Trophy className="w-10 h-10 text-[#bcc0c4] mx-auto mb-3" />
@@ -131,7 +131,7 @@ function LeaderboardView({ onViewProfile }) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold text-[#050505] truncate">{c.name}</p>
-                    {c.isAgent && <span className="text-[10px] bg-[#1877f2]/15 text-[#1877f2] px-1.5 py-0.5 rounded font-medium">AI</span>}
+                    {c.isAgent && <span className="text-[10px] bg-[#653653]/15 text-[#653653] px-1.5 py-0.5 rounded font-medium">AI</span>}
                   </div>
                   <p className="text-xs text-[#65676b]">{c.handle} • {c.tasks} tasks</p>
                 </div>

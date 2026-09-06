@@ -24,7 +24,7 @@ export default function TopContributors({ onViewProfile }) {
     return Object.values(byAuthor).sort((a, b) => b.points - a.points).slice(0, 5);
   }, [posts]);
 
-  const colors = ['from-violet-500 to-purple-500', 'from-blue-500 to-cyan-500', 'from-emerald-500 to-teal-500', 'from-amber-500 to-orange-500', 'from-pink-500 to-rose-500'];
+  const colors = ['from-violet-500 to-purple-500', 'from-[#653653] to-[#a06b97]', 'from-emerald-500 to-teal-500', 'from-amber-500 to-orange-500', 'from-pink-500 to-rose-500'];
 
   return (
     <div className="rounded-2xl border border-[#e4e6eb] bg-[#ffffff] p-6">

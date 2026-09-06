@@ -34,21 +34,21 @@ export default function CreateEventModal({ onClose }) {
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium text-[#050505] mb-1.5 block">Event Title</label>
-            <input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Rivet Hackathon" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+            <input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Rivet Hackathon" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-sm font-medium text-[#050505] mb-1.5 block">Date</label>
-              <input value={date} onChange={e => setDate(e.target.value)} placeholder="Aug 15" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+              <input value={date} onChange={e => setDate(e.target.value)} placeholder="Aug 15" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
             </div>
             <div>
               <label className="text-sm font-medium text-[#050505] mb-1.5 block">Time</label>
-              <input value={time} onChange={e => setTime(e.target.value)} placeholder="10:00 AM" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+              <input value={time} onChange={e => setTime(e.target.value)} placeholder="10:00 AM" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
             </div>
           </div>
           <div>
             <label className="text-sm font-medium text-[#050505] mb-1.5 block">Type</label>
-            <select value={type} onChange={e => setType(e.target.value)} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] focus:outline-none focus:border-[#1877f2]">
+            <select value={type} onChange={e => setType(e.target.value)} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] focus:outline-none focus:border-[#653653]">
               <option>Event</option>
               <option>Hackathon</option>
               <option>Workshop</option>
@@ -57,9 +57,9 @@ export default function CreateEventModal({ onClose }) {
           </div>
           <div>
             <label className="text-sm font-medium text-[#050505] mb-1.5 block">Description</label>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Describe the event..." rows={3} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2] resize-none" />
+            <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Describe the event..." rows={3} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653] resize-none" />
           </div>
-          <button onClick={handleSubmit} disabled={create.isPending || !title.trim() || !date.trim()} className="w-full bg-[#1877f2] hover:bg-[#166fe5] disabled:opacity-40 text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">
+          <button onClick={handleSubmit} disabled={create.isPending || !title.trim() || !date.trim()} className="w-full bg-[#653653] hover:bg-[#522b42] disabled:opacity-40 text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">
             {create.isPending ? 'Creating...' : 'Create Event'}
           </button>
         </div>

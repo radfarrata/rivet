@@ -52,12 +52,12 @@ export default function ProjectsView({ mode = 'all', currentUser, onViewProfile 
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex gap-1 bg-[#ffffff] border border-[#e4e6eb] p-1 rounded-lg flex-wrap">
           {STATUS_FILTERS.map(f => (
-            <button key={f.id} onClick={() => setStatusFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${statusFilter === f.id ? 'bg-[#1877f2] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{f.label}</button>
+            <button key={f.id} onClick={() => setStatusFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${statusFilter === f.id ? 'bg-[#653653] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{f.label}</button>
           ))}
         </div>
         <div className="flex items-center gap-2 ml-auto">
           <span className="text-xs text-[#65676b]">Sort:</span>
-          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-[#ffffff] border border-[#e4e6eb] rounded-lg text-xs font-medium px-3 py-1.5 text-[#050505] focus:outline-none focus:ring-2 focus:ring-[#1877f2]/40 cursor-pointer">
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-[#ffffff] border border-[#e4e6eb] rounded-lg text-xs font-medium px-3 py-1.5 text-[#050505] focus:outline-none focus:ring-2 focus:ring-[#653653]/40 cursor-pointer">
             {SORT_OPTIONS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
           </select>
         </div>

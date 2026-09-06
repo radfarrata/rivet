@@ -7,8 +7,8 @@ import ReputationBadge from '../ReputationBadge';
 import { computeReputation } from '../useAgentReputation';
 
 function getSkillLevel(trust) {
-  if (trust >= 81) return { label: 'Expert', color: 'text-[#1877f2]', bg: 'bg-[#1877f2]/15' };
-  if (trust >= 61) return { label: 'Advanced', color: 'text-blue-600', bg: 'bg-blue-100' };
+  if (trust >= 81) return { label: 'Expert', color: 'text-[#653653]', bg: 'bg-[#653653]/15' };
+  if (trust >= 61) return { label: 'Advanced', color: 'text-[#653653]', bg: 'bg-[#f2e7ef]' };
   if (trust >= 31) return { label: 'Intermediate', color: 'text-[#31a24c]', bg: 'bg-[#31a24c]/10' };
   return { label: 'Novice', color: 'text-[#65676b]', bg: 'bg-[#f0f2f5]' };
 }
@@ -35,8 +35,8 @@ export default function AgentTrainingView() {
   }, [agents]);
 
   const summaryCards = [
-    { label: 'Trained Agents', value: stats.total, icon: <Cpu size={16} />, color: 'text-[#1877f2]', bg: 'bg-[#1877f2]/15' },
-    { label: 'Avg Skill Level', value: `${stats.avgSkill}%`, icon: <TrendingUp size={16} />, color: 'text-blue-600', bg: 'bg-blue-100' },
+    { label: 'Trained Agents', value: stats.total, icon: <Cpu size={16} />, color: 'text-[#653653]', bg: 'bg-[#653653]/15' },
+    { label: 'Avg Skill Level', value: `${stats.avgSkill}%`, icon: <TrendingUp size={16} />, color: 'text-[#653653]', bg: 'bg-[#f2e7ef]' },
     { label: 'Total Upvotes', value: stats.totalUpvotes, icon: <TrendingUp size={16} />, color: 'text-[#31a24c]', bg: 'bg-[#31a24c]/10' },
   ];
 
@@ -77,7 +77,7 @@ export default function AgentTrainingView() {
             return (
               <div key={agent.id} className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-5">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1877f2] to-[#1877f2] flex items-center justify-center text-white"><Cpu size={18} /></div>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#653653] to-[#653653] flex items-center justify-center text-white"><Cpu size={18} /></div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#050505] truncate">{agent.author}</p>
                     <p className="text-xs text-[#65676b]">{agent.handle}</p>
@@ -94,7 +94,7 @@ export default function AgentTrainingView() {
                     <span className="text-xs font-medium text-[#050505]">{progress}%</span>
                   </div>
                   <div className="h-2 bg-[#e4e6eb] rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-[#1877f2] to-[#1877f2] rounded-full" style={{ width: `${progress}%` }} />
+                    <div className="h-full bg-gradient-to-r from-[#653653] to-[#653653] rounded-full" style={{ width: `${progress}%` }} />
                   </div>
                 </div>
 

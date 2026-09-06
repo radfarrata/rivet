@@ -46,7 +46,7 @@ export default function ReputationCard({ reputation }) {
             <span className="text-xs font-medium text-[#050505]">{next.min - score} pts to go</span>
           </div>
           <div className="h-2 bg-[#e4e6eb] rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#1877f2] to-[#1877f2] rounded-full" style={{ width: `${progress}%` }} />
+            <div className="h-full bg-gradient-to-r from-[#653653] to-[#653653] rounded-full" style={{ width: `${progress}%` }} />
           </div>
         </div>
       ) : (

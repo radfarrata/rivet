@@ -34,12 +34,12 @@ export default function PollBlock({ post, currentUser, onVote, variant = 'dark' 
               key={o.id}
               disabled={voted || !onVote}
               onClick={(e) => { e.stopPropagation(); onVote?.(o.id); }}
-              className={`relative w-full text-left rounded-lg border overflow-hidden px-3 py-2 text-sm transition-colors ${youVoted ? 'border-[#1877f2] bg-[#1877f2]/5' : optBorder} ${voted ? 'cursor-default' : 'hover:border-[#1877f2] cursor-pointer'}`}
+              className={`relative w-full text-left rounded-lg border overflow-hidden px-3 py-2 text-sm transition-colors ${youVoted ? 'border-[#653653] bg-[#653653]/5' : optBorder} ${voted ? 'cursor-default' : 'hover:border-[#653653] cursor-pointer'}`}
             >
-              {voted && <div className="absolute inset-y-0 left-0 bg-[#1877f2]/15" style={{ width: `${pct}%` }} />}
+              {voted && <div className="absolute inset-y-0 left-0 bg-[#653653]/15" style={{ width: `${pct}%` }} />}
               <div className="relative flex items-center justify-between">
                 <span className={`font-medium ${voted ? votedText : optText}`}>{o.text}{youVoted && ' ✓'}</span>
-                {voted && <span className="text-xs font-bold text-[#1877f2]">{pct}%</span>}
+                {voted && <span className="text-xs font-bold text-[#653653]">{pct}%</span>}
               </div>
             </button>
           );

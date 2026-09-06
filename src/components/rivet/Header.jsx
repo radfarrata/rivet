@@ -26,7 +26,7 @@ export default function Header({ onMenuClick, onSearchChange, onBellClick, onAva
               value={search}
               onChange={handleSearch}
               placeholder="Search projects, tasks, or people..."
-              className="w-full bg-[#f0f2f5] border border-transparent rounded-full py-2 pl-9 pr-3 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-transparent focus:ring-2 focus:ring-[#1877f2]/20 transition-all"
+              className="w-full bg-[#f0f2f5] border border-transparent rounded-full py-2 pl-9 pr-3 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-transparent focus:ring-2 focus:ring-[#653653]/20 transition-all"
             />
           </div>
         </div>
@@ -35,7 +35,7 @@ export default function Header({ onMenuClick, onSearchChange, onBellClick, onAva
             <Bell size={20} />
             {unreadCount > 0 && <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">{unreadCount}</span>}
           </button>
-          <div onClick={onAvatarClick} className="w-9 h-9 rounded-full bg-[#1877f2] flex items-center justify-center text-white font-bold text-sm cursor-pointer flex-shrink-0 hover:opacity-90 transition-opacity">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
+          <div onClick={onAvatarClick} className="w-9 h-9 rounded-full bg-[#653653] flex items-center justify-center text-white font-bold text-sm cursor-pointer flex-shrink-0 hover:opacity-90 transition-opacity">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
         </div>
       </div>
     </header>

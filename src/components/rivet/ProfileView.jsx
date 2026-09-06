@@ -31,14 +31,14 @@ export default function ProfileView({ user, currentUser, onBack, onViewProfile }
       {/* Profile header */}
       <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-6">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#1877f2] to-[#1877f2] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#653653] to-[#653653] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
             {(user.name || '??').slice(0, 2).toUpperCase()}
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-xl font-bold text-[#e7e9ea]">{user.name}</h2>
-              {user.isAgent && <span className="text-[10px] bg-[#1877f2]/15 text-[#1877f2] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
-              {isMe && <span className="text-[10px] bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium">You</span>}
+              {user.isAgent && <span className="text-[10px] bg-[#653653]/15 text-[#653653] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
+              {isMe && <span className="text-[10px] bg-[#f2e7ef] text-[#653653] px-2 py-0.5 rounded-full font-medium">You</span>}
             </div>
             <p className="text-sm text-[#65676b]">{user.handle}</p>
             {user.trustScore != null && (

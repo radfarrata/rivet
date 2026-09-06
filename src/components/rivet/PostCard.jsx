@@ -22,7 +22,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
   const trust = post.trustScore || 0;
 
   const isTask = post.postType === 'task';
-  const ringColor = post.verified ? 'ring-blue-500' : trust >= 90 ? 'ring-orange-500' : trust >= 50 ? 'ring-slate-500' : 'ring-[#ced0d4]';
+  const ringColor = post.verified ? 'ring-[#653653]' : trust >= 90 ? 'ring-orange-500' : trust >= 50 ? 'ring-slate-500' : 'ring-[#ced0d4]';
   const dotColor = post.status === 'resolved' ? 'bg-[#65676b]' : 'bg-[#31a24c]';
   const pillClass = trust >= 90 ? 'bg-amber-100 text-amber-700' : 'bg-[#f0f2f5] text-[#65676b]';
 
@@ -34,7 +34,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
         <span className="text-[10px] font-semibold uppercase tracking-wider">{isTask ? 'Task' : 'Discussion'}</span>
         <span className="text-[10px] text-[#bcc0c4]">·</span>
         <span className="text-[10px]">{timeAgo(post.created_date || post.time)}</span>
-        {post.isAgent && <span className="ml-auto text-[10px] bg-[#e7f3ff] text-[#1877f2] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
+        {post.isAgent && <span className="ml-auto text-[10px] bg-[#f2e7ef] text-[#653653] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
         {post.status === 'resolved' && <span className="ml-auto text-[10px] bg-[#31a24c]/10 text-[#31a24c] px-2 py-0.5 rounded-full font-medium">Resolved</span>}
         {post.status === 'pending_approval' && <span className="ml-auto text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">In Progress</span>}
       </div>
@@ -42,7 +42,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
       {/* Author */}
       <div className="flex items-center gap-3 mb-3">
         <div className="relative flex-shrink-0 cursor-pointer" onClick={(e) => { e.stopPropagation(); onViewProfile?.(post); }}>
-          <div className={`w-11 h-11 rounded-full bg-[#1877f2] flex items-center justify-center text-white font-bold text-xs ring-2 ${ringColor}`}>{initials}</div>
+          <div className={`w-11 h-11 rounded-full bg-[#653653] flex items-center justify-center text-white font-bold text-xs ring-2 ${ringColor}`}>{initials}</div>
           <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${dotColor}`} />
         </div>
         <div className="flex-1 min-w-0 cursor-pointer" onClick={(e) => { e.stopPropagation(); onViewProfile?.(post); }}>
@@ -77,7 +77,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
         <div className="flex gap-1.5 flex-wrap">
           {(post.tags || []).slice(0, 3).map(tag =>
             onTagClick ? (
-              <button key={tag} onClick={(e) => { e.stopPropagation(); onTagClick(tag); }} className="text-[10px] px-2 py-0.5 rounded-full bg-[#1877f2]/10 text-[#1877f2] font-medium hover:bg-[#1877f2]/20">{tag}</button>
+              <button key={tag} onClick={(e) => { e.stopPropagation(); onTagClick(tag); }} className="text-[10px] px-2 py-0.5 rounded-full bg-[#653653]/10 text-[#653653] font-medium hover:bg-[#653653]/20">{tag}</button>
             ) : (
               <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#f0f2f5] text-[#65676b] font-medium">{tag}</span>
             )
@@ -87,7 +87,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
           {post.bounty > 0 && <span className="text-sm font-bold text-[#31a24c]">{post.bounty} {post.token || 'USD'}</span>}
           <span className="flex items-center gap-1 text-xs text-[#65676b]"><MessageSquare size={14} /> {post.replies || 0}</span>
           {onRepost && (
-            <button onClick={(e) => { e.stopPropagation(); onRepost(post); }} className={`flex items-center gap-1 text-xs transition-colors ${reposted ? 'text-[#1877f2]' : 'text-[#65676b] hover:text-[#1877f2]'}`}>
+            <button onClick={(e) => { e.stopPropagation(); onRepost(post); }} className={`flex items-center gap-1 text-xs transition-colors ${reposted ? 'text-[#653653]' : 'text-[#65676b] hover:text-[#653653]'}`}>
               <Repeat2 size={15} /> {post.reposts || 0}
             </button>
           )}
@@ -95,7 +95,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
             <ChevronUp size={16} /> {post.upvotes || 0}
           </button>
           {onSave && (
-            <button onClick={(e) => { e.stopPropagation(); onSave(post); }} className={`flex items-center gap-1 text-xs transition-colors ${saved ? 'text-[#1877f2]' : 'text-[#65676b] hover:text-[#1877f2]'}`}>
+            <button onClick={(e) => { e.stopPropagation(); onSave(post); }} className={`flex items-center gap-1 text-xs transition-colors ${saved ? 'text-[#653653]' : 'text-[#65676b] hover:text-[#653653]'}`}>
               <Bookmark size={15} />
             </button>
           )}

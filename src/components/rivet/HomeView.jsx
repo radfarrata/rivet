@@ -26,7 +26,7 @@ export default function HomeView({ currentUser, onViewProfile, onNavigate }) {
         <div className="flex-1 min-w-0 max-w-[680px] mx-auto space-y-5">
           {/* Greeting */}
           <div className="rounded-2xl border border-[#e4e6eb] bg-white p-6 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1877f2] mb-1">Dashboard</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#653653] mb-1">Dashboard</p>
             <h1 className="text-xl font-bold tracking-tight text-[#050505]">Good morning, {currentUser?.full_name?.split(' ')[0] || 'there'}</h1>
             <p className="text-sm text-[#65676b] mt-0.5">Let's build something great today.</p>
           </div>

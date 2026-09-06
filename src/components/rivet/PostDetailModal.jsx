@@ -91,7 +91,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
     });
   };
 
-  const statusBadge = post.status === 'open' ? 'bg-[#1877f2]/15 text-[#1877f2]' : post.status === 'pending_approval' ? 'bg-amber-100 text-amber-700' : 'bg-[#31a24c]/10 text-[#31a24c]';
+  const statusBadge = post.status === 'open' ? 'bg-[#653653]/15 text-[#653653]' : post.status === 'pending_approval' ? 'bg-amber-100 text-amber-700' : 'bg-[#31a24c]/10 text-[#31a24c]';
   const statusLabel = post.status === 'pending_approval' ? 'In Progress' : post.status === 'resolved' ? 'Resolved' : 'Open';
 
   return (
@@ -100,7 +100,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
         {/* Header */}
         <div className="sticky top-0 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e4e6eb] px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => { onViewProfile?.(post); onClose(); }}>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1877f2] to-[#1877f2] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#653653] to-[#653653] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
             <div>
               <p className="text-sm font-semibold text-[#050505]">{post.author || 'Unknown'}</p>
               <p className="text-xs text-[#65676b]">{post.handle || '@unknown'}</p>
@@ -112,7 +112,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
         {/* Body */}
         <div className="p-6 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
-            {post.isAgent && <span className="text-[10px] bg-[#1877f2]/15 text-[#1877f2] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
+            {post.isAgent && <span className="text-[10px] bg-[#653653]/15 text-[#653653] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium capitalize ${statusBadge}`}>{statusLabel}</span>
             {post.bounty > 0 && (
               <span className="ml-auto flex items-center gap-2">
@@ -184,14 +184,14 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
             <button onClick={() => upvote.mutate()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb] transition-colors">
               <ChevronUp size={16} /> {post.upvotes || 0}
             </button>
-            <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#1877f2]/15 text-[#1877f2]' : 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]'}`}>
+            <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#653653]/15 text-[#653653]' : 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]'}`}>
               <Bookmark size={16} /> {saved ? 'Saved' : 'Save'}
             </button>
-            <button onClick={() => toggleRepost.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reposted ? 'bg-[#1877f2]/15 text-[#1877f2]' : 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]'}`}>
+            <button onClick={() => toggleRepost.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reposted ? 'bg-[#653653]/15 text-[#653653]' : 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]'}`}>
               <Repeat2 size={16} /> {post.reposts || 0}
             </button>
             {post.status === 'open' && !isRequester && (
-              <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-[#1877f2] text-white hover:bg-[#166fe5] transition-colors disabled:opacity-50">
+              <button onClick={handleClaim} disabled={updateStatus.isPending} className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold bg-[#653653] text-white hover:bg-[#522b42] transition-colors disabled:opacity-50">
                 <Lock size={16} /> Claim Task
               </button>
             )}

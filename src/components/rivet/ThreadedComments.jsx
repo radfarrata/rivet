@@ -63,7 +63,7 @@ export default function ThreadedComments({ post, currentUser, notifyOwner }) {
               </div>
               <p className="text-sm text-[#1c1e21]">{c.content}</p>
             </div>
-            <button onClick={() => { setReplyTo({ id: c.id, name: c.authorName }); setText(''); }} className="mt-1 ml-1 text-[11px] font-medium text-[#65676b] hover:text-[#1877f2] inline-flex items-center gap-1">
+            <button onClick={() => { setReplyTo({ id: c.id, name: c.authorName }); setText(''); }} className="mt-1 ml-1 text-[11px] font-medium text-[#65676b] hover:text-[#653653] inline-flex items-center gap-1">
               <Reply size={11} /> Reply
             </button>
             {replyTo?.id === c.id && (
@@ -74,9 +74,9 @@ export default function ThreadedComments({ post, currentUser, notifyOwner }) {
                   onChange={e => setText(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }}
                   placeholder={`Reply to ${replyTo.name}...`}
-                  className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-1.5 text-xs text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]"
+                  className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-1.5 text-xs text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]"
                 />
-                <button onClick={submit} className="bg-[#1877f2] text-white px-2.5 rounded-lg"><Send size={12} /></button>
+                <button onClick={submit} className="bg-[#653653] text-white px-2.5 rounded-lg"><Send size={12} /></button>
                 <button onClick={() => { setReplyTo(null); setText(''); }} className="text-[#65676b] text-xs px-1">Cancel</button>
               </div>
             )}
@@ -102,9 +102,9 @@ export default function ThreadedComments({ post, currentUser, notifyOwner }) {
           onChange={e => { if (!replyTo) setText(e.target.value); }}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }}
           placeholder={replyTo ? `Replying to ${replyTo.name}...` : 'Write a comment...'}
-          className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]"
+          className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]"
         />
-        <button onClick={submit} disabled={add.isPending || !text.trim() || !!replyTo} className="bg-[#1877f2] hover:bg-[#b85e92] disabled:opacity-40 text-white p-2.5 rounded-lg transition-colors">
+        <button onClick={submit} disabled={add.isPending || !text.trim() || !!replyTo} className="bg-[#653653] hover:bg-[#b85e92] disabled:opacity-40 text-white p-2.5 rounded-lg transition-colors">
           <Send size={16} />
         </button>
       </div>

@@ -107,7 +107,7 @@ function TransactionsTable() {
 
       <div className="flex gap-1 bg-[#ffffff] border border-[#e4e6eb] p-1 rounded-lg w-fit">
         {FILTERS.map(f => (
-          <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-[#1877f2] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{f.label}</button>
+          <button key={f.id} onClick={() => setFilter(f.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${filter === f.id ? 'bg-[#653653] text-white' : 'text-[#65676b] hover:text-[#050505]'}`}>{f.label}</button>
         ))}
       </div>
 
@@ -145,13 +145,13 @@ function WalletHome({ currentUser }) {
 
   return (
     <div className="space-y-5">
-      <div className="bg-gradient-to-br from-[#1877f2] via-[#166fe5] to-[#42a5f5] rounded-2xl p-6 text-white">
+      <div className="bg-gradient-to-br from-[#653653] via-[#522b42] to-[#a06b97] rounded-2xl p-6 text-white">
         <div className="flex items-center gap-2 mb-4"><WalletIcon size={20} className="text-white/70" /><p className="text-sm text-white/60 font-medium">My Wallet</p></div>
         <div className="flex items-baseline gap-2 mb-1"><span className="text-4xl font-bold">{balance.toLocaleString()}</span><span className="text-sm text-white/60">pts</span></div>
         <p className="text-xs text-white/50 mb-5">≈ ${(balance / 100).toFixed(2)} USD</p>
         <div>
           <div className="flex items-center justify-between mb-1.5"><span className="text-xs text-white/60">Points to next payout</span><span className="text-xs text-white/60">{Math.max(0, 15000 - balance).toLocaleString()} pts</span></div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-[#1877f2] to-[#42a5f5] rounded-full" style={{ width: `${Math.min(100, (balance / 15000) * 100)}%` }} /></div>
+          <div className="h-2 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-gradient-to-r from-[#653653] to-[#a06b97] rounded-full" style={{ width: `${Math.min(100, (balance / 15000) * 100)}%` }} /></div>
         </div>
       </div>
 
@@ -213,7 +213,7 @@ function WithdrawForm({ currentUser }) {
         <CheckCircle2 className="w-12 h-12 text-[#31a24c] mx-auto mb-4" />
         <h3 className="text-lg font-bold text-[#050505] mb-1">Withdrawal Requested!</h3>
         <p className="text-sm text-[#65676b]">{amount} pts ({(Number(amount) / 100).toFixed(2)} USD) will be sent to your {method === 'paypal' ? 'PayPal' : 'bank account'} within 2-3 business days.</p>
-        <button onClick={() => { setDone(false); setAmount(''); }} className="mt-4 text-sm font-semibold text-[#1877f2] hover:text-[#166fe5]">Make another withdrawal</button>
+        <button onClick={() => { setDone(false); setAmount(''); }} className="mt-4 text-sm font-semibold text-[#653653] hover:text-[#522b42]">Make another withdrawal</button>
       </div>
     );
   }
@@ -225,17 +225,17 @@ function WithdrawForm({ currentUser }) {
       <div className="space-y-4">
         <div>
           <label className="text-sm font-medium text-[#050505] mb-1.5 block">Amount (points)</label>
-          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter points to withdraw" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter points to withdraw" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
           <p className="text-xs text-[#65676b] mt-1">Minimum withdrawal: 1,000 pts</p>
         </div>
         <div>
           <label className="text-sm font-medium text-[#050505] mb-1.5 block">Withdrawal Method</label>
           <div className="flex gap-2">
-            <button onClick={() => setMethod('paypal')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'paypal' ? 'border-[#1877f2] bg-[#1877f2]/15 text-[#1877f2]' : 'border-[#e4e6eb] text-[#65676b] hover:bg-[#f0f2f5]'}`}>PayPal</button>
-            <button onClick={() => setMethod('bank')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'bank' ? 'border-[#1877f2] bg-[#1877f2]/15 text-[#1877f2]' : 'border-[#e4e6eb] text-[#65676b] hover:bg-[#f0f2f5]'}`}>Bank Transfer</button>
+            <button onClick={() => setMethod('paypal')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'paypal' ? 'border-[#653653] bg-[#653653]/15 text-[#653653]' : 'border-[#e4e6eb] text-[#65676b] hover:bg-[#f0f2f5]'}`}>PayPal</button>
+            <button onClick={() => setMethod('bank')} className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-colors ${method === 'bank' ? 'border-[#653653] bg-[#653653]/15 text-[#653653]' : 'border-[#e4e6eb] text-[#65676b] hover:bg-[#f0f2f5]'}`}>Bank Transfer</button>
           </div>
         </div>
-        <button onClick={handleWithdraw} disabled={Number(amount) < 1000 || createTxn.isPending} className="w-full bg-[#1877f2] hover:bg-[#166fe5] disabled:opacity-40 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">Withdraw {amount && `${amount} pts`}</button>
+        <button onClick={handleWithdraw} disabled={Number(amount) < 1000 || createTxn.isPending} className="w-full bg-[#653653] hover:bg-[#522b42] disabled:opacity-40 disabled:cursor-not-allowed text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">Withdraw {amount && `${amount} pts`}</button>
       </div>
     </div>
   );
@@ -260,7 +260,7 @@ function EscrowView({ currentUser }) {
 
   const stats = [
     { label: 'Held in Escrow', value: held.toLocaleString(), unit: 'pts', icon: <Lock size={16} />, color: 'text-amber-600', bg: 'bg-amber-100' },
-    { label: 'Pending Verification', value: pending, unit: '', icon: <Clock size={16} />, color: 'text-[#1877f2]', bg: 'bg-[#1877f2]/15' },
+    { label: 'Pending Verification', value: pending, unit: '', icon: <Clock size={16} />, color: 'text-[#653653]', bg: 'bg-[#653653]/15' },
     { label: 'Earned via Bounties', value: earned.toLocaleString(), unit: 'pts', icon: <TrendingUp size={16} />, color: 'text-[#31a24c]', bg: 'bg-[#31a24c]/10' },
   ];
 

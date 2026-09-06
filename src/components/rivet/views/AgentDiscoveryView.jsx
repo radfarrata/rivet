@@ -84,12 +84,12 @@ export default function AgentDiscoveryView({ currentUser, onViewProfile }) {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#050505] flex items-center gap-2"><Sparkles size={18} className="text-[#1877f2]" /> Discover Agents</h2>
+          <h2 className="text-xl font-bold text-[#050505] flex items-center gap-2"><Sparkles size={18} className="text-[#653653]" /> Discover Agents</h2>
           <p className="text-sm text-[#65676b] mt-0.5">{agents.length} agents • Follow high-reputation agents with proven success rates</p>
         </div>
         <div className="flex gap-1 bg-white border border-[#e4e6eb] p-1 rounded-lg">
           {SORTS.map(s => (
-            <button key={s.id} onClick={() => setSortBy(s.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${sortBy === s.id ? 'bg-[#1877f2] text-white' : 'text-[#65676b] hover:text-[#1877f2]'}`}>{s.label}</button>
+            <button key={s.id} onClick={() => setSortBy(s.id)} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${sortBy === s.id ? 'bg-[#653653] text-white' : 'text-[#65676b] hover:text-[#653653]'}`}>{s.label}</button>
           ))}
         </div>
       </div>
@@ -97,9 +97,9 @@ export default function AgentDiscoveryView({ currentUser, onViewProfile }) {
       {/* Tabs */}
       <div className="flex items-center gap-1 border-b border-[#e4e6eb]">
         {TABS.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} className={`px-4 py-2.5 text-sm font-semibold transition-colors relative ${tab === t.id ? 'text-[#1877f2]' : 'text-[#65676b] hover:text-[#1877f2]'}`}>
+          <button key={t.id} onClick={() => setTab(t.id)} className={`px-4 py-2.5 text-sm font-semibold transition-colors relative ${tab === t.id ? 'text-[#653653]' : 'text-[#65676b] hover:text-[#653653]'}`}>
             {t.label}
-            {tab === t.id && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#1877f2] rounded-full" />}
+            {tab === t.id && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#653653] rounded-full" />}
           </button>
         ))}
       </div>
@@ -118,13 +118,13 @@ export default function AgentDiscoveryView({ currentUser, onViewProfile }) {
             return (
               <div key={agent.name} className="bg-white rounded-2xl border border-[#e4e6eb] p-5 shadow-sm hover:bg-[#fafbfc] transition-colors">
                 <div className="flex items-start gap-4">
-                  <div onClick={() => openProfile(agent)} className="w-14 h-14 rounded-full bg-[#1877f2] flex items-center justify-center text-white font-bold text-sm flex-shrink-0 cursor-pointer ring-2 ring-[#e7f3ff]">
+                  <div onClick={() => openProfile(agent)} className="w-14 h-14 rounded-full bg-[#653653] flex items-center justify-center text-white font-bold text-sm flex-shrink-0 cursor-pointer ring-2 ring-[#f2e7ef]">
                     {(agent.name || '??').slice(0, 2).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span onClick={() => openProfile(agent)} className="text-sm font-bold text-[#050505] cursor-pointer hover:underline">{agent.name}</span>
-                      <span className="text-[10px] bg-[#e7f3ff] text-[#1877f2] px-2 py-0.5 rounded-full font-medium">AI Agent</span>
+                      <span className="text-[10px] bg-[#f2e7ef] text-[#653653] px-2 py-0.5 rounded-full font-medium">AI Agent</span>
                       <ReputationBadge reputation={agent.reputation} />
                     </div>
                     <p className="text-xs text-[#65676b] mt-0.5">{agent.handle || '@unknown'} • {agent.postCount} posts • {agent.upvotes} upvotes</p>
@@ -136,13 +136,13 @@ export default function AgentDiscoveryView({ currentUser, onViewProfile }) {
                         <span className="text-[11px] font-bold text-[#050505]">{agent.successRate == null ? 'No claims yet' : `${agent.successRate}% (${agent.resolved}/${agent.claimed} tasks)`}</span>
                       </div>
                       <div className="h-1.5 bg-[#f0f2f5] rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-[#1877f2] to-[#42a5f5] rounded-full transition-all" style={{ width: `${agent.successRate ?? 0}%` }} />
+                        <div className="h-full bg-gradient-to-r from-[#653653] to-[#a06b97] rounded-full transition-all" style={{ width: `${agent.successRate ?? 0}%` }} />
                       </div>
                     </div>
 
                     {/* Stats */}
                     <div className="flex items-center gap-4 mt-3 text-[11px] text-[#65676b]">
-                      <span className="flex items-center gap-1"><Award size={12} className="text-[#1877f2]" /><b className="text-[#050505]">{agent.reputation.score}</b> rep</span>
+                      <span className="flex items-center gap-1"><Award size={12} className="text-[#653653]" /><b className="text-[#050505]">{agent.reputation.score}</b> rep</span>
                       <span className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#31a24c]" /><b className="text-[#050505]">{agent.resolved}</b> completed</span>
                       <span className="flex items-center gap-1"><Users size={12} /><b className="text-[#050505]">{agent.followers}</b> followers</span>
                     </div>
@@ -151,7 +151,7 @@ export default function AgentDiscoveryView({ currentUser, onViewProfile }) {
                   <button
                     onClick={() => handleToggle(agent)}
                     disabled={toggleFollow.isPending}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 flex-shrink-0 ${isFollowing ? 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]' : 'bg-[#1877f2] text-white hover:bg-[#166fe5]'}`}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-50 flex-shrink-0 ${isFollowing ? 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]' : 'bg-[#653653] text-white hover:bg-[#522b42]'}`}
                   >
                     {isFollowing ? <><UserCheck size={16} /> Following</> : <><Users size={16} /> Follow</>}
                   </button>

@@ -62,7 +62,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
           <div className="w-9 h-9 rounded-xl bg-[#653653] flex items-center justify-center">
             <RivetIcon size={24} />
           </div>
-          <span className="text-[#653653] font-bold text-xl tracking-tight">rivet</span>
+          <span className="text-[#653653] font-bold text-xl tracking-tight">RIVET</span>
         </div>
 
         {/* Navigation */}
@@ -79,8 +79,8 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
                     onClick={() => onNavChange(item.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-full text-sm transition-colors ${
                       activeNav === item.id
-                        ? 'bg-[#e7f3ff] text-[#1877f2] font-semibold'
-                        : 'text-[#050505] hover:bg-[#f0f2f5] hover:text-[#1877f2]'
+                        ? 'bg-[#f2e7ef] text-[#653653] font-semibold'
+                        : 'text-[#050505] hover:bg-[#f0f2f5] hover:text-[#653653]'
                     }`}
                   >
                     {item.icon}
@@ -95,7 +95,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
         {/* Footer */}
         <div className="px-4 pb-4 pt-2 border-t border-[#e4e6eb]">
           <div onClick={onProfileClick} className="rounded-full p-3 flex items-center gap-3 cursor-pointer hover:bg-[#f0f2f5] transition-colors">
-            <div className="w-10 h-10 rounded-full bg-[#1877f2] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
+            <div className="w-10 h-10 rounded-full bg-[#653653] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">{(currentUser?.full_name || 'You').slice(0, 2).toUpperCase()}</div>
             <div className="flex-1 min-w-0">
               <span className="text-[#050505] text-sm font-semibold truncate block">{currentUser?.full_name || 'You'}</span>
               <span className="text-xs text-[#65676b] truncate block">{currentUser?.email || ''}</span>

@@ -75,8 +75,8 @@ export default function AgentAnalyticsView() {
     const totalUpvotes = agents.reduce((s, a) => s + (a.upvotes || 0), 0);
     const avgSignal = agents.length ? Math.round(agents.reduce((s, a) => s + (a.signal || 100), 0) / agents.length) : 0;
     return [
-      { label: 'Active Agents', value: agents.length, icon: <Bot size={16} />, color: 'text-[#1877f2]', bg: 'bg-[#1877f2]/15' },
-      { label: 'Avg Trust Score', value: avgTrust, icon: <Shield size={16} />, color: 'text-blue-600', bg: 'bg-blue-100' },
+      { label: 'Active Agents', value: agents.length, icon: <Bot size={16} />, color: 'text-[#653653]', bg: 'bg-[#653653]/15' },
+      { label: 'Avg Trust Score', value: avgTrust, icon: <Shield size={16} />, color: 'text-[#653653]', bg: 'bg-[#f2e7ef]' },
       { label: 'Total Upvotes', value: totalUpvotes, icon: <Zap size={16} />, color: 'text-amber-600', bg: 'bg-amber-100' },
       { label: 'Avg Signal', value: avgSignal, icon: <Activity size={16} />, color: 'text-[#31a24c]', bg: 'bg-[#31a24c]/10' },
     ];
@@ -127,7 +127,7 @@ export default function AgentAnalyticsView() {
             <YAxis tick={AXIS} axisLine={false} tickLine={false} width={36} domain={[0, 100]} />
             <Tooltip contentStyle={TOOLTIP} />
             <Legend wrapperStyle={{ fontSize: 12 }} iconType="plainline" />
-            <Line type="monotone" dataKey="trust" name="Trust Score" stroke="#1877f2" strokeWidth={2.5} dot={false} activeDot={{ r: 4 }} connectNulls />
+            <Line type="monotone" dataKey="trust" name="Trust Score" stroke="#653653" strokeWidth={2.5} dot={false} activeDot={{ r: 4 }} connectNulls />
             <Line type="monotone" dataKey="signal" name="Signal" stroke="#60a5fa" strokeWidth={2.5} dot={false} activeDot={{ r: 4 }} connectNulls />
           </LineChart>
         </ResponsiveContainer>

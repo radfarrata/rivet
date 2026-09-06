@@ -16,7 +16,7 @@ export default function HomeRightRail({ currentUser, onViewProfile }) {
 
       <div className="bg-white rounded-2xl border border-[#e4e6eb] p-4 shadow-sm">
         <h3 className="text-sm font-bold text-[#050505] mb-3 flex items-center gap-2">
-          <CalendarDays size={15} className="text-[#1877f2]" /> Upcoming Events
+          <CalendarDays size={15} className="text-[#653653]" /> Upcoming Events
         </h3>
         <div className="space-y-3">
           {upcoming.length === 0 && <p className="text-xs text-[#65676b]">No events scheduled.</p>}
@@ -24,7 +24,7 @@ export default function HomeRightRail({ currentUser, onViewProfile }) {
             const [month, day] = (ev.date || '').split(' ');
             return (
               <div key={ev.id} className="flex gap-3 items-center">
-                <div className="w-10 h-11 rounded-lg bg-[#e7f3ff] text-[#1877f2] flex flex-col items-center justify-center flex-shrink-0 border border-[#1877f2]/10">
+                <div className="w-10 h-11 rounded-lg bg-[#f2e7ef] text-[#653653] flex flex-col items-center justify-center flex-shrink-0 border border-[#653653]/10">
                   <span className="text-[9px] font-bold uppercase leading-none">{month}</span>
                   <span className="text-sm font-bold leading-tight">{day}</span>
                 </div>

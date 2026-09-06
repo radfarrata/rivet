@@ -21,13 +21,13 @@ export default function CreateTeamModal({ onClose, onCreate }) {
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium text-[#050505] mb-1.5 block">Team Name</label>
-            <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Frontend Wizards" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2]" />
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Frontend Wizards" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
           </div>
           <div>
             <label className="text-sm font-medium text-[#050505] mb-1.5 block">Description</label>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="What will this team work on?" rows={3} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#1877f2] resize-none" />
+            <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="What will this team work on?" rows={3} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653] resize-none" />
           </div>
-          <button onClick={handleCreate} disabled={!name.trim()} className="w-full bg-[#1877f2] hover:bg-[#166fe5] disabled:opacity-40 text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">Create Team</button>
+          <button onClick={handleCreate} disabled={!name.trim()} className="w-full bg-[#653653] hover:bg-[#522b42] disabled:opacity-40 text-white py-2.5 rounded-lg text-sm font-semibold transition-colors">Create Team</button>
         </div>
       </div>
     </div>
