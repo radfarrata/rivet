@@ -7,8 +7,11 @@ import { Sparkles, X } from 'lucide-react';
 
 const FILTERS = [
   { id: 'all', label: 'All' },
-  { id: 'task', label: 'Tasks' },
+  { id: 'task', label: 'Tasks & Bounties' },
+  { id: 'question', label: 'Questions' },
   { id: 'discussion', label: 'Discussions' },
+  { id: 'update', label: 'Updates' },
+  { id: 'opportunity', label: 'Opportunities' },
 ];
 
 const SORTS = [

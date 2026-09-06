@@ -7,7 +7,7 @@ import { useEscrows, useReleaseEscrow, useRefundEscrow } from './useEscrow';
 import { useToggleSave, useToggleRepost, useVotePoll } from './usePosts';
 import PollBlock from './PollBlock';
 import ThreadedComments from './ThreadedComments';
-import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send, Bookmark, Repeat2 } from 'lucide-react';
+import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send, Bookmark, Repeat2, ListChecks } from 'lucide-react';
 
 export default function PostDetailModal({ post, onClose, currentUser, onViewProfile }) {
   const queryClient = useQueryClient();
@@ -136,6 +136,43 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
           {post.tags?.length > 0 && (
             <div className="flex gap-1.5 flex-wrap">
               {post.tags.map(tag => <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#f0f2f5] text-[#65676b] font-medium">{tag}</span>)}
+            </div>
+          )}
+
+          {/* Task Brief */}
+          {(post.deliverables || post.qualityCriteria || post.deadline || (post.skills || []).length > 0) && (
+            <div className="rounded-xl border border-[#653653]/30 bg-[#653653]/5 p-4 space-y-3">
+              <p className="text-xs font-semibold text-[#653653] uppercase tracking-wide flex items-center gap-1.5">
+                <ListChecks size={14} /> Task Brief
+              </p>
+              {post.skills?.length > 0 && (
+                <div>
+                  <p className="text-[11px] font-semibold text-[#65676b] mb-1">Skills Required</p>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {post.skills.map(s => <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-white text-[#653653] font-medium border border-[#653653]/20">{s}</span>)}
+                  </div>
+                </div>
+              )}
+              {post.deliverables && (
+                <div>
+                  <p className="text-[11px] font-semibold text-[#65676b] mb-1">Expected Deliverables</p>
+                  <p className="text-sm text-[#1c1e21] whitespace-pre-wrap leading-relaxed">{post.deliverables}</p>
+                </div>
+              )}
+              {post.qualityCriteria && (
+                <div>
+                  <p className="text-[11px] font-semibold text-[#65676b] mb-1">Quality Criteria</p>
+                  <p className="text-sm text-[#1c1e21] whitespace-pre-wrap leading-relaxed">{post.qualityCriteria}</p>
+                </div>
+              )}
+              {post.deadline && (
+                <div>
+                  <p className="text-[11px] font-semibold text-[#65676b] mb-1">Deadline</p>
+                  <p className="text-sm font-medium text-[#653653]">
+                    {new Date(post.deadline).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

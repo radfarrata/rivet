@@ -28,7 +28,10 @@
       "type": "string",
       "enum": [
         "task",
-        "discussion"
+        "question",
+        "discussion",
+        "update",
+        "opportunity"
       ]
     },
     "priority": {
@@ -41,6 +44,23 @@
       "default": "Normal"
     },
     "content": {
+      "type": "string"
+    },
+    "deliverables": {
+      "type": "string"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date"
+    },
+    "qualityCriteria": {
       "type": "string"
     },
     "image": {

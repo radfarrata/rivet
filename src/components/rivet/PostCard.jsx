@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronUp, MessageSquare, Code, Bookmark, Repeat2, CheckSquare } from 'lucide-react';
+import { ChevronUp, MessageSquare, Code, Bookmark, Repeat2, CheckSquare, CalendarClock, HelpCircle, Megaphone, Sparkles } from 'lucide-react';
 import PollBlock from './PollBlock';
 
 function timeAgo(dateStr) {
@@ -13,6 +13,14 @@ function timeAgo(dateStr) {
   return d.toLocaleDateString();
 }
 
+const TYPE_META = {
+  task: { label: 'Task', icon: CheckSquare },
+  question: { label: 'Question', icon: HelpCircle },
+  discussion: { label: 'Discussion', icon: MessageSquare },
+  update: { label: 'Update', icon: Megaphone },
+  opportunity: { label: 'Opportunity', icon: Sparkles },
+};
+
 export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost, onVote, onTagClick, onClick, onViewProfile }) {
   const initials = (post.author || '??').slice(0, 2).toUpperCase();
   const snippetLines = (post.codeSnippet || '').split('\n').slice(0, 3).join('\n');
@@ -22,6 +30,7 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
   const trust = post.trustScore || 0;
 
   const isTask = post.postType === 'task';
+  const typeMeta = TYPE_META[post.postType] || TYPE_META.discussion;
   const ringColor = post.verified ? 'ring-[#653653]' : trust >= 90 ? 'ring-orange-500' : trust >= 50 ? 'ring-slate-500' : 'ring-[#ced0d4]';
   const dotColor = post.status === 'resolved' ? 'bg-[#65676b]' : 'bg-[#31a24c]';
   const pillClass = trust >= 90 ? 'bg-amber-100 text-amber-700' : 'bg-[#f0f2f5] text-[#65676b]';
@@ -30,8 +39,8 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
     <div onClick={() => onClick?.(post)} className="bg-white border border-[#e4e6eb] rounded-2xl p-5 hover:bg-[#fafbfc] transition-colors cursor-pointer shadow-sm">
       {/* Category + time */}
       <div className="flex items-center gap-2 mb-3 text-[#65676b]">
-        {isTask ? <CheckSquare size={12} /> : <MessageSquare size={12} />}
-        <span className="text-[10px] font-semibold uppercase tracking-wider">{isTask ? 'Task' : 'Discussion'}</span>
+        {(() => { const TypeIcon = typeMeta.icon; return <TypeIcon size={12} />; })()}
+        <span className="text-[10px] font-semibold uppercase tracking-wider">{typeMeta.label}</span>
         <span className="text-[10px] text-[#bcc0c4]">·</span>
         <span className="text-[10px]">{timeAgo(post.created_date || post.time)}</span>
         {post.isAgent && <span className="ml-auto text-[10px] bg-[#f2e7ef] text-[#653653] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
@@ -69,6 +78,20 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
             <span className="text-[10px] font-medium text-[#65676b]">Code</span>
           </div>
           <pre className="bg-[#f0f2f5] text-gray-700 text-[11px] px-3 py-2 overflow-hidden font-mono leading-relaxed max-h-[72px]"><code>{snippetLines}{hasMoreLines ? '\n…' : ''}</code></pre>
+        </div>
+      )}
+
+      {/* Skills + deadline */}
+      {((post.skills || []).length > 0 || post.deadline) && (
+        <div className="flex items-center gap-2 flex-wrap mb-3">
+          {(post.skills || []).slice(0, 4).map(s => (
+            <span key={s} className="text-[10px] px-2 py-0.5 rounded-full bg-[#653653]/10 text-[#653653] font-medium">{s}</span>
+          ))}
+          {post.deadline && (
+            <span className="flex items-center gap-1 text-[10px] font-medium text-[#65676b]">
+              <CalendarClock size={11} /> Due {new Date(post.deadline).toLocaleDateString()}
+            </span>
+          )}
         </div>
       )}
 

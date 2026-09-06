@@ -11,6 +11,16 @@ const SYNDICATES = [
   { id: 'physics', label: 'Physics' },
 ];
 
+const POST_TYPES = [
+  { id: 'task', label: 'Task / Bounty' },
+  { id: 'question', label: 'Question' },
+  { id: 'discussion', label: 'Discussion' },
+  { id: 'update', label: 'Project Update' },
+  { id: 'opportunity', label: 'Opportunity' },
+];
+
+const TASK_TYPES = ['task', 'opportunity'];
+
 export default function PostComposer({ defaultType = 'task', defaultSyndicate = 'software', currentUser }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -18,6 +28,11 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
   const [bounty, setBounty] = useState('');
   const [syndicate, setSyndicate] = useState(defaultSyndicate);
   const [tags, setTags] = useState('');
+  const [postType, setPostType] = useState(POST_TYPES.some(t => t.id === defaultType) ? defaultType : 'discussion');
+  const [deliverables, setDeliverables] = useState('');
+  const [skills, setSkills] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [qualityCriteria, setQualityCriteria] = useState('');
   const [codeSnippet, setCodeSnippet] = useState('');
   const [showCode, setShowCode] = useState(false);
   const [showPoll, setShowPoll] = useState(false);
@@ -47,6 +62,7 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
       queryClient.invalidateQueries({ queryKey: ['rivet-transactions'] });
       setTitle(''); setContent(''); setBounty(''); setTags(''); setCodeSnippet(''); setImage(null); setShowCode(false);
       setShowPoll(false); setPollQuestion(''); setPollOptions(['', '']);
+      setDeliverables(''); setSkills(''); setDeadline(''); setQualityCriteria('');
       setOpen(false);
     },
   });
@@ -75,7 +91,11 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
       title, content,
       author: currentUser?.full_name || 'You',
       handle: `@${currentUser?.email?.split('@')[0] || 'you'}`,
-      syndicate, postType: defaultType,
+      syndicate, postType,
+      skills: skills.split(',').map(s => s.trim()).filter(Boolean),
+      deliverables: deliverables.trim() || undefined,
+      deadline: deadline || undefined,
+      qualityCriteria: qualityCriteria.trim() || undefined,
       priority: 'Normal', bounty: Number(bounty) || 0, token: 'USD',
       tags: tags.split(',').map(t => t.trim()).filter(Boolean),
       codeSnippet: codeSnippet.trim() || undefined,
@@ -90,7 +110,7 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
   if (!open) {
     return (
       <button onClick={() => setOpen(true)} className="w-full bg-[#653653] hover:bg-[#522b42] text-white rounded-xl py-3 px-4 text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
-        <Plus size={18} /> New {defaultType === 'task' ? 'Task' : 'Post'}
+        <Plus size={18} /> Create a post
       </button>
     );
   }
@@ -98,11 +118,22 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
   return (
     <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-[#050505]">Create New {defaultType === 'task' ? 'Task' : 'Discussion'}</h3>
+        <h3 className="text-sm font-bold text-[#050505]">Create a Post</h3>
         <button onClick={() => setOpen(false)} className="text-[#65676b] hover:text-[#050505]"><X size={18} /></button>
       </div>
+      <div className="flex gap-1.5 flex-wrap">
+        {POST_TYPES.map(t => (
+          <button
+            key={t.id}
+            onClick={() => setPostType(t.id)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${postType === t.id ? 'bg-[#653653] text-white' : 'bg-[#f0f2f5] text-[#65676b] hover:bg-[#f2e7ef] hover:text-[#653653]'}`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
       <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
-      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Describe your task or discussion..." rows={3} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653] resize-none" />
+      <textarea value={content} onChange={e => setContent(e.target.value)} placeholder="Technical context — describe the challenge, question, or update..." rows={3} className="w-full bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653] resize-none" />
 
       {image && (
         <div className="relative">
@@ -118,6 +149,18 @@ export default function PostComposer({ defaultType = 'task', defaultSyndicate = 
         <input value={bounty} onChange={e => setBounty(e.target.value)} type="number" placeholder="Bounty (pts)" className="w-32 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
         <input value={tags} onChange={e => setTags(e.target.value)} placeholder="Tags (comma separated)" className="flex-1 min-w-[160px] bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
       </div>
+
+      {TASK_TYPES.includes(postType) && (
+        <div className="rounded-xl border border-[#653653]/30 bg-[#653653]/5 p-3 space-y-2">
+          <span className="text-xs font-semibold text-[#653653] uppercase tracking-wide">Task Brief</span>
+          <textarea value={deliverables} onChange={e => setDeliverables(e.target.value)} placeholder="Expected deliverables — what exactly should the contributor hand over?" rows={2} className="w-full bg-white border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653] resize-none" />
+          <div className="flex gap-2 flex-wrap">
+            <input value={skills} onChange={e => setSkills(e.target.value)} placeholder="Skills required (comma separated)" className="flex-1 min-w-[200px] bg-white border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]" />
+            <input value={deadline} onChange={e => setDeadline(e.target.value)} type="date" className="bg-white border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] focus:outline-none focus:border-[#653653]" />
+          </div>
+          <textarea value={qualityCriteria} onChange={e => setQualityCriteria(e.target.value)} placeholder="Quality criteria — how will the work be reviewed and accepted?" rows={2} className="w-full bg-white border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653] resize-none" />
+        </div>
+      )}
 
       {showPoll && (
         <div className="rounded-xl border border-[#653653]/30 bg-[#653653]/5 p-3 space-y-2">
