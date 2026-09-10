@@ -3,7 +3,16 @@ import { RIVET_MODELS } from './evalModels';
 
 export async function runEvaluation(task, onProgress = () => {}) {
   await base44.entities.EvaluationTask.update(task.id, { status: 'running' });
+  try {
+    return await runInner(task, onProgress);
+  } catch (err) {
+    // Never leave a task stuck in "running" — let the creator retry.
+    await base44.entities.EvaluationTask.update(task.id, { status: 'pending' });
+    throw err;
+  }
+}
 
+async function runInner(task, onProgress) {
   // 1. Get an answer from each selected model on the exact same task
   const outputs = [];
   for (const modelId of task.models) {

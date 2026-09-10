@@ -64,6 +64,7 @@ export default function EvaluationTaskDetail({ task, onClose, currentUser }) {
           )}
           <div className="flex gap-1.5 flex-wrap">{(task.models || []).map(id => <Tag key={id} cls="bg-[#b06d97]/10 text-[#b06d97]">{modelLabel(id)}</Tag>)}</div>
 
+          {run.isError && <p className="text-xs text-[#ff6b6b] bg-[#ff6b6b]/10 border border-[#ff6b6b]/30 rounded-xl p-3">The evaluation run failed. The task was reset — you can try running it again.</p>}
           {task.status === 'pending' && (
             <button onClick={() => run.mutate()} disabled={run.isPending} className="w-full flex items-center justify-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-60 text-white rounded-xl py-3 text-sm font-semibold shadow-[0_0_20px_rgba(101,54,83,0.5)]">
               {run.isPending ? <><Loader2 size={16} className="animate-spin" /> Running evaluation...</> : <><Play size={16} /> Run multi-model evaluation</>}
