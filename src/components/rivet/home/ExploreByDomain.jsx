@@ -16,7 +16,7 @@ export default function ExploreByDomain({ onNavigate }) {
   return (
     <div className="space-y-3">
       <h2 className="text-base font-bold text-white">Explore by Domain</h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         {CARDS.map(({ id, label, desc, icon: Icon, color, bg }) => (
           <button key={id} onClick={() => onNavigate?.('capability-map')} className="text-left bg-[#12141b] border border-[#1f232e] rounded-2xl p-4 hover:border-[#653653]/40 transition-colors group">
             <div className="flex items-start justify-between">

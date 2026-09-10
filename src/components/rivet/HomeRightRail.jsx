@@ -7,7 +7,7 @@ import RecentActivityCard from './home/RecentActivityCard';
 
 export default function HomeRightRail({ currentUser, onNavigate, onOpenTask }) {
   return (
-    <aside className="w-full lg:w-[300px] flex-shrink-0 flex flex-col gap-4 self-start">
+    <aside className="w-[300px] flex-shrink-0 flex flex-col gap-4 max-h-screen overflow-y-auto scrollbar-hide py-4 md:py-6">
       <YourImpactCard currentUser={currentUser} onNavigate={onNavigate} />
       <RecommendedTasksCard currentUser={currentUser} onOpenTask={onOpenTask} />
       <TrendingTasksCard currentUser={currentUser} onNavigate={onNavigate} onOpenTask={onOpenTask} />
