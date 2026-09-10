@@ -1,0 +1,64 @@
+{
+  "name": "EvaluationTask",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "reasoning",
+        "coding",
+        "mathematics",
+        "biology",
+        "chemistry",
+        "physics",
+        "multimodal",
+        "long_context",
+        "safety",
+        "scientific_reasoning",
+        "agentic",
+        "other"
+      ]
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "basic",
+        "intermediate",
+        "advanced"
+      ],
+      "default": "intermediate"
+    },
+    "evaluationCriteria": {
+      "type": "string"
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "running",
+        "evaluated"
+      ],
+      "default": "pending"
+    },
+    "creatorName": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "prompt"
+  ]
+}

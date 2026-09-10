@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Home, Folder, CheckSquare, Bot, Users, Brain, Trophy, Cpu, Hash, TrendingUp, Lock,
   MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt, Sparkles, ShieldAlert,
+  FlaskConical, Map,
 } from 'lucide-react';
 import RivetIcon from './RivetLogo';
 
@@ -14,6 +15,8 @@ const NAV_GROUPS = [
   {
     label: 'EVALUATION',
     items: [
+      { id: 'evaluation-lab', label: 'Evaluation Lab', icon: <FlaskConical size={18} /> },
+      { id: 'capability-map', label: 'Capability Map', icon: <Map size={18} /> },
       { id: 'expert-workspace', label: 'Expert Workspace', icon: <ShieldAlert size={18} />, href: '/expert' },
     ],
   },
@@ -65,11 +68,14 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       )}
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-white border-r border-[#e4e6eb] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         {/* Logo */}
-        <div className="flex items-center gap-2.5 px-6 py-5">
-          <div className="w-9 h-9 rounded-xl bg-[#653653] flex items-center justify-center">
-            <RivetIcon size={24} />
+        <div className="px-6 py-5 space-y-1.5">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-[#653653] flex items-center justify-center">
+              <RivetIcon size={24} />
+            </div>
+            <span className="text-[#653653] font-bold text-xl tracking-tight">RIVET</span>
           </div>
-          <span className="text-[#653653] font-bold text-xl tracking-tight">RIVET</span>
+          <span className="block text-[9px] font-semibold text-[#a06b97] uppercase tracking-[0.18em]">AI Training, Made Social</span>
         </div>
 
         {/* Navigation */}

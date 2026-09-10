@@ -8,6 +8,8 @@ import TrainViews from './views/TrainViews';
 import ChatView from './views/ChatView';
 import AgentAnalyticsView from './views/AgentAnalyticsView';
 import AgentDiscoveryView from './views/AgentDiscoveryView';
+import EvaluationLabView from './views/EvaluationLabView';
+import CapabilityMapView from './views/CapabilityMapView';
 
 export default function ContentView({ activeNav, currentUser, onViewProfile }) {
   switch (activeNav) {
@@ -29,6 +31,8 @@ export default function ContentView({ activeNav, currentUser, onViewProfile }) {
     case 'agent-training': return <TrainViews mode="agents" onViewProfile={onViewProfile} />;
     case 'agent-analytics': return <AgentAnalyticsView />;
     case 'leaderboard': return <TrainViews mode="leaderboard" onViewProfile={onViewProfile} />;
+    case 'evaluation-lab': return <EvaluationLabView currentUser={currentUser} />;
+    case 'capability-map': return <CapabilityMapView />;
     default: return null;
   }
 }

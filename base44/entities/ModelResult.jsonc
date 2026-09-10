@@ -1,0 +1,49 @@
+{
+  "name": "ModelResult",
+  "type": "object",
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "taskTitle": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "modelId": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "score": {
+      "type": "number",
+      "default": 0
+    },
+    "summary": {
+      "type": "string"
+    },
+    "strengths": {
+      "type": "string"
+    },
+    "weaknesses": {
+      "type": "string"
+    },
+    "failureModes": {
+      "type": "string"
+    },
+    "rawResponse": {
+      "type": "string"
+    },
+    "judgedBy": {
+      "type": "string",
+      "default": "Rivet automated judge"
+    }
+  },
+  "required": [
+    "taskId",
+    "modelId",
+    "score"
+  ]
+}
