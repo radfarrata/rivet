@@ -28,7 +28,7 @@ export default function RivetDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-[#f0f2f5] overflow-hidden">
+    <div className="flex h-screen bg-[#0b0d12] overflow-hidden">
       <Sidebar
         activeNav={activeNav}
         onNavChange={(id) => { setActiveNav(id); setSearchQuery(''); setProfileUser(null); setIsMobileNavOpen(false); }}
