@@ -2,6 +2,7 @@ import React from 'react';
 import { Clock, Plus, BarChart3 } from 'lucide-react';
 import { useEvaluationTasks } from '../useEvaluations';
 import { domainLabel } from '../evalModels';
+import { visibleTo } from '../evalStats';
 
 function timeAgo(d) {
   const diff = (Date.now() - new Date(d).getTime()) / 60000;
@@ -10,14 +11,14 @@ function timeAgo(d) {
   return `${Math.round(diff / 1440)} days ago`;
 }
 
-export default function RecentActivityCard({ onNavigate }) {
+export default function RecentActivityCard({ currentUser, onNavigate }) {
   const { data: tasks = [] } = useEvaluationTasks();
-  const items = tasks.slice(0, 4);
+  const items = visibleTo(tasks, currentUser).slice(0, 4);
 
   return (
     <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2"><Clock size={15} className="text-[#8b90a0]" /> Recent Activity</h3>
+        <h3 className="text-sm font-bold text-white flex items-center gap-2"><Clock size={15} className="text-[#8b90a0]" /> Community Activity</h3>
         <button onClick={() => onNavigate?.('evaluation-lab')} className="text-[11px] text-[#8f82ff] hover:underline">See all →</button>
       </div>
       {items.length === 0 ? (

@@ -37,6 +37,23 @@
     "evaluationCriteria": {
       "type": "string"
     },
+    "evaluationType": {
+      "type": "string",
+      "enum": [
+        "automated",
+        "human",
+        "hybrid"
+      ],
+      "default": "hybrid"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "public",
+        "private"
+      ],
+      "default": "public"
+    },
     "models": {
       "type": "array",
       "items": {

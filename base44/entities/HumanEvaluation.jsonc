@@ -1,0 +1,65 @@
+{
+  "name": "HumanEvaluation",
+  "type": "object",
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "resultId": {
+      "type": "string"
+    },
+    "modelId": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "evaluatorId": {
+      "type": "string"
+    },
+    "evaluatorName": {
+      "type": "string"
+    },
+    "score": {
+      "type": "number",
+      "default": 0
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "partial",
+        "fail"
+      ],
+      "default": "pass"
+    },
+    "failureCategory": {
+      "type": "string",
+      "enum": [
+        "none",
+        "hallucination",
+        "reasoning_error",
+        "factual_error",
+        "incomplete",
+        "instruction_violation",
+        "safety_issue",
+        "formatting",
+        "other"
+      ],
+      "default": "none"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "taskId",
+    "resultId",
+    "modelId",
+    "score",
+    "verdict"
+  ]
+}

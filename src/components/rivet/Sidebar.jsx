@@ -70,7 +70,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
             </div>
             <span className="text-white font-bold text-xl tracking-tight">Rivet</span>
           </div>
-          <span className="block text-[11px] text-[#8b90a0]">Real Tasks. Real Evaluation. Better AI.</span>
+          <span className="block text-[11px] text-[#8b90a0]">AI Training, Made Social.</span>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-5 scrollbar-hide">

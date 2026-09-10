@@ -1,26 +1,18 @@
 import React, { useMemo, useState } from 'react';
 import { Trophy } from 'lucide-react';
-import { useModelResults } from '../useEvaluations';
+import { useModelResults, useEvaluationTasks } from '../useEvaluations';
+import { useHumanEvaluations } from '../useHumanEvaluations';
+import { aggregateModels } from '../evalStats';
 import { DOMAINS, modelLabel } from '../evalModels';
 
 export default function LeaderboardCard({ onNavigate }) {
   const { data: results = [] } = useModelResults();
+  const { data: tasks = [] } = useEvaluationTasks();
+  const { data: humanEvals = [] } = useHumanEvaluations();
   const [domain, setDomain] = useState('all');
 
-  const domains = useMemo(() => {
-    const set = new Set(results.map(r => r.domain));
-    return DOMAINS.filter(d => set.has(d.id)).slice(0, 3);
-  }, [results]);
-
-  const rows = useMemo(() => {
-    const agg = {};
-    results.filter(r => domain === 'all' || r.domain === domain).forEach(r => {
-      agg[r.modelId] = agg[r.modelId] || { modelId: r.modelId, total: 0, n: 0 };
-      agg[r.modelId].total += r.score || 0; agg[r.modelId].n += 1;
-    });
-    return Object.values(agg).map(a => ({ ...a, avg: a.total / a.n })).sort((a, b) => b.avg - a.avg).slice(0, 5);
-  }, [results, domain]);
-
+  const domains = useMemo(() => { const s = new Set(results.map(r => r.domain)); return DOMAINS.filter(d => s.has(d.id)).slice(0, 3); }, [results]);
+  const rows = useMemo(() => aggregateModels(results, humanEvals, tasks, domain).slice(0, 5), [results, humanEvals, tasks, domain]);
   const tabCls = (active) => `px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-colors ${active ? 'bg-[#6d5dfc] text-white' : 'text-[#8b90a0] hover:text-white'}`;
 
   return (
@@ -41,7 +33,7 @@ export default function LeaderboardCard({ onNavigate }) {
             <div key={r.modelId} className="flex items-center gap-3 text-xs">
               <span className="w-4 text-[#6b7080]">{i + 1}</span>
               <span className="w-7 h-7 rounded-full bg-[#1f232e] border border-[#2a2e3d] flex items-center justify-center text-[10px] font-bold text-white">{modelLabel(r.modelId).slice(0, 1)}</span>
-              <span className="flex-1 text-white font-medium truncate">{modelLabel(r.modelId)}</span>
+              <div className="flex-1 min-w-0"><p className="text-white font-medium truncate">{modelLabel(r.modelId)}</p><p className="text-[10px] text-[#6b7080]">{r.n} evals · {r.confidence} confidence</p></div>
               <span className="text-white font-semibold">{Math.round(r.avg)}%</span>
             </div>
           ))}

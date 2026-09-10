@@ -2,13 +2,14 @@ import React from 'react';
 import { ChevronRight, Calendar, Layers, CheckCircle2 } from 'lucide-react';
 import { useEvaluationTasks, useModelResults } from '../useEvaluations';
 import { domainLabel } from '../evalModels';
+import { visibleTo } from '../evalStats';
 
 const BAR_COLORS = ['bg-[#8f82ff]', 'bg-[#4f8cff]', 'bg-[#2fd4a7]', 'bg-[#f5b544]'];
 
-export default function RecentEvaluations({ onNavigate, onOpenTask }) {
+export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask }) {
   const { data: tasks = [] } = useEvaluationTasks();
   const { data: results = [] } = useModelResults();
-  const recent = tasks.filter(t => t.status === 'evaluated').slice(0, 3);
+  const recent = visibleTo(tasks, currentUser).filter(t => t.status === 'evaluated').slice(0, 3);
 
   return (
     <div className="space-y-3">

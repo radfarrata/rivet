@@ -2,14 +2,16 @@ import React from 'react';
 import { Flame, Users } from 'lucide-react';
 import { useEvaluationTasks, useModelResults } from '../useEvaluations';
 import { domainLabel } from '../evalModels';
+import { visibleTo } from '../evalStats';
 
 const BADGE = {
   biology: 'bg-[#2fd4a7]/10 text-[#2fd4a7]', chemistry: 'bg-[#f5b544]/10 text-[#f5b544]', physics: 'bg-[#4f8cff]/10 text-[#4f8cff]',
   coding: 'bg-[#8f82ff]/10 text-[#8f82ff]', reasoning: 'bg-[#ff7ab6]/10 text-[#ff7ab6]', safety: 'bg-[#ff6b6b]/10 text-[#ff6b6b]',
 };
 
-export default function TrendingTasksCard({ onNavigate, onOpenTask }) {
-  const { data: tasks = [] } = useEvaluationTasks();
+export default function TrendingTasksCard({ currentUser, onNavigate, onOpenTask }) {
+  const { data: allTasks = [] } = useEvaluationTasks();
+  const tasks = visibleTo(allTasks, currentUser);
   const { data: results = [] } = useModelResults();
   const counts = results.reduce((acc, r) => { acc[r.taskId] = (acc[r.taskId] || 0) + 1; return acc; }, {});
   const trending = [...tasks].sort((a, b) => (counts[b.id] || 0) - (counts[a.id] || 0)).slice(0, 5);
