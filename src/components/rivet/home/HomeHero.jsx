@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Play, PenLine, Loader2 } from 'lucide-react';
+import { Sparkles, Play, Loader2 } from 'lucide-react';
 import { useCreateEvaluationTask } from '../useEvaluations';
 import { DOMAINS } from '../evalModels';
 
@@ -37,19 +37,16 @@ export default function HomeHero({ currentUser, onNavigate }) {
             className="flex-1 bg-[#0e1017] border border-[#1f232e] rounded-2xl px-4 py-3 text-sm text-white placeholder-[#6b7080] focus:outline-none focus:border-[#653653]/60 resize-none"
           />
         </div>
-        <div className="flex items-center gap-2 text-xs font-semibold border-t border-[#1f232e] pt-3">
-          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1a1d29] text-white border border-[#2a2e3d]"><PenLine size={13} /> New Task</span>
-          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[#8b90a0]"><Sparkles size={13} /> Multi-model</span>
-        </div>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-          <label className="flex-1 flex items-center gap-2 bg-[#0e1017] border border-[#1f232e] rounded-full px-4 py-2">
-            <span className="text-[10px] text-[#6b7080] uppercase tracking-wide">Domain</span>
-            <select value={domain} onChange={e => setDomain(e.target.value)} className="flex-1 bg-transparent text-sm text-white focus:outline-none">
+        <div className="flex items-center gap-2 border-t border-[#1f232e] pt-3">
+          <label className="flex items-center gap-2 bg-[#0e1017] border border-[#1f232e] rounded-full pl-3 pr-2 py-1.5">
+            <span className="text-[10px] font-semibold text-[#6b7080] uppercase tracking-widest">Domain</span>
+            <select value={domain} onChange={e => setDomain(e.target.value)} className="bg-transparent text-[13px] text-white focus:outline-none">
               {DOMAINS.map(d => <option key={d.id} value={d.id} className="bg-[#12141b]">{d.label}</option>)}
             </select>
           </label>
-          <button onClick={handleRun} disabled={create.isPending || !prompt.trim()} className="flex items-center justify-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-50 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors shadow-[0_0_20px_rgba(101,54,83,0.5)]">
-            {create.isPending ? <Loader2 size={15} className="animate-spin" /> : <Play size={15} />} Run Evaluation
+          <span className="hidden sm:flex items-center gap-1.5 text-[11px] font-medium text-[#6b7080]"><Sparkles size={12} /> 3 models</span>
+          <button onClick={handleRun} disabled={create.isPending || !prompt.trim()} className="ml-auto flex items-center justify-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-40 text-white px-5 py-2 rounded-full text-[13px] font-bold transition-colors">
+            {create.isPending ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />} Run evaluation
           </button>
         </div>
       </div>

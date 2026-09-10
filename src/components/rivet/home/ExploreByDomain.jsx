@@ -2,32 +2,40 @@ import React from 'react';
 import { ChevronRight, Dna, FlaskConical, Atom, Code2, Brain, Shield, Bot, Sigma } from 'lucide-react';
 
 const CARDS = [
-  { id: 'biology', label: 'Biology', desc: 'Genetics, bioinformatics, cell biology...', icon: Dna, color: 'text-[#2fd4a7]', bg: 'bg-[#2fd4a7]/10' },
-  { id: 'chemistry', label: 'Chemistry', desc: 'Organic, inorganic, reaction prediction...', icon: FlaskConical, color: 'text-[#f5b544]', bg: 'bg-[#f5b544]/10' },
-  { id: 'physics', label: 'Physics', desc: 'Quantum, classical, astrophysics...', icon: Atom, color: 'text-[#4f8cff]', bg: 'bg-[#4f8cff]/10' },
-  { id: 'coding', label: 'Coding', desc: 'Algorithms, debugging, systems design...', icon: Code2, color: 'text-[#b06d97]', bg: 'bg-[#b06d97]/10' },
-  { id: 'reasoning', label: 'Reasoning', desc: 'Logic, planning, multi-step inference...', icon: Brain, color: 'text-[#ff7ab6]', bg: 'bg-[#ff7ab6]/10' },
-  { id: 'mathematics', label: 'Mathematics', desc: 'Proofs, calculus, applied math...', icon: Sigma, color: 'text-[#5ad1ff]', bg: 'bg-[#5ad1ff]/10' },
-  { id: 'safety', label: 'Safety', desc: 'Refusals, alignment, robustness...', icon: Shield, color: 'text-[#ff6b6b]', bg: 'bg-[#ff6b6b]/10' },
-  { id: 'agentic', label: 'Agentic', desc: 'Tool use, long-horizon tasks...', icon: Bot, color: 'text-[#c084fc]', bg: 'bg-[#c084fc]/10' },
+  { id: 'biology', label: 'Biology', desc: 'Genetics, bioinformatics', icon: Dna },
+  { id: 'chemistry', label: 'Chemistry', desc: 'Reaction prediction', icon: FlaskConical },
+  { id: 'physics', label: 'Physics', desc: 'Quantum, classical', icon: Atom },
+  { id: 'coding', label: 'Coding', desc: 'Algorithms, systems', icon: Code2 },
+  { id: 'reasoning', label: 'Reasoning', desc: 'Multi-step inference', icon: Brain },
+  { id: 'mathematics', label: 'Mathematics', desc: 'Proofs, applied math', icon: Sigma },
+  { id: 'safety', label: 'Safety', desc: 'Refusals, robustness', icon: Shield },
+  { id: 'agentic', label: 'Agentic', desc: 'Tool use, long horizon', icon: Bot },
 ];
 
+// Restrained, monochrome domain list — one bordered block, hairline-separated rows.
 export default function ExploreByDomain({ onNavigate }) {
   return (
-    <div className="space-y-3">
-      <h2 className="text-base font-bold text-white">Explore by Domain</h2>
-      <div className="grid grid-cols-2 gap-3">
-        {CARDS.map(({ id, label, desc, icon: Icon, color, bg }) => (
-          <button key={id} onClick={() => onNavigate?.('capability-map')} className="text-left bg-[#12141b] border border-[#1f232e] rounded-2xl p-4 hover:border-[#653653]/40 transition-colors group">
-            <div className="flex items-start justify-between">
-              <span className={`w-9 h-9 rounded-lg ${bg} ${color} flex items-center justify-center`}><Icon size={18} /></span>
-              <ChevronRight size={16} className="text-[#6b7080] group-hover:text-white transition-colors" />
-            </div>
-            <p className="text-sm font-semibold text-white mt-3">{label}</p>
-            <p className="text-[11px] text-[#8b90a0] mt-0.5 line-clamp-2">{desc}</p>
+    <section className="rounded-2xl border border-[#1f232e] bg-[#12141b] overflow-hidden">
+      <div className="px-4 py-3 border-b border-[#1f232e] flex items-center justify-between">
+        <h2 className="text-[11px] font-semibold uppercase tracking-widest text-[#8b90a0]">Explore by domain</h2>
+        <button onClick={() => onNavigate?.('capability-map')} className="text-xs font-semibold text-[#b06d97] hover:underline">Leaderboards</button>
+      </div>
+      <div className="grid grid-cols-2">
+        {CARDS.map(({ id, label, desc, icon: Icon }, i) => (
+          <button
+            key={id}
+            onClick={() => onNavigate?.('capability-map')}
+            className={`group text-left flex items-center gap-3 px-4 py-3 hover:bg-[#171a23] transition-colors border-[#1f232e] ${i % 2 === 0 ? 'border-r' : ''} ${i < 6 ? 'border-b' : ''}`}
+          >
+            <span className="w-8 h-8 rounded-lg bg-[#1a1d29] border border-[#2a2e3d] text-[#b8bcc8] group-hover:text-[#b06d97] flex items-center justify-center flex-shrink-0 transition-colors"><Icon size={15} /></span>
+            <span className="min-w-0">
+              <span className="block text-[13px] font-semibold text-white truncate">{label}</span>
+              <span className="block text-[11px] text-[#6b7080] truncate">{desc}</span>
+            </span>
+            <ChevronRight size={14} className="ml-auto text-[#3a3f4d] group-hover:text-[#8b90a0] flex-shrink-0 transition-colors" />
           </button>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
