@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layers, CheckCircle2, Clock, MessageSquare, BarChart3 } from 'lucide-react';
 import { domainLabel } from '../evalModels';
+import SaveTaskButton from '../SaveTaskButton';
 
 const timeShort = (d) => {
   const m = (Date.now() - new Date(d).getTime()) / 60000;
@@ -53,6 +54,7 @@ export default function EvaluationFeedRow({ task, results, humanCount, onOpen })
           <span className={`flex items-center gap-1.5 font-semibold ${done ? 'text-[#2fd4a7]' : 'text-[#f5b544]'}`}>
             {done ? <><CheckCircle2 size={14} /> Completed</> : <><Clock size={14} /> {task.status}</>}
           </span>
+          <span className="ml-auto"><SaveTaskButton task={task} /></span>
         </div>
       </div>
     </article>

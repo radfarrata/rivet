@@ -1,0 +1,32 @@
+{
+  "name": "SavedTask",
+  "type": "object",
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "taskTitle": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "taskId"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

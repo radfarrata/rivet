@@ -7,6 +7,7 @@ import { runEvaluation } from './runEvaluation';
 import { domainLabel, modelLabel } from './evalModels';
 import { summarizeHuman, blendedScore } from './evalStats';
 import ModelResultCard from './ModelResultCard';
+import SaveTaskButton from './SaveTaskButton';
 
 const Tag = ({ children, cls = 'bg-[#1f232e] text-[#b8bcc8]' }) => <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${cls}`}>{children}</span>;
 
@@ -48,7 +49,10 @@ export default function EvaluationTaskDetail({ task, onClose, currentUser }) {
               <span className="capitalize">{task.evaluationType || 'hybrid'} evaluation</span>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-[#8b90a0] hover:text-white hover:bg-[#151823] rounded-lg"><X size={18} /></button>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <SaveTaskButton task={task} showLabel />
+            <button onClick={onClose} className="p-2 text-[#8b90a0] hover:text-white hover:bg-[#151823] rounded-lg"><X size={18} /></button>
+          </div>
         </div>
 
         <div className="p-6 space-y-5">

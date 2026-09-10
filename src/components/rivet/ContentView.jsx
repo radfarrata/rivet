@@ -10,6 +10,9 @@ import AgentAnalyticsView from './views/AgentAnalyticsView';
 import AgentDiscoveryView from './views/AgentDiscoveryView';
 import EvaluationLabView from './views/EvaluationLabView';
 import CapabilityMapView from './views/CapabilityMapView';
+import ExploreTasksView from './views/ExploreTasksView';
+import SavedTasksView from './views/SavedTasksView';
+import SettingsView from './views/SettingsView';
 
 export default function ContentView({ activeNav, currentUser, onViewProfile }) {
   switch (activeNav) {
@@ -33,6 +36,9 @@ export default function ContentView({ activeNav, currentUser, onViewProfile }) {
     case 'leaderboard': return <TrainViews mode="leaderboard" onViewProfile={onViewProfile} />;
     case 'evaluation-lab': return <EvaluationLabView currentUser={currentUser} />;
     case 'capability-map': return <CapabilityMapView />;
+    case 'explore-tasks': return <ExploreTasksView currentUser={currentUser} />;
+    case 'saved-tasks': return <SavedTasksView currentUser={currentUser} />;
+    case 'settings': return <SettingsView currentUser={currentUser} />;
     default: return null;
   }
 }
