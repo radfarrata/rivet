@@ -17,15 +17,15 @@ export default function CapabilityMapView() {
   const [selected, setSelected] = useState(null);
 
   const rows = useMemo(() => aggregateModels(results, humanEvals, tasks, domain), [results, humanEvals, tasks, domain]);
-  const trend = useMemo(() => monthlyTrend(results, humanEvals), [results, humanEvals]);
+  const trend = useMemo(() => monthlyTrend(domain === 'all' ? results : results.filter(r => r.domain === domain), humanEvals), [results, humanEvals, domain]);
   const activeDomains = useMemo(() => { const s = new Set(results.map(r => r.domain)); return DOMAINS.filter(d => s.has(d.id)); }, [results]);
   const evaluatedCount = tasks.filter(t => t.status === 'evaluated').length;
-  const pill = (active) => `px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? 'bg-[#6d5dfc] text-white' : 'bg-[#12141b] border border-[#1f232e] text-[#8b90a0] hover:text-white'}`;
+  const pill = (active) => `px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? 'bg-[#653653] text-white' : 'bg-[#12141b] border border-[#1f232e] text-[#8b90a0] hover:text-white'}`;
 
   return (
     <div className="space-y-5 max-w-[1000px] mx-auto">
       <div>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2"><MapIcon size={20} className="text-[#8f82ff]" /> AI Capability Map</h2>
+        <h2 className="text-xl font-bold text-white flex items-center gap-2"><MapIcon size={20} className="text-[#b06d97]" /> AI Capability Map</h2>
         <p className="text-sm text-[#8b90a0] mt-0.5">Not "which AI is best" — <span className="text-white font-semibold">which AI is best for this job</span>. Every score is auditable: click a model to see the evidence.</p>
       </div>
 
@@ -51,7 +51,7 @@ export default function CapabilityMapView() {
                     <span className="text-sm font-semibold text-white truncate">{modelLabel(row.modelId)}</span>
                   </div>
                   <div className="flex-1 h-6 bg-[#0e1017] rounded-lg overflow-hidden relative min-w-[60px]">
-                    <div className="h-full bg-gradient-to-r from-[#6d5dfc] to-[#8f82ff] rounded-lg" style={{ width: `${row.avg}%` }} />
+                    <div className="h-full bg-gradient-to-r from-[#653653] to-[#b06d97] rounded-lg" style={{ width: `${row.avg}%` }} />
                     <span className="absolute inset-y-0 right-2 flex items-center text-xs font-bold text-white">{row.avg.toFixed(1)}</span>
                   </div>
                   <div className="text-[10px] text-right w-24 md:w-32 flex-shrink-0 leading-tight">

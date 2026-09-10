@@ -3,10 +3,10 @@ import { Plus, X, FlaskConical, Lock, Globe } from 'lucide-react';
 import { useCreateEvaluationTask } from './useEvaluations';
 import { RIVET_MODELS, DOMAINS, DIFFICULTIES } from './evalModels';
 
-const inputCls = 'w-full bg-[#0e1017] border border-[#1f232e] rounded-lg px-3 py-2 text-sm text-white placeholder-[#6b7080] focus:outline-none focus:border-[#6d5dfc]/60';
+const inputCls = 'w-full bg-[#0e1017] border border-[#1f232e] rounded-lg px-3 py-2 text-sm text-white placeholder-[#6b7080] focus:outline-none focus:border-[#653653]/60';
 const selectCls = 'bg-[#0e1017] border border-[#1f232e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none capitalize';
 const Chip = ({ active, onClick, children }) => (
-  <button onClick={onClick} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? 'bg-[#6d5dfc] text-white' : 'bg-[#1a1d29] text-[#8b90a0] hover:text-white'}`}>{children}</button>
+  <button onClick={onClick} className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${active ? 'bg-[#653653] text-white' : 'bg-[#1a1d29] text-[#8b90a0] hover:text-white'}`}>{children}</button>
 );
 
 export default function EvaluationTaskForm({ currentUser, onCreated }) {
@@ -27,7 +27,7 @@ export default function EvaluationTaskForm({ currentUser, onCreated }) {
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="w-full bg-[#6d5dfc] hover:bg-[#5b4be6] text-white rounded-xl py-3 px-4 text-sm font-semibold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(109,93,252,0.3)]">
+      <button onClick={() => setOpen(true)} className="w-full bg-[#653653] hover:bg-[#7c4165] text-white rounded-xl py-3 px-4 text-sm font-semibold flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(109,93,252,0.3)]">
         <Plus size={18} /> Create an evaluation task
       </button>
     );
@@ -36,7 +36,7 @@ export default function EvaluationTaskForm({ currentUser, onCreated }) {
   return (
     <div className="bg-[#12141b] rounded-2xl border border-[#1f232e] p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2"><FlaskConical size={16} className="text-[#8f82ff]" /> New Evaluation Task</h3>
+        <h3 className="text-sm font-bold text-white flex items-center gap-2"><FlaskConical size={16} className="text-[#b06d97]" /> New Evaluation Task</h3>
         <button onClick={() => setOpen(false)} className="text-[#8b90a0] hover:text-white"><X size={18} /></button>
       </div>
       <input value={form.title} onChange={e => set('title', e.target.value)} placeholder="Title — e.g. Experimental design comparison" className={inputCls} />
@@ -60,7 +60,7 @@ export default function EvaluationTaskForm({ currentUser, onCreated }) {
           <Chip active={form.visibility === 'public'} onClick={() => set('visibility', 'public')}><span className="flex items-center gap-1"><Globe size={12} /> Public</span></Chip>
           <Chip active={form.visibility === 'private'} onClick={() => set('visibility', 'private')}><span className="flex items-center gap-1"><Lock size={12} /> Private</span></Chip>
         </div>
-        <button onClick={handleSubmit} disabled={create.isPending || !valid} className="bg-[#6d5dfc] hover:bg-[#5b4be6] disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-semibold">
+        <button onClick={handleSubmit} disabled={create.isPending || !valid} className="bg-[#653653] hover:bg-[#7c4165] disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-semibold">
           {create.isPending ? 'Creating...' : 'Create task'}
         </button>
       </div>

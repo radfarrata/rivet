@@ -25,10 +25,10 @@ export default function YourImpactCard({ currentUser, onNavigate }) {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-[#1a1636] to-[#12141b] border border-[#6d5dfc]/30 rounded-2xl p-4">
+    <div className="bg-gradient-to-br from-[#2a1524] to-[#12141b] border border-[#653653]/50 rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2"><Award size={15} className="text-[#8f82ff]" /> Your Impact</h3>
-        <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#6d5dfc]/20 text-[#b3aaff] font-semibold">{level}</span>
+        <h3 className="text-sm font-bold text-white flex items-center gap-2"><Award size={15} className="text-[#b06d97]" /> Your Impact</h3>
+        <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#653653]/40 text-[#d9b8cd] font-semibold">{level}</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
         {stats.map(([label, value]) => (
@@ -38,7 +38,7 @@ export default function YourImpactCard({ currentUser, onNavigate }) {
           </div>
         ))}
       </div>
-      {total === 0 && <button onClick={() => onNavigate?.('evaluation-lab')} className="mt-3 text-[11px] text-[#8f82ff] hover:underline">Create a task or evaluate a response to start building your record →</button>}
+      {total === 0 && <button onClick={() => onNavigate?.('evaluation-lab')} className="mt-3 text-[11px] text-[#b06d97] hover:underline">Create a task or evaluate a response to start building your record →</button>}
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default function ModelEvidencePanel({ row, onClose }) {
       <div className="bg-[#0e1017] border border-[#1f232e] rounded-2xl w-full max-w-2xl max-h-[88vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="sticky top-0 bg-[#0e1017]/95 backdrop-blur-md border-b border-[#1f232e] px-6 py-4 flex items-start justify-between z-10">
           <div>
-            <p className="text-[10px] text-[#8f82ff] font-semibold uppercase tracking-widest">Evidence behind the score</p>
+            <p className="text-[10px] text-[#b06d97] font-semibold uppercase tracking-widest">Evidence behind the score</p>
             <h2 className="text-lg font-bold text-white">{modelLabel(row.modelId)} — {row.avg.toFixed(1)}</h2>
             <p className="text-xs text-[#8b90a0]">Model version: {row.modelId} · Confidence: <span className={row.confidence === 'High' ? 'text-[#2fd4a7]' : row.confidence === 'Medium' ? 'text-[#f5b544]' : 'text-[#ff6b6b]'}>{row.confidence}</span> ({row.n} evaluation{row.n === 1 ? '' : 's'})</p>
           </div>
@@ -40,7 +40,7 @@ export default function ModelEvidencePanel({ row, onClose }) {
             <Stat icon={ShieldCheck} label="Evaluator agreement" value={row.agreement == null ? '—' : `${row.agreement}%`} />
           </div>
           <div className="flex flex-wrap gap-1.5 text-[10px]">
-            {row.domains.map(d => <span key={d} className="px-2 py-0.5 rounded-md bg-[#8f82ff]/10 text-[#8f82ff] font-semibold">{domainLabel(d)}</span>)}
+            {row.domains.map(d => <span key={d} className="px-2 py-0.5 rounded-md bg-[#b06d97]/10 text-[#b06d97] font-semibold">{domainLabel(d)}</span>)}
             {Object.entries(row.difficulty).map(([d, n]) => <span key={d} className="px-2 py-0.5 rounded-md bg-[#1f232e] text-[#b8bcc8] font-semibold capitalize">{d} ×{n}</span>)}
           </div>
           <div>

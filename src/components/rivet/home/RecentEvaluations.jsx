@@ -4,7 +4,7 @@ import { useEvaluationTasks, useModelResults } from '../useEvaluations';
 import { domainLabel } from '../evalModels';
 import { visibleTo } from '../evalStats';
 
-const BAR_COLORS = ['bg-[#8f82ff]', 'bg-[#4f8cff]', 'bg-[#2fd4a7]', 'bg-[#f5b544]'];
+const BAR_COLORS = ['bg-[#b06d97]', 'bg-[#4f8cff]', 'bg-[#2fd4a7]', 'bg-[#f5b544]'];
 
 export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask }) {
   const { data: tasks = [] } = useEvaluationTasks();
@@ -15,14 +15,14 @@ export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask 
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold text-white">Recent Evaluations</h2>
-        <button onClick={() => onNavigate?.('evaluation-lab')} className="text-xs text-[#8f82ff] hover:underline">View all →</button>
+        <button onClick={() => onNavigate?.('evaluation-lab')} className="text-xs text-[#b06d97] hover:underline">View all →</button>
       </div>
       {recent.length === 0 ? (
         <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-8 text-center text-sm text-[#8b90a0]">No completed evaluations yet. Run your first task above.</div>
       ) : recent.map(task => {
         const rs = results.filter(r => r.taskId === task.id).sort((a, b) => b.score - a.score);
         return (
-          <div key={task.id} onClick={() => onOpenTask?.(task)} className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-4 md:p-5 grid grid-cols-1 lg:grid-cols-[1fr_260px_auto] gap-4 items-center cursor-pointer hover:border-[#6d5dfc]/40 transition-colors">
+          <div key={task.id} onClick={() => onOpenTask?.(task)} className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-4 md:p-5 grid grid-cols-1 lg:grid-cols-[1fr_260px_auto] gap-4 items-center cursor-pointer hover:border-[#653653]/40 transition-colors">
             <div className="min-w-0">
               <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#2fd4a7]/10 text-[#2fd4a7] font-semibold">{domainLabel(task.domain)}</span>
               <h3 className="text-sm font-bold text-white mt-2 leading-snug">{task.title}</h3>

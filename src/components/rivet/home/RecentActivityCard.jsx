@@ -19,7 +19,7 @@ export default function RecentActivityCard({ currentUser, onNavigate }) {
     <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-bold text-white flex items-center gap-2"><Clock size={15} className="text-[#8b90a0]" /> Community Activity</h3>
-        <button onClick={() => onNavigate?.('evaluation-lab')} className="text-[11px] text-[#8f82ff] hover:underline">See all →</button>
+        <button onClick={() => onNavigate?.('evaluation-lab')} className="text-[11px] text-[#b06d97] hover:underline">See all →</button>
       </div>
       {items.length === 0 ? (
         <p className="text-xs text-[#8b90a0]">No activity yet.</p>
@@ -29,7 +29,7 @@ export default function RecentActivityCard({ currentUser, onNavigate }) {
             const done = t.status === 'evaluated';
             return (
               <div key={t.id} className="flex items-start gap-3">
-                <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${done ? 'bg-[#2fd4a7]/10 text-[#2fd4a7]' : 'bg-[#8f82ff]/10 text-[#8f82ff]'}`}>
+                <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${done ? 'bg-[#2fd4a7]/10 text-[#2fd4a7]' : 'bg-[#b06d97]/10 text-[#b06d97]'}`}>
                   {done ? <BarChart3 size={14} /> : <Plus size={14} />}
                 </span>
                 <div className="min-w-0">

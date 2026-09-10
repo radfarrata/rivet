@@ -2,13 +2,13 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid } from 'recharts';
 import { Activity } from 'lucide-react';
 
-const COLORS = ['#8f82ff', '#4f8cff', '#2fd4a7', '#f5b544', '#ff7ab6'];
+const COLORS = ['#b06d97', '#4f8cff', '#2fd4a7', '#f5b544', '#653653'];
 
 export default function ModelTrendChart({ data }) {
   const models = [...new Set(data.flatMap(d => Object.keys(d).filter(k => k !== 'month')))];
   return (
     <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-5">
-      <h3 className="text-sm font-bold text-white flex items-center gap-2"><Activity size={15} className="text-[#8f82ff]" /> Model performance over time</h3>
+      <h3 className="text-sm font-bold text-white flex items-center gap-2"><Activity size={15} className="text-[#b06d97]" /> Model performance over time</h3>
       <p className="text-[11px] text-[#8b90a0] mb-4">Monthly average score per model — spot improvements and regressions as new evaluations land.</p>
       {data.length < 2 ? (
         <p className="text-xs text-[#6b7080]">Trend appears once evaluations span more than one month.</p>

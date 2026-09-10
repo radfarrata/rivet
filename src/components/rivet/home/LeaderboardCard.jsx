@@ -13,13 +13,13 @@ export default function LeaderboardCard({ onNavigate }) {
 
   const domains = useMemo(() => { const s = new Set(results.map(r => r.domain)); return DOMAINS.filter(d => s.has(d.id)).slice(0, 3); }, [results]);
   const rows = useMemo(() => aggregateModels(results, humanEvals, tasks, domain).slice(0, 5), [results, humanEvals, tasks, domain]);
-  const tabCls = (active) => `px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-colors ${active ? 'bg-[#6d5dfc] text-white' : 'text-[#8b90a0] hover:text-white'}`;
+  const tabCls = (active) => `px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-colors ${active ? 'bg-[#653653] text-white' : 'text-[#8b90a0] hover:text-white'}`;
 
   return (
     <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-bold text-white flex items-center gap-2"><Trophy size={15} className="text-[#f5b544]" /> Leaderboard</h3>
-        <button onClick={() => onNavigate?.('capability-map')} className="text-[11px] text-[#8f82ff] hover:underline">See all →</button>
+        <button onClick={() => onNavigate?.('capability-map')} className="text-[11px] text-[#b06d97] hover:underline">See all →</button>
       </div>
       <div className="flex gap-1 bg-[#0e1017] border border-[#1f232e] rounded-xl p-1 mb-3 overflow-x-auto scrollbar-hide">
         <button onClick={() => setDomain('all')} className={tabCls(domain === 'all')}>Overall</button>

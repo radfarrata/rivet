@@ -16,7 +16,7 @@ export default function ModelResultCard({ task, result, humanEvals, isBest, open
       <button onClick={onToggle} className="w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#151823] transition-colors">
         {isBest && <Trophy size={15} className="text-[#f5b544] flex-shrink-0" />}
         <span className="text-sm font-semibold text-white w-24 truncate">{result.model}</span>
-        <div className="flex-1 h-2 bg-[#1f232e] rounded-full overflow-hidden min-w-[50px]"><div className="h-full bg-[#8f82ff] rounded-full" style={{ width: `${result.blended}%` }} /></div>
+        <div className="flex-1 h-2 bg-[#1f232e] rounded-full overflow-hidden min-w-[50px]"><div className="h-full bg-[#b06d97] rounded-full" style={{ width: `${result.blended}%` }} /></div>
         <span className="text-sm font-bold text-white w-10 text-right">{result.blended}%</span>
         <ChevronDown size={16} className={`text-[#6b7080] transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>

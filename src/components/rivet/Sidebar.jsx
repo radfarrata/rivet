@@ -65,7 +65,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-[#0e1017] border-r border-[#1f232e] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="px-5 py-5 space-y-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7c6cff] to-[#4f3fd6] flex items-center justify-center shadow-[0_0_18px_rgba(124,108,255,0.45)]">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#8a4a73] to-[#4a2740] flex items-center justify-center shadow-[0_0_18px_rgba(101,54,83,0.6)]">
               <Sparkles size={16} className="text-white" />
             </div>
             <span className="text-white font-bold text-xl tracking-tight">Rivet</span>
@@ -91,7 +91,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
                         : 'text-[#b8bcc8] hover:bg-[#151823] hover:text-white'
                     }`}
                   >
-                    <span className={activeNav === item.id ? 'text-[#8f82ff]' : ''}>{item.icon}</span>
+                    <span className={activeNav === item.id ? 'text-[#b06d97]' : ''}>{item.icon}</span>
                     <span>{item.label}</span>
                   </Link>
                 ))}

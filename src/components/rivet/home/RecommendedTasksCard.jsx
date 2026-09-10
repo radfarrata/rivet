@@ -22,7 +22,7 @@ export default function RecommendedTasksCard({ currentUser, onOpenTask }) {
 
   return (
     <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-4">
-      <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-1"><Sparkles size={15} className="text-[#8f82ff]" /> Recommended for you</h3>
+      <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-1"><Sparkles size={15} className="text-[#b06d97]" /> Recommended for you</h3>
       <p className="text-[11px] text-[#6b7080] mb-3">Responses that need human evaluation, matched to your expertise.</p>
       {recommended.length === 0 ? (
         <p className="text-xs text-[#8b90a0]">Nothing waiting for your review right now.</p>
@@ -30,9 +30,9 @@ export default function RecommendedTasksCard({ currentUser, onOpenTask }) {
         <div className="space-y-2.5">
           {recommended.map(t => (
             <div key={t.id} onClick={() => onOpenTask?.(t)} className="cursor-pointer group">
-              <p className="text-xs text-white leading-snug group-hover:text-[#8f82ff]">{t.title}</p>
+              <p className="text-xs text-white leading-snug group-hover:text-[#b06d97]">{t.title}</p>
               <p className="text-[10px] text-[#6b7080] mt-0.5 flex items-center gap-2">
-                <span className={myDomains.has(t.domain) ? 'text-[#8f82ff] font-semibold' : ''}>{domainLabel(t.domain)}</span>
+                <span className={myDomains.has(t.domain) ? 'text-[#b06d97] font-semibold' : ''}>{domainLabel(t.domain)}</span>
                 <span className="flex items-center gap-1"><Users size={10} /> {humanCount[t.id] || 0} human evaluations</span>
               </p>
             </div>

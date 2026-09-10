@@ -28,9 +28,9 @@ export default function HumanEvalForm({ task, result, currentUser, alreadyEvalua
 
   return (
     <div className="bg-[#0e1017] border border-[#1f232e] rounded-xl p-3 space-y-3">
-      <p className="text-[11px] font-semibold text-white flex items-center gap-1.5"><UserCheck size={13} className="text-[#8f82ff]" /> Add your human evaluation</p>
+      <p className="text-[11px] font-semibold text-white flex items-center gap-1.5"><UserCheck size={13} className="text-[#b06d97]" /> Add your human evaluation</p>
       <div className="flex items-center gap-3">
-        <input type="range" min={0} max={100} value={score} onChange={e => setScore(Number(e.target.value))} className="flex-1 accent-[#6d5dfc]" />
+        <input type="range" min={0} max={100} value={score} onChange={e => setScore(Number(e.target.value))} className="flex-1 accent-[#653653]" />
         <span className="text-sm font-bold text-white w-10 text-right">{score}%</span>
       </div>
       <div className="flex gap-1.5">
@@ -44,9 +44,9 @@ export default function HumanEvalForm({ task, result, currentUser, alreadyEvalua
           {Object.entries(FAILURE_LABELS).map(([id, label]) => <option key={id} value={id}>{label}</option>)}
         </select>
       )}
-      <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} placeholder="What did the model get right or wrong against the criteria?" className="w-full bg-[#12141b] border border-[#1f232e] rounded-lg px-3 py-2 text-xs text-white placeholder-[#6b7080] focus:outline-none focus:border-[#6d5dfc]/60 resize-none" />
+      <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} placeholder="What did the model get right or wrong against the criteria?" className="w-full bg-[#12141b] border border-[#1f232e] rounded-lg px-3 py-2 text-xs text-white placeholder-[#6b7080] focus:outline-none focus:border-[#653653]/60 resize-none" />
       <div className="flex justify-end">
-        <button onClick={submit} disabled={create.isPending} className="bg-[#6d5dfc] hover:bg-[#5b4be6] disabled:opacity-50 text-white px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+        <button onClick={submit} disabled={create.isPending} className="bg-[#653653] hover:bg-[#7c4165] disabled:opacity-50 text-white px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5">
           {create.isPending && <Loader2 size={12} className="animate-spin" />} Submit evaluation
         </button>
       </div>

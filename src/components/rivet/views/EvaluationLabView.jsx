@@ -15,7 +15,7 @@ export default function EvaluationLabView({ currentUser }) {
   return (
     <div className="space-y-5 max-w-[900px] mx-auto">
       <div>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2"><FlaskConical size={20} className="text-[#8f82ff]" /> Evaluation Lab</h2>
+        <h2 className="text-xl font-bold text-white flex items-center gap-2"><FlaskConical size={20} className="text-[#b06d97]" /> Evaluation Lab</h2>
         <p className="text-sm text-[#8b90a0] mt-0.5">Bring a real-world task, compare multiple AI systems on it, and get evidence behind every score.</p>
       </div>
 
@@ -23,7 +23,7 @@ export default function EvaluationLabView({ currentUser }) {
 
       <div className="flex gap-1 bg-[#12141b] border border-[#1f232e] rounded-xl p-1 w-fit">
         {[['all', 'All tasks'], ['mine', 'Your tasks']].map(([id, label]) => (
-          <button key={id} onClick={() => setScope(id)} className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${scope === id ? 'bg-[#6d5dfc] text-white' : 'text-[#8b90a0] hover:text-white'}`}>{label}</button>
+          <button key={id} onClick={() => setScope(id)} className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${scope === id ? 'bg-[#653653] text-white' : 'text-[#8b90a0] hover:text-white'}`}>{label}</button>
         ))}
       </div>
 
@@ -34,8 +34,8 @@ export default function EvaluationLabView({ currentUser }) {
       ) : (
         <div className="space-y-2.5">
           {tasks.map(task => (
-            <button key={task.id} onClick={() => setSelected(task)} className="w-full text-left bg-[#12141b] rounded-2xl border border-[#1f232e] p-4 hover:border-[#6d5dfc]/40 transition-colors flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#8f82ff]/10 text-[#8f82ff] flex items-center justify-center flex-shrink-0"><FlaskConical size={18} /></div>
+            <button key={task.id} onClick={() => setSelected(task)} className="w-full text-left bg-[#12141b] rounded-2xl border border-[#1f232e] p-4 hover:border-[#653653]/40 transition-colors flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-[#b06d97]/10 text-[#b06d97] flex items-center justify-center flex-shrink-0"><FlaskConical size={18} /></div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-semibold text-white truncate">{task.title}</span>

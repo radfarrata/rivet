@@ -35,7 +35,7 @@ export default function EvaluationTaskDetail({ task, onClose, currentUser }) {
         <div className="sticky top-0 bg-[#0e1017]/95 backdrop-blur-md border-b border-[#1f232e] px-6 py-4 flex items-start justify-between gap-4 z-10">
           <div className="space-y-1.5">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <Tag cls="bg-[#8f82ff]/15 text-[#8f82ff]">{domainLabel(task.domain)}</Tag>
+              <Tag cls="bg-[#b06d97]/15 text-[#b06d97]">{domainLabel(task.domain)}</Tag>
               <Tag>{task.difficulty}</Tag>
               <Tag cls={task.status === 'evaluated' ? 'bg-[#2fd4a7]/15 text-[#2fd4a7]' : task.status === 'running' ? 'bg-[#f5b544]/15 text-[#f5b544]' : ''}>{task.status}</Tag>
               <Tag>{task.visibility === 'private' ? <span className="flex items-center gap-1"><Lock size={10} /> Private</span> : <span className="flex items-center gap-1"><Globe size={10} /> Public</span>}</Tag>
@@ -62,16 +62,16 @@ export default function EvaluationTaskDetail({ task, onClose, currentUser }) {
               <p className="text-sm text-[#d4d7e0] whitespace-pre-wrap leading-relaxed bg-[#12141b] border border-[#1f232e] rounded-xl p-3">{task.evaluationCriteria}</p>
             </div>
           )}
-          <div className="flex gap-1.5 flex-wrap">{(task.models || []).map(id => <Tag key={id} cls="bg-[#8f82ff]/10 text-[#8f82ff]">{modelLabel(id)}</Tag>)}</div>
+          <div className="flex gap-1.5 flex-wrap">{(task.models || []).map(id => <Tag key={id} cls="bg-[#b06d97]/10 text-[#b06d97]">{modelLabel(id)}</Tag>)}</div>
 
           {task.status === 'pending' && (
-            <button onClick={() => run.mutate()} disabled={run.isPending} className="w-full flex items-center justify-center gap-2 bg-[#6d5dfc] hover:bg-[#5b4be6] disabled:opacity-60 text-white rounded-xl py-3 text-sm font-semibold shadow-[0_0_20px_rgba(109,93,252,0.35)]">
+            <button onClick={() => run.mutate()} disabled={run.isPending} className="w-full flex items-center justify-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-60 text-white rounded-xl py-3 text-sm font-semibold shadow-[0_0_20px_rgba(101,54,83,0.5)]">
               {run.isPending ? <><Loader2 size={16} className="animate-spin" /> Running evaluation...</> : <><Play size={16} /> Run multi-model evaluation</>}
             </button>
           )}
           {run.isPending && progress && (
             <p className="text-xs text-[#8b90a0] flex items-center gap-2 bg-[#12141b] border border-[#1f232e] rounded-xl p-3">
-              <Loader2 size={14} className="animate-spin text-[#8f82ff]" />
+              <Loader2 size={14} className="animate-spin text-[#b06d97]" />
               {progress.stage === 'generating' ? <>Getting response from <span className="font-semibold text-white">{progress.label}</span>…</> : 'Judging responses against the criteria…'}
             </p>
           )}
