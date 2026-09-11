@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '@/components/Icon';
+import { RivetMark } from './RivetLogo';
 
 const NAV_GROUPS = [
   {
@@ -70,10 +71,8 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-black border-r border-[#2f3336] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="px-5 py-5 space-y-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#8a4a73] to-[#4a2740] flex items-center justify-center shadow-[0_0_18px_rgba(101,54,83,0.6)]">
-              <Icon name="sparkles" size={15} className="text-white" />
-            </div>
-            <span className="text-white font-bold text-xl tracking-tight">Rivet</span>
+            <RivetMark size={34} glow />
+            <span className="text-white font-bold text-xl tracking-tight">RIVET</span>
           </div>
           <span className="block text-[11px] text-[#71767b]">Real Tasks. Real Evaluation. Better AI.</span>
         </div>

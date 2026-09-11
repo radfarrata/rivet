@@ -1,32 +1,30 @@
-export function RivetIcon({ size = 32, className = "" }) {
+import React from 'react';
+
+export const RIVET_LOGO_URL = 'https://media.base44.com/images/public/69f641f65e271dbe71760592/65a9b2fff_M2.png';
+
+/** The app mark — plum tile with the white Rivet creature. */
+export function RivetMark({ size = 32, className = '', rounded = 'rounded-lg', glow = false }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      {/* Head dome */}
-      <path d="M12 20 C12 8 36 8 36 20 L36 28 L12 28 Z" fill="#ffffff" />
-      {/* X panel seams */}
-      <g stroke="#653653" strokeWidth="1.8" strokeLinecap="round">
-        <line x1="15" y1="10.5" x2="33" y2="19" />
-        <line x1="33" y1="10.5" x2="15" y2="19" />
-      </g>
-      {/* Eyes */}
-      <rect x="20.8" y="18" width="2.4" height="5" rx="1.2" fill="#653653" />
-      <rect x="24.8" y="18" width="2.4" height="5" rx="1.2" fill="#653653" />
-      {/* Circuit lines */}
-      <g stroke="#ffffff" strokeWidth="2" strokeLinecap="round" fill="none">
-        <path d="M15.5 28 C13.5 33 12.5 36 13 41" />
-        <path d="M19.5 28 C18.5 33 18 36 18.5 41" />
-        <path d="M28.5 28 C29.5 33 30 36 29.5 41" />
-        <path d="M32.5 28 C34.5 33 35.5 36 35 41" />
-      </g>
-      {/* Terminal nodes */}
-      <g fill="#ffffff">
-        <circle cx="13" cy="41.5" r="2" />
-        <circle cx="18.5" cy="41.5" r="2" />
-        <circle cx="29.5" cy="41.5" r="2" />
-        <circle cx="35" cy="41.5" r="2" />
-      </g>
-    </svg>
+    <img
+      src={RIVET_LOGO_URL}
+      alt="Rivet"
+      width={size}
+      height={size}
+      className={`${rounded} object-cover flex-shrink-0 ${glow ? 'shadow-[0_0_20px_rgba(101,54,83,0.65)]' : ''} ${className}`}
+      style={{ width: size, height: size }}
+    />
   );
 }
 
-export default RivetIcon;
+/** Mark + uppercase wordmark, used in headers and auth screens. */
+export function RivetWordmark({ size = 32, className = '', textClassName = 'text-white' }) {
+  return (
+    <div className={`flex items-center gap-2.5 ${className}`}>
+      <RivetMark size={size} />
+      <span className={`font-bold tracking-tight ${textClassName}`} style={{ fontSize: size * 0.62 }}>RIVET</span>
+    </div>
+  );
+}
+
+export const RivetIcon = RivetMark;
+export default RivetMark;
