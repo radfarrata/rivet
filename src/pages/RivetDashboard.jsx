@@ -28,7 +28,7 @@ export default function RivetDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-[#0b0d12] overflow-hidden">
+    <div className="flex h-screen bg-black overflow-hidden">
       <Sidebar
         activeNav={activeNav}
         onNavChange={(id) => { setActiveNav(id); setSearchQuery(''); setProfileUser(null); setIsMobileNavOpen(false); }}
@@ -45,7 +45,7 @@ export default function RivetDashboard() {
           ) : profileUser ? (
             <ProfileView user={profileUser} currentUser={currentUser} onBack={() => setProfileUser(null)} onViewProfile={handleViewProfile} />
           ) : activeNav === 'home' ? (
-            <HomeView currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} />
+            <HomeView currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
           ) : (
             <ContentView activeNav={activeNav} currentUser={currentUser} onViewProfile={handleViewProfile} />
           )}

@@ -16,13 +16,13 @@ export default function RecentActivityCard({ currentUser, onNavigate }) {
   const items = visibleTo(tasks, currentUser).slice(0, 4);
 
   return (
-    <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-4">
+    <div className="bg-[#16181c] border border-[#2f3336] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2"><Clock size={15} className="text-[#8b90a0]" /> Community Activity</h3>
+        <h3 className="text-sm font-bold text-white flex items-center gap-2"><Clock size={15} className="text-[#71767b]" /> Community Activity</h3>
         <button onClick={() => onNavigate?.('evaluation-lab')} className="text-[11px] text-[#b06d97] hover:underline">See all →</button>
       </div>
       {items.length === 0 ? (
-        <p className="text-xs text-[#8b90a0]">No activity yet.</p>
+        <p className="text-xs text-[#71767b]">No activity yet.</p>
       ) : (
         <div className="space-y-3">
           {items.map(t => {
@@ -34,7 +34,7 @@ export default function RecentActivityCard({ currentUser, onNavigate }) {
                 </span>
                 <div className="min-w-0">
                   <p className="text-xs text-white leading-snug">{done ? 'New evaluation results available' : `${t.creatorName || 'You'} created a new task`}</p>
-                  <p className="text-[10px] text-[#6b7080] mt-0.5">{domainLabel(t.domain)} • {timeAgo(t.updated_date || t.created_date)}</p>
+                  <p className="text-[10px] text-[#71767b] mt-0.5">{domainLabel(t.domain)} • {timeAgo(t.updated_date || t.created_date)}</p>
                 </div>
               </div>
             );

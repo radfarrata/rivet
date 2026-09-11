@@ -70,22 +70,21 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
       {isMobileOpen && (
         <div className="fixed inset-0 bg-black/60 z-30 md:hidden" onClick={() => setIsMobileNavOpen(false)} />
       )}
-      <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-[#0e1017] border-r border-[#1f232e] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+      <aside className={`fixed md:sticky top-0 left-0 h-screen w-64 bg-black border-r border-[#2f3336] flex flex-col z-40 transition-transform duration-300 flex-shrink-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="px-5 py-5 space-y-1">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#8a4a73] to-[#4a2740] flex items-center justify-center shadow-[0_0_18px_rgba(101,54,83,0.6)]">
-              <Sparkles size={16} className="text-white" />
-            </div>
-            <span className="text-white font-bold text-xl tracking-tight">Rivet</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#8a4a73] to-[#4a2740] flex items-center justify-center shadow-[0_0_18px_rgba(101,54,83,0.6)]">
+            <Sparkles size={16} className="text-white" />
           </div>
-          <span className="block text-[11px] text-[#8b90a0]">Real Tasks. Real Evaluation. Better AI.</span>
+          <span className="text-white font-bold text-xl tracking-tight">Rivet</span>
+        </div>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-5 scrollbar-hide">
           {NAV_GROUPS.map((group, gi) => (
             <div key={gi}>
               {group.label && (
-                <div className="px-3 py-2 text-[10px] font-semibold text-[#6b7080] uppercase tracking-widest">{group.label}</div>
+                <div className="px-3 py-2 text-[10px] font-semibold text-[#71767b] uppercase tracking-widest">{group.label}</div>
               )}
               <div className="space-y-0.5">
                 {group.items.map(item => (
@@ -95,8 +94,8 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
                     onClick={item.href ? () => setIsMobileNavOpen?.(false) : (e) => { e.preventDefault(); onNavChange(item.id); }}
                     className={`w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-full text-[15px] transition-colors ${
                       activeNav === item.id
-                        ? 'bg-[#1a1d29] text-white font-bold'
-                        : 'text-[#b8bcc8] hover:bg-[#151823] hover:text-white'
+                        ? 'bg-white/5 text-white font-bold'
+                        : 'text-[#e7e9ea] hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     <span className={activeNav === item.id ? 'text-[#b06d97]' : ''}>{item.icon}</span>
@@ -108,14 +107,14 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
           ))}
         </nav>
 
-        <div className="px-3 pb-4 pt-3 border-t border-[#1f232e]">
-          <div onClick={onProfileClick} className="rounded-full p-2.5 flex items-center gap-3 cursor-pointer hover:bg-[#151823] transition-colors">
-            <div className="w-9 h-9 rounded-full bg-[#1f232e] border border-[#2a2e3d] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(currentUser?.full_name || 'You').slice(0, 1).toUpperCase()}</div>
+        <div className="px-3 pb-4 pt-3 border-t border-[#2f3336]">
+          <div onClick={onProfileClick} className="rounded-full p-2.5 flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors">
+            <div className="w-9 h-9 rounded-full bg-[#1f232e] border border-[#2f3336] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(currentUser?.full_name || 'You').slice(0, 1).toUpperCase()}</div>
             <div className="flex-1 min-w-0">
               <span className="text-white text-sm font-semibold truncate block">{currentUser?.full_name || 'You'}</span>
-              <span className="text-[11px] text-[#8b90a0] truncate block">{currentUser?.headline || currentUser?.email || ''}</span>
+              <span className="text-[11px] text-[#71767b] truncate block">{currentUser?.headline || currentUser?.email || ''}</span>
             </div>
-            <ChevronRight size={16} className="text-[#6b7080]" />
+            <ChevronRight size={16} className="text-[#71767b]" />
           </div>
         </div>
       </aside>

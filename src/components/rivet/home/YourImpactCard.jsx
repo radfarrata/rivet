@@ -25,16 +25,16 @@ export default function YourImpactCard({ currentUser, onNavigate }) {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-[#2a1524] to-[#12141b] border border-[#653653]/50 rounded-2xl p-4">
+    <div className="bg-[#16181c] border border-[#2f3336] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-bold text-white flex items-center gap-2"><Award size={15} className="text-[#b06d97]" /> Your Impact</h3>
         <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#653653]/40 text-[#d9b8cd] font-semibold">{level}</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
         {stats.map(([label, value]) => (
-          <div key={label} className="bg-[#0e1017]/60 rounded-xl p-2.5">
+          <div key={label} className="bg-black/40 rounded-xl p-2.5">
             <p className="text-lg font-bold text-white leading-none">{value}</p>
-            <p className="text-[10px] text-[#8b90a0] mt-1 leading-tight">{label}</p>
+            <p className="text-[10px] text-[#71767b] mt-1 leading-tight">{label}</p>
           </div>
         ))}
       </div>

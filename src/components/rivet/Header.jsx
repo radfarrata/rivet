@@ -13,7 +13,7 @@ export default function Header({ onMenuClick, onSearchChange, onBellClick, onAva
   };
 
   return (
-    <header className="sticky top-0 z-20 bg-[#0b0d12]/90 backdrop-blur-xl border-b border-[#1f232e] px-4 md:px-6 py-3">
+    <header className="sticky top-0 z-20 bg-black/80 backdrop-blur-xl border-b border-[#2f3336] px-4 md:px-6 py-3">
       <div className="flex items-center justify-between gap-4">
         <button onClick={onMenuClick} className="md:hidden p-2 text-[#b8bcc8] hover:bg-[#151823] rounded-lg transition-colors flex-shrink-0">
           <Menu size={20} />
@@ -26,7 +26,7 @@ export default function Header({ onMenuClick, onSearchChange, onBellClick, onAva
               value={search}
               onChange={handleSearch}
               placeholder="Search tasks, models, or people..."
-              className="w-full bg-[#12141b] border border-[#1f232e] rounded-full py-2.5 pl-10 pr-3 text-sm text-white placeholder-[#6b7080] focus:outline-none focus:border-[#653653]/60 focus:bg-[#0e1017] transition-all"
+              className="w-full bg-[#202327] border border-transparent focus:border-[#b06d97] focus:bg-black rounded-full py-2.5 pl-10 pr-3 text-sm text-white placeholder-[#71767b] focus:outline-none transition-colors"
             />
           </div>
         </div>

@@ -18,7 +18,8 @@ export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask 
   const [tab, setTab] = useState('foryou');
 
   const visible = visibleTo(tasks, currentUser);
-  const feed = visible.filter(t =>
+  const sorted = [...visible].sort((a, b) => new Date(b.created_date || 0) - new Date(a.created_date || 0));
+  const feed = sorted.filter(t =>
     tab === 'completed' ? t.status === 'evaluated' :
     tab === 'yours' ? t.created_by_id === currentUser?.id : true
   ).slice(0, 12);
@@ -27,7 +28,7 @@ export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask 
     <div>
       <FeedTabs tabs={TABS} active={tab} onChange={setTab} />
       {feed.length === 0 ? (
-        <div className="py-12 text-center text-sm text-[#8b90a0] border-b border-[#1f232e]">
+        <div className="py-16 text-center text-sm text-[#71767b] border-b border-[#2f3336]">
           Nothing here yet.{' '}
           <button onClick={() => onNavigate?.('evaluation-lab')} className="text-[#b06d97] hover:underline">Create an evaluation task</button>
         </div>
