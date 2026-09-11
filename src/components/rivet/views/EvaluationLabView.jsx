@@ -5,6 +5,7 @@ import EvaluationTaskForm from '../EvaluationTaskForm';
 import EvaluationTaskDetail from '../EvaluationTaskDetail';
 import { domainLabel, modelLabel } from '../evalModels';
 import { FlaskConical, ChevronRight, Lock } from 'lucide-react';
+import RivetEmptyState from '../RivetEmptyState';
 
 export default function EvaluationLabView({ currentUser }) {
   const { data: allTasks = [], isLoading } = useEvaluationTasks();
@@ -30,7 +31,9 @@ export default function EvaluationLabView({ currentUser }) {
       {isLoading ? (
         [...Array(3)].map((_, i) => <div key={i} className="h-24 bg-[#12141b] rounded-2xl border border-[#1f232e] animate-pulse" />)
       ) : tasks.length === 0 ? (
-        <div className="bg-[#12141b] rounded-2xl border border-[#1f232e] p-12 text-center text-sm text-[#8b90a0]">No evaluation tasks yet. Create the first one and see which AI is best at it — and why.</div>
+        <div className="bg-[#16181c] rounded-2xl border border-[#2f3336]">
+          <RivetEmptyState title="No evaluation tasks yet" description="Create the first one and see which AI is best at it — and why." />
+        </div>
       ) : (
         <div className="space-y-2.5">
           {tasks.map(task => (

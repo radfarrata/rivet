@@ -3,6 +3,7 @@ import Icon from '@/components/Icon';
 import { useDatasets, useDeleteDataset } from '../useDatasets';
 import { domainLabel } from '../evalModels';
 import DatasetForm from './DatasetForm';
+import RivetEmptyState from '../RivetEmptyState';
 
 const fmtSize = (b) => (!b ? '—' : b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Math.round(b / 1e3)} KB`);
 
@@ -29,9 +30,9 @@ export default function CustomDatasetsView() {
 
       <div className="rounded-2xl border border-[#2f3336] bg-[#16181c] overflow-hidden">
         {isLoading ? (
-          <p className="py-12 text-center text-sm text-[#71767b]">Loading…</p>
+          <RivetEmptyState loading title="Loading your datasets…" />
         ) : datasets.length === 0 ? (
-          <p className="py-12 text-center text-sm text-[#71767b]">No datasets yet — add one to get started.</p>
+          <RivetEmptyState title="No datasets yet" description="Upload a CSV, JSON or PDF to build evaluation tasks from your own data." />
         ) : datasets.map(d => (
           <div key={d.id} className="flex items-center gap-3 px-4 py-3 border-b border-[#2f3336] last:border-b-0">
             <span className="w-9 h-9 rounded-lg bg-[#2f3336] text-[#e7e9ea] flex items-center justify-center flex-shrink-0"><Icon name="file" size={15} /></span>

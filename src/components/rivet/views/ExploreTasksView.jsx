@@ -6,6 +6,7 @@ import { visibleTo } from '../evalStats';
 import { DOMAINS } from '../evalModels';
 import TaskListRow from '../TaskListRow';
 import EvaluationTaskDetail from '../EvaluationTaskDetail';
+import RivetEmptyState from '../RivetEmptyState';
 
 export default function ExploreTasksView({ currentUser }) {
   const { data: tasks = [] } = useEvaluationTasks();
@@ -41,7 +42,7 @@ export default function ExploreTasksView({ currentUser }) {
 
       <div className="rounded-2xl border border-[#1f232e] bg-[#12141b] overflow-hidden">
         {list.length === 0 ? (
-          <p className="py-12 text-center text-sm text-[#8b90a0]">No tasks match that search.</p>
+          <RivetEmptyState title="No tasks match that search" description="Try a different keyword or switch the domain filter." />
         ) : list.map(t => (
           <TaskListRow
             key={t.id}

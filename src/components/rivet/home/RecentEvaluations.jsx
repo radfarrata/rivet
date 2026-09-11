@@ -4,6 +4,7 @@ import { useHumanEvaluations } from '../useHumanEvaluations';
 import { visibleTo } from '../evalStats';
 import FeedTabs from './FeedTabs';
 import EvaluationFeedRow from './EvaluationFeedRow';
+import RivetEmptyState from '../RivetEmptyState';
 
 const TABS = [
   { id: 'foryou', label: 'For you' },
@@ -32,9 +33,12 @@ export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask 
       </div>
       <FeedTabs tabs={TABS} active={tab} onChange={setTab} />
       {feed.length === 0 ? (
-        <div className="py-16 text-center text-sm text-[#71767b] border-b border-[#2f3336]">
-          Nothing here yet.{' '}
-          <button onClick={() => onNavigate?.('evaluation-lab')} className="text-[#b06d97] hover:underline">Create an evaluation task</button>
+        <div className="border-b border-[#2f3336]">
+          <RivetEmptyState
+            title="Nothing here yet"
+            description="Evaluations you and the community run will show up in this feed."
+            action={<button onClick={() => onNavigate?.('evaluation-lab')} className="bg-[#653653] hover:bg-[#7c4165] text-white px-4 py-2 rounded-full text-[13px] font-bold">Create an evaluation task</button>}
+          />
         </div>
       ) : feed.map(task => (
         <EvaluationFeedRow

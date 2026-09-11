@@ -5,6 +5,7 @@ import { useHumanEvaluations } from '../useHumanEvaluations';
 import { useSavedTasks } from '../useSavedTasks';
 import TaskListRow from '../TaskListRow';
 import EvaluationTaskDetail from '../EvaluationTaskDetail';
+import RivetEmptyState from '../RivetEmptyState';
 
 export default function SavedTasksView({ currentUser }) {
   const { data: tasks = [] } = useEvaluationTasks();
@@ -25,9 +26,9 @@ export default function SavedTasksView({ currentUser }) {
 
       <div className="rounded-2xl border border-[#1f232e] bg-[#12141b] overflow-hidden">
         {isLoading ? (
-          <p className="py-12 text-center text-sm text-[#8b90a0]">Loading…</p>
+          <RivetEmptyState loading title="Loading your saved tasks…" />
         ) : list.length === 0 ? (
-          <p className="py-12 text-center text-sm text-[#8b90a0]">Nothing saved yet — use the bookmark icon on any task.</p>
+          <RivetEmptyState title="Nothing saved yet" description="Use the bookmark icon on any task to keep it here for later." />
         ) : list.map(t => (
           <TaskListRow
             key={t.id}

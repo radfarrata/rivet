@@ -26,5 +26,20 @@ export function RivetWordmark({ size = 32, className = '', textClassName = 'text
   );
 }
 
+export const RIVET_GLYPH_URL = 'https://media.base44.com/images/public/69f641f65e271dbe71760592/0dad5201e_image.png';
+
+/** Transparent white glyph — for watermarks, empty states and loaders on dark surfaces. */
+export function RivetGlyph({ size = 64, className = '', spin = false }) {
+  return (
+    <img
+      src={RIVET_GLYPH_URL}
+      alt=""
+      aria-hidden="true"
+      className={`object-contain select-none ${spin ? 'animate-pulse' : ''} ${className}`}
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
 export const RivetIcon = RivetMark;
 export default RivetMark;
