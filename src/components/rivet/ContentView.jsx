@@ -15,9 +15,11 @@ import SavedTasksView from './views/SavedTasksView';
 import SettingsView from './views/SettingsView';
 import CustomDatasetsView from './views/CustomDatasetsView';
 import ExpertWorkspaceView from './views/ExpertWorkspaceView';
+import VerdictFeedView from './views/VerdictFeedView';
 
-export default function ContentView({ activeNav, currentUser, onViewProfile }) {
+export default function ContentView({ activeNav, currentUser, onViewProfile, onNavigate }) {
   switch (activeNav) {
+    case 'verdict-feed': return <VerdictFeedView currentUser={currentUser} onNavigate={onNavigate} />;
     case 'projects': return <ProjectsView currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'build-tasks': return <ProjectsView mode="my-tasks" currentUser={currentUser} onViewProfile={onViewProfile} />;
     case 'train-tasks': return <ProjectsView mode="training" currentUser={currentUser} onViewProfile={onViewProfile} />;

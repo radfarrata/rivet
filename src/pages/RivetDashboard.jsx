@@ -47,7 +47,7 @@ export default function RivetDashboard() {
           ) : activeNav === 'home' ? (
             <HomeView currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
           ) : (
-            <ContentView activeNav={activeNav} currentUser={currentUser} onViewProfile={handleViewProfile} />
+            <ContentView activeNav={activeNav} currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} />
           )}
         </main>
       </div>

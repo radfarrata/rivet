@@ -8,6 +8,7 @@ const NAV_GROUPS = [
     label: null,
     items: [
       { id: 'home', label: 'Home', icon: 'home' },
+      { id: 'verdict-feed', label: 'Feed', icon: 'layers' },
       { id: 'explore-tasks', label: 'Explore Tasks', icon: 'search' },
       { id: 'evaluation-lab', label: 'Run Evaluation', icon: 'flask' },
       { id: 'capability-map', label: 'Leaderboards', icon: 'trophy' },
