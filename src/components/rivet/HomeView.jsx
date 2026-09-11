@@ -10,7 +10,7 @@ export default function HomeView({ currentUser, onNavigate, searchQuery, onSearc
   return (
     <div className="flex gap-6 items-start mx-auto max-w-[990px]">
       {/* Center column — X-style feed spine */}
-      <div className="flex-1 min-w-0 w-full border-x border-[#2f3336] min-h-screen">
+      <div className="flex-1 min-w-0 w-full border-x border-[#2f3336] min-h-screen opacity-100">
         <HomeHero currentUser={currentUser} onNavigate={onNavigate} />
         <RecentEvaluations currentUser={currentUser} onNavigate={onNavigate} onOpenTask={setSelectedTask} />
       </div>
@@ -21,6 +21,6 @@ export default function HomeView({ currentUser, onNavigate, searchQuery, onSearc
       </div>
 
       {selectedTask && <EvaluationTaskDetail task={selectedTask} currentUser={currentUser} onClose={() => setSelectedTask(null)} />}
-    </div>
-  );
+    </div>);
+
 }
