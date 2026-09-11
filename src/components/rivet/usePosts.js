@@ -14,6 +14,14 @@ export function usePosts() {
   });
 }
 
+export function useCreatePost() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => base44.entities.Post.create(data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
+  });
+}
+
 export function useUpvote() {
   const queryClient = useQueryClient();
   return useMutation({
