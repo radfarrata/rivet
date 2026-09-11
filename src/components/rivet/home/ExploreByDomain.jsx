@@ -1,38 +1,37 @@
 import React from 'react';
-import { ChevronRight, Dna, FlaskConical, Atom, Code2, Brain, Shield, Bot, Sigma } from 'lucide-react';
+import { ChevronRight, Dna, FlaskConical, Atom, Stethoscope, Code2, Brain, Shield, Bot } from 'lucide-react';
 
 const CARDS = [
-  { id: 'biology', label: 'Biology', desc: 'Genetics, bioinformatics', icon: Dna },
-  { id: 'chemistry', label: 'Chemistry', desc: 'Reaction prediction', icon: FlaskConical },
-  { id: 'physics', label: 'Physics', desc: 'Quantum, classical', icon: Atom },
-  { id: 'coding', label: 'Coding', desc: 'Algorithms, systems', icon: Code2 },
-  { id: 'reasoning', label: 'Reasoning', desc: 'Multi-step inference', icon: Brain },
-  { id: 'mathematics', label: 'Mathematics', desc: 'Proofs, applied math', icon: Sigma },
-  { id: 'safety', label: 'Safety', desc: 'Refusals, robustness', icon: Shield },
-  { id: 'agentic', label: 'Agentic', desc: 'Tool use, long horizon', icon: Bot },
+  { id: 'biology', label: 'Biology', desc: 'Genetics, bioinformatics, cell biology…', icon: Dna, color: 'text-[#2fd4a7]' },
+  { id: 'chemistry', label: 'Chemistry', desc: 'Organic, inorganic, reaction prediction…', icon: FlaskConical, color: 'text-[#f5b544]' },
+  { id: 'physics', label: 'Physics', desc: 'Quantum, classical, astro physics…', icon: Atom, color: 'text-[#4f8cff]' },
+  { id: 'medicine', label: 'Medicine', desc: 'Diagnostics, treatment, public health…', icon: Stethoscope, color: 'text-[#ff6b6b]' },
+  { id: 'coding', label: 'Coding', desc: 'Algorithms, systems, debugging…', icon: Code2, color: 'text-[#b06d97]' },
+  { id: 'reasoning', label: 'Reasoning', desc: 'Multi-step inference, logic…', icon: Brain, color: 'text-[#ff7ab6]' },
+  { id: 'safety', label: 'Safety', desc: 'Refusals, robustness, alignment…', icon: Shield, color: 'text-[#e7e9ea]' },
+  { id: 'agentic', label: 'Agentic', desc: 'Tool use, long-horizon tasks…', icon: Bot, color: 'text-[#71767b]' },
 ];
 
-// Restrained, monochrome domain list — one bordered block, hairline-separated rows.
 export default function ExploreByDomain({ onNavigate }) {
   return (
-    <section className="rounded-2xl border border-[#1f232e] bg-[#12141b] overflow-hidden">
-      <div className="px-4 py-3 border-b border-[#1f232e] flex items-center justify-between">
-        <h2 className="text-[11px] font-semibold uppercase tracking-widest text-[#8b90a0]">Explore by domain</h2>
-        <button onClick={() => onNavigate?.('capability-map')} className="text-xs font-semibold text-[#b06d97] hover:underline">Leaderboards</button>
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-[17px] font-bold text-white">Explore by Domain</h2>
+        <button onClick={() => onNavigate?.('capability-map')} className="text-[12px] text-[#b06d97] hover:underline">Leaderboards →</button>
       </div>
-      <div className="grid grid-cols-2">
-        {CARDS.map(({ id, label, desc, icon: Icon }, i) => (
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {CARDS.map(({ id, label, desc, icon: Icon, color }) => (
           <button
             key={id}
             onClick={() => onNavigate?.('capability-map')}
-            className={`group text-left flex items-center gap-3 px-4 py-3 hover:bg-[#171a23] transition-colors border-[#1f232e] ${i % 2 === 0 ? 'border-r' : ''} ${i < 6 ? 'border-b' : ''}`}
+            className="group text-left bg-[#16181c] border border-[#2f3336] hover:border-[#71767b] rounded-xl p-3.5 transition-colors"
           >
-            <span className="w-8 h-8 rounded-lg bg-[#1a1d29] border border-[#2a2e3d] text-[#b8bcc8] group-hover:text-[#b06d97] flex items-center justify-center flex-shrink-0 transition-colors"><Icon size={15} /></span>
-            <span className="min-w-0">
-              <span className="block text-[13px] font-semibold text-white truncate">{label}</span>
-              <span className="block text-[11px] text-[#6b7080] truncate">{desc}</span>
-            </span>
-            <ChevronRight size={14} className="ml-auto text-[#3a3f4d] group-hover:text-[#8b90a0] flex-shrink-0 transition-colors" />
+            <div className="flex items-start justify-between">
+              <Icon size={20} className={color} />
+              <ChevronRight size={14} className="text-[#71767b] group-hover:text-white transition-colors" />
+            </div>
+            <p className="text-[13px] font-semibold text-white mt-3">{label}</p>
+            <p className="text-[11px] text-[#71767b] mt-0.5 leading-snug line-clamp-2">{desc}</p>
           </button>
         ))}
       </div>

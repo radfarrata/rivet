@@ -8,7 +8,7 @@ export default function HomeHeroHeadline() {
         <h1 className="text-3xl font-bold tracking-tight text-white leading-[1.15]">
           Better answers through<br /><span className="text-[#b06d97]">real evaluation.</span>
         </h1>
-        <p className="text-[13px] text-[#8b90a0] mt-3 leading-relaxed">
+        <p className="text-[13px] text-[#71767b] mt-3 leading-relaxed">
           Rivet lets you bring real-world tasks, test multiple AI models, and see how they perform — with transparent, human-verified evaluation.
         </p>
       </div>

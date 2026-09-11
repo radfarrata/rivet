@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Home, Folder, CheckSquare, Bot, Users, Brain, Trophy, Cpu, Hash, TrendingUp, Lock,
   MessageSquare, MessagesSquare, Calendar, Wallet, ArrowUp, Receipt, Sparkles, ShieldAlert,
-  FlaskConical, Map, ChevronRight, Search, Bookmark, Settings,
+  FlaskConical, Map, ChevronRight, Search, Bookmark, Settings, Database,
 } from 'lucide-react';
 
 const NAV_GROUPS = [
@@ -23,6 +23,7 @@ const NAV_GROUPS = [
     label: 'YOUR WORKSPACE',
     items: [
       { id: 'saved-tasks', label: 'Saved Tasks', icon: <Bookmark size={20} /> },
+      { id: 'custom-datasets', label: 'Custom Datasets', icon: <Database size={20} /> },
       { id: 'settings', label: 'Settings', icon: <Settings size={20} /> },
     ],
   },
@@ -78,6 +79,7 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
           </div>
           <span className="text-white font-bold text-xl tracking-tight">Rivet</span>
         </div>
+        <span className="block text-[11px] text-[#71767b]">Real Tasks. Real Evaluation. Better AI.</span>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-5 scrollbar-hide">

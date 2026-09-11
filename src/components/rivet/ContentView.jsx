@@ -13,6 +13,7 @@ import CapabilityMapView from './views/CapabilityMapView';
 import ExploreTasksView from './views/ExploreTasksView';
 import SavedTasksView from './views/SavedTasksView';
 import SettingsView from './views/SettingsView';
+import CustomDatasetsView from './views/CustomDatasetsView';
 
 export default function ContentView({ activeNav, currentUser, onViewProfile }) {
   switch (activeNav) {
@@ -39,6 +40,7 @@ export default function ContentView({ activeNav, currentUser, onViewProfile }) {
     case 'explore-tasks': return <ExploreTasksView currentUser={currentUser} />;
     case 'saved-tasks': return <SavedTasksView currentUser={currentUser} />;
     case 'settings': return <SettingsView currentUser={currentUser} />;
+    case 'custom-datasets': return <CustomDatasetsView currentUser={currentUser} />;
     default: return null;
   }
 }

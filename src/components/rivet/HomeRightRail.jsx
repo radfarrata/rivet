@@ -21,11 +21,11 @@ export default function HomeRightRail({ currentUser, onNavigate, onOpenTask, sea
           />
         </div>
       </div>
-      <YourImpactCard currentUser={currentUser} onNavigate={onNavigate} />
-      <RecommendedTasksCard currentUser={currentUser} onOpenTask={onOpenTask} />
       <TrendingTasksCard currentUser={currentUser} onNavigate={onNavigate} onOpenTask={onOpenTask} />
       <LeaderboardCard onNavigate={onNavigate} />
       <RecentActivityCard currentUser={currentUser} onNavigate={onNavigate} />
+      <YourImpactCard currentUser={currentUser} onNavigate={onNavigate} />
+      <RecommendedTasksCard currentUser={currentUser} onOpenTask={onOpenTask} />
     </aside>
   );
 }

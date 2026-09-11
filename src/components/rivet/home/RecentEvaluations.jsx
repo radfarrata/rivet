@@ -26,6 +26,10 @@ export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask 
 
   return (
     <div>
+      <div className="flex items-center justify-between px-4 pt-4 pb-1">
+        <h2 className="text-[17px] font-bold text-white">Recent Evaluations</h2>
+        <button onClick={() => onNavigate?.('explore-tasks')} className="text-[12px] text-[#b06d97] hover:underline">View all →</button>
+      </div>
       <FeedTabs tabs={TABS} active={tab} onChange={setTab} />
       {feed.length === 0 ? (
         <div className="py-16 text-center text-sm text-[#71767b] border-b border-[#2f3336]">

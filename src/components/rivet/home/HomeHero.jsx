@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Paperclip, LayoutTemplate, Loader2, X } from 'lucide-react';
+import { Play, Paperclip, LayoutTemplate, Loader2, PenLine, ChevronDown, Layers, ShieldCheck } from 'lucide-react';
 import { useCreateEvaluationTask } from '../useEvaluations';
 import { DOMAINS } from '../evalModels';
 import TemplatePicker from './TemplatePicker';
@@ -11,14 +11,35 @@ const EVAL_TYPES = [
   { id: 'human', label: 'Human only' },
 ];
 
-// X-style inline composer: avatar + transparent textarea + action row.
+const TABS = [
+  { id: 'new', label: 'New Task', icon: PenLine },
+  { id: 'upload', label: 'Upload Document', icon: Paperclip },
+  { id: 'template', label: 'From Template', icon: LayoutTemplate },
+];
+
+function LabeledSelect({ icon: Icon, label, value, options, onChange }) {
+  return (
+    <label className="relative flex items-center gap-2.5 bg-black border border-[#2f3336] hover:border-[#71767b] rounded-xl px-3 py-2 cursor-pointer flex-1 min-w-0">
+      <Icon size={16} className="text-[#71767b] flex-shrink-0" />
+      <span className="min-w-0 flex-1">
+        <span className="block text-[10px] text-[#71767b] leading-none">{label}</span>
+        <span className="block text-[13px] text-white font-medium truncate mt-0.5">{options.find(o => o.id === value)?.label}</span>
+      </span>
+      <ChevronDown size={14} className="text-[#71767b]" />
+      <select value={value} onChange={e => onChange(e.target.value)} className="absolute inset-0 opacity-0 cursor-pointer">
+        {options.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
+      </select>
+    </label>
+  );
+}
+
 export default function HomeHero({ currentUser, onNavigate }) {
   const [prompt, setPrompt] = useState('');
   const [title, setTitle] = useState('');
   const [domain, setDomain] = useState('biology');
   const [difficulty, setDifficulty] = useState('intermediate');
   const [evaluationType, setEvaluationType] = useState('hybrid');
-  const [mode, setMode] = useState(null); // null | 'upload' | 'template'
+  const [tab, setTab] = useState('new');
   const create = useCreateEvaluationTask();
 
   const handleRun = () => {
@@ -26,81 +47,52 @@ export default function HomeHero({ currentUser, onNavigate }) {
     create.mutate({
       title: (title || prompt).trim().slice(0, 80),
       prompt: prompt.trim(),
-      domain,
-      difficulty,
-      evaluationType,
+      domain, difficulty, evaluationType,
       models: ['gpt_5_mini', 'claude-sonnet-5', 'gemini_3_flash'],
       status: 'pending',
       creatorName: currentUser?.full_name || 'You',
-    }, {
-      onSuccess: () => {
-        setPrompt(''); setTitle('');
-        onNavigate?.('evaluation-lab');
-      },
-    });
+    }, { onSuccess: () => { setPrompt(''); setTitle(''); onNavigate?.('evaluation-lab'); } });
   };
 
-  const applyTemplate = (t) => {
-    setTitle(t.label); setPrompt(t.prompt);
-    setDomain(t.domain); setDifficulty(t.difficulty);
-    setMode(null);
-  };
+  const applyTemplate = (t) => { setTitle(t.label); setPrompt(t.prompt); setDomain(t.domain); setDifficulty(t.difficulty); setTab('new'); };
 
   return (
-    <div className="flex gap-3 px-4 py-3 border-b border-[#2f3336]">
-      <div className="w-10 h-10 rounded-full bg-[#1f232e] border border-[#2f3336] flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
-        {(currentUser?.full_name || 'You').slice(0, 1).toUpperCase()}
+    <div className="px-4 py-3 border-b border-[#2f3336]">
+      <div className="flex gap-1 border-b border-[#2f3336] mb-3">
+        {TABS.map(({ id, label, icon: Icon }) => (
+          <button key={id} onClick={() => setTab(id)} className={`relative flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold transition-colors ${tab === id ? 'text-white' : 'text-[#71767b] hover:text-white'}`}>
+            <Icon size={14} /> {label}
+            {tab === id && <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#b06d97]" />}
+          </button>
+        ))}
       </div>
-      <div className="flex-1 min-w-0">
+
+      {tab === 'upload' && <div className="mb-3"><DocumentUpload onExtracted={(d) => { setTitle(d.title); setPrompt(d.prompt); setTab('new'); }} /></div>}
+      {tab === 'template' && <div className="mb-3"><TemplatePicker onPick={applyTemplate} /></div>}
+
+      <div className="flex gap-3">
+        <div className="w-10 h-10 rounded-full bg-[#1f232e] border border-[#2f3336] flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+          {(currentUser?.full_name || 'You').slice(0, 1).toUpperCase()}
+        </div>
         <textarea
           value={prompt}
           onChange={e => setPrompt(e.target.value)}
-          rows={2}
-          placeholder='What do you want to evaluate?'
-          className="w-full bg-transparent text-[15px] text-white placeholder-[#71767b] focus:outline-none resize-none leading-relaxed pt-2"
+          rows={3}
+          placeholder='Describe your task… (e.g. "Given this paper and these constraints, which experimental design is most defensible?")'
+          className="flex-1 bg-transparent text-[15px] text-white placeholder-[#71767b] focus:outline-none resize-none leading-relaxed pt-2"
         />
+      </div>
 
-        {mode === 'upload' && (
-          <div className="mb-2">
-            <DocumentUpload onExtracted={(d) => { setTitle(d.title); setPrompt(d.prompt); setMode(null); }} />
-            <button onClick={() => setMode(null)} className="text-xs text-[#71767b] hover:text-white mt-1 flex items-center gap-1"><X size={12} /> Cancel</button>
-          </div>
-        )}
-        {mode === 'template' && (
-          <div className="mb-2">
-            <TemplatePicker onPick={applyTemplate} />
-            <button onClick={() => setMode(null)} className="text-xs text-[#71767b] hover:text-white mt-1 flex items-center gap-1"><X size={12} /> Cancel</button>
-          </div>
-        )}
-
-        <div className="flex items-center gap-1 mt-1 -ml-2">
-          <button onClick={() => setMode(mode === 'upload' ? null : 'upload')} title="Upload document" className={`p-2 rounded-full transition-colors ${mode === 'upload' ? 'text-[#b06d97]' : 'text-[#b06d97] hover:bg-[#b06d97]/10'}`}>
-            <Paperclip size={18} />
-          </button>
-          <button onClick={() => setMode(mode === 'template' ? null : 'template')} title="From template" className={`p-2 rounded-full transition-colors ${mode === 'template' ? 'text-[#b06d97]' : 'text-[#b06d97] hover:bg-[#b06d97]/10'}`}>
-            <LayoutTemplate size={18} />
-          </button>
-          <div className="w-px h-6 bg-[#2f3336] mx-1" />
-          <label className="flex items-center gap-1 px-2 py-1.5 rounded-full hover:bg-[#b06d97]/10 cursor-pointer text-[#b06d97] text-xs font-medium">
-            <span className="text-[11px]">{DOMAINS.find(d => d.id === domain)?.label}</span>
-            <select value={domain} onChange={e => setDomain(e.target.value)} className="sr-only">
-              {DOMAINS.map(d => <option key={d.id} value={d.id}>{d.label}</option>)}
-            </select>
-          </label>
-          <label className="flex items-center gap-1 px-2 py-1.5 rounded-full hover:bg-[#b06d97]/10 cursor-pointer text-[#b06d97] text-xs font-medium">
-            <span className="text-[11px]">{EVAL_TYPES.find(t => t.id === evaluationType)?.label}</span>
-            <select value={evaluationType} onChange={e => setEvaluationType(e.target.value)} className="sr-only">
-              {EVAL_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
-            </select>
-          </label>
-          <button
-            onClick={handleRun}
-            disabled={create.isPending || !prompt.trim()}
-            className="ml-auto flex items-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-40 text-white px-4 py-1.5 rounded-full text-[13px] font-bold transition-colors"
-          >
-            {create.isPending ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />} Run
-          </button>
-        </div>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2 sm:pl-[52px]">
+        <LabeledSelect icon={Layers} label="Domain" value={domain} options={DOMAINS} onChange={setDomain} />
+        <LabeledSelect icon={ShieldCheck} label="Evaluation Type" value={evaluationType} options={EVAL_TYPES} onChange={setEvaluationType} />
+        <button
+          onClick={handleRun}
+          disabled={create.isPending || !prompt.trim()}
+          className="sm:ml-auto flex items-center justify-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-40 text-white px-5 py-2.5 rounded-full text-[13px] font-bold transition-colors flex-shrink-0"
+        >
+          {create.isPending ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />} Run Evaluation
+        </button>
       </div>
     </div>
   );

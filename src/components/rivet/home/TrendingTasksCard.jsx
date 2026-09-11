@@ -7,6 +7,7 @@ import { visibleTo } from '../evalStats';
 const BADGE = {
   biology: 'bg-[#2fd4a7]/10 text-[#2fd4a7]', chemistry: 'bg-[#f5b544]/10 text-[#f5b544]', physics: 'bg-[#4f8cff]/10 text-[#4f8cff]',
   coding: 'bg-[#b06d97]/10 text-[#b06d97]', reasoning: 'bg-[#ff7ab6]/10 text-[#ff7ab6]', safety: 'bg-[#ff6b6b]/10 text-[#ff6b6b]',
+  medicine: 'bg-[#ff6b6b]/10 text-[#ff6b6b]',
 };
 
 export default function TrendingTasksCard({ currentUser, onNavigate, onOpenTask }) {

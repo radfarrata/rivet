@@ -12,6 +12,7 @@ export const DOMAINS = [
   { id: 'biology', label: 'Biology' },
   { id: 'chemistry', label: 'Chemistry' },
   { id: 'physics', label: 'Physics' },
+  { id: 'medicine', label: 'Medicine' },
   { id: 'multimodal', label: 'Multimodal' },
   { id: 'long_context', label: 'Long-Context' },
   { id: 'safety', label: 'Safety' },
