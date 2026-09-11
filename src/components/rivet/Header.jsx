@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Bell, Menu } from 'lucide-react';
+import Icon from '@/components/Icon';
 import { useNotifications } from './useNotifications';
 
 export default function Header({ onMenuClick, onSearchChange, onBellClick, onAvatarClick, currentUser }) {
@@ -16,11 +16,11 @@ export default function Header({ onMenuClick, onSearchChange, onBellClick, onAva
     <header className="sticky top-0 z-20 bg-black/80 backdrop-blur-xl border-b border-[#2f3336] px-4 md:px-6 py-3">
       <div className="flex items-center justify-between gap-4">
         <button onClick={onMenuClick} className="md:hidden p-2 text-[#b8bcc8] hover:bg-[#151823] rounded-lg transition-colors flex-shrink-0">
-          <Menu size={20} />
+          <Icon name="menu" size={19} />
         </button>
         <div className="flex-1 max-w-md">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7080]" />
+            <Icon name="search" size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71767b]" />
             <input
               type="text"
               value={search}
@@ -32,7 +32,7 @@ export default function Header({ onMenuClick, onSearchChange, onBellClick, onAva
         </div>
         <div className="flex items-center gap-2">
           <button onClick={onBellClick} className="relative p-2.5 text-[#b8bcc8] bg-[#12141b] hover:text-white hover:bg-[#1a1d29] rounded-full transition-colors">
-            <Bell size={18} />
+            <Icon name="bell" size={17} />
             {unreadCount > 0 && <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-[#653653] text-white text-[9px] font-bold rounded-full flex items-center justify-center">{unreadCount}</span>}
           </button>
           <div onClick={onAvatarClick} className="w-9 h-9 rounded-full bg-[#1f232e] border border-[#2a2e3d] flex items-center justify-center text-white font-bold text-sm cursor-pointer flex-shrink-0 hover:border-[#b06d97] transition-colors">{(currentUser?.full_name || 'You').slice(0, 1).toUpperCase()}</div>

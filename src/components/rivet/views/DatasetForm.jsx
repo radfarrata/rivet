@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Upload, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import Icon from '@/components/Icon';
 import { base44 } from '@/api/base44Client';
 import { DOMAINS } from '../evalModels';
 import { useCreateDataset } from '../useDatasets';
@@ -34,7 +35,7 @@ export default function DatasetForm({ onDone }) {
           {DOMAINS.map(d => <option key={d.id} value={d.id}>{d.label}</option>)}
         </select>
         <label className={`${inputCls} flex items-center gap-2 cursor-pointer text-[#71767b] truncate`}>
-          <Upload size={14} /> {file ? file.name : 'Attach CSV / JSON / PDF'}
+          <Icon name="upload" size={13} /> {file ? file.name : 'Attach CSV / JSON / PDF'}
           <input type="file" accept=".csv,.json,.xlsx,.pdf,.txt" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} />
         </label>
       </div>

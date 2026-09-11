@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Play, Paperclip, LayoutTemplate, Loader2, PenLine, ChevronDown, Layers, ShieldCheck } from 'lucide-react';
+import { ChevronDown, Loader2 } from 'lucide-react';
+import Icon from '@/components/Icon';
 import { useCreateEvaluationTask } from '../useEvaluations';
 import { DOMAINS } from '../evalModels';
 import TemplatePicker from './TemplatePicker';
@@ -12,15 +13,15 @@ const EVAL_TYPES = [
 ];
 
 const TABS = [
-  { id: 'new', label: 'New Task', icon: PenLine },
-  { id: 'upload', label: 'Upload Document', icon: Paperclip },
-  { id: 'template', label: 'From Template', icon: LayoutTemplate },
+  { id: 'new', label: 'New Task', icon: 'edit' },
+  { id: 'upload', label: 'Upload Document', icon: 'paperclip' },
+  { id: 'template', label: 'From Template', icon: 'template' },
 ];
 
-function LabeledSelect({ icon: Icon, label, value, options, onChange }) {
+function LabeledSelect({ icon, label, value, options, onChange }) {
   return (
     <label className="relative flex items-center gap-2.5 bg-black border border-[#2f3336] hover:border-[#71767b] rounded-xl px-3 py-2 cursor-pointer flex-1 min-w-0">
-      <Icon size={16} className="text-[#71767b] flex-shrink-0" />
+      <Icon name={icon} size={15} className="text-[#71767b] flex-shrink-0" />
       <span className="min-w-0 flex-1">
         <span className="block text-[10px] text-[#71767b] leading-none">{label}</span>
         <span className="block text-[13px] text-white font-medium truncate mt-0.5">{options.find(o => o.id === value)?.label}</span>
@@ -59,9 +60,9 @@ export default function HomeHero({ currentUser, onNavigate }) {
   return (
     <div className="px-4 py-3 border-b border-[#2f3336]">
       <div className="flex gap-1 border-b border-[#2f3336] mb-3">
-        {TABS.map(({ id, label, icon: Icon }) => (
+        {TABS.map(({ id, label, icon }) => (
           <button key={id} onClick={() => setTab(id)} className={`relative flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold transition-colors ${tab === id ? 'text-white' : 'text-[#71767b] hover:text-white'}`}>
-            <Icon size={14} /> {label}
+            <Icon name={icon} size={13} /> {label}
             {tab === id && <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-[#b06d97]" />}
           </button>
         ))}
@@ -84,14 +85,14 @@ export default function HomeHero({ currentUser, onNavigate }) {
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2 sm:pl-[52px]">
-        <LabeledSelect icon={Layers} label="Domain" value={domain} options={DOMAINS} onChange={setDomain} />
-        <LabeledSelect icon={ShieldCheck} label="Evaluation Type" value={evaluationType} options={EVAL_TYPES} onChange={setEvaluationType} />
+        <LabeledSelect icon="layers" label="Domain" value={domain} options={DOMAINS} onChange={setDomain} />
+        <LabeledSelect icon="shield" label="Evaluation Type" value={evaluationType} options={EVAL_TYPES} onChange={setEvaluationType} />
         <button
           onClick={handleRun}
           disabled={create.isPending || !prompt.trim()}
           className="sm:ml-auto flex items-center justify-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-40 text-white px-5 py-2.5 rounded-full text-[13px] font-bold transition-colors flex-shrink-0"
         >
-          {create.isPending ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />} Run Evaluation
+          {create.isPending ? <Loader2 size={14} className="animate-spin" /> : <Icon name="play" size={12} />} Run Evaluation
         </button>
       </div>
     </div>

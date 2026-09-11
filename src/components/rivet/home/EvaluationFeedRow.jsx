@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Calendar, Users, CheckCircle2, Clock } from 'lucide-react';
+import Icon from '@/components/Icon';
 import { domainLabel } from '../evalModels';
 import SaveTaskButton from '../SaveTaskButton';
 
@@ -22,11 +22,11 @@ export default function EvaluationFeedRow({ task, results, humanCount, onOpen })
           <p className="text-[15px] text-white font-bold mt-2 leading-snug">{task.title}</p>
           <p className="text-[13px] text-[#e7e9ea] mt-1 line-clamp-2 leading-relaxed">{task.prompt}</p>
           <div className="flex items-center gap-4 mt-3 text-[11px] text-[#71767b] flex-wrap">
-            <span className="flex items-center gap-1"><Calendar size={12} /> {fmtDate(task.created_date)}</span>
-            <span className="flex items-center gap-1"><Layers size={12} /> {task.models?.length || results.length} models</span>
-            <span className="flex items-center gap-1"><Users size={12} /> {EVAL_LABEL[task.evaluationType] || 'Human evaluation'}{humanCount ? ` (${humanCount})` : ''}</span>
+            <span className="flex items-center gap-1.5"><Icon name="calendar" size={11} /> {fmtDate(task.created_date)}</span>
+            <span className="flex items-center gap-1.5"><Icon name="layers" size={11} /> {task.models?.length || results.length} models</span>
+            <span className="flex items-center gap-1.5"><Icon name="users" size={11} /> {EVAL_LABEL[task.evaluationType] || 'Human evaluation'}{humanCount ? ` (${humanCount})` : ''}</span>
             <span className={`ml-auto flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold ${done ? 'bg-[#2fd4a7]/10 text-[#2fd4a7]' : 'bg-[#f5b544]/10 text-[#f5b544]'}`}>
-              {done ? <CheckCircle2 size={11} /> : <Clock size={11} />} {done ? 'Completed' : task.status === 'running' ? 'Running' : 'Pending'}
+              <Icon name={done ? 'check' : 'clock'} size={10} /> {done ? 'Completed' : task.status === 'running' ? 'Running' : 'Pending'}
             </span>
           </div>
         </div>
