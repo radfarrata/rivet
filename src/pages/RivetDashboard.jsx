@@ -9,7 +9,7 @@ import NotificationsPanel from '../components/rivet/NotificationsPanel';
 import HomeView from '../components/rivet/HomeView';
 
 export default function RivetDashboard() {
-  const [activeNav, setActiveNav] = useState('home');
+  const [activeNav, setActiveNav] = useState(() => new URLSearchParams(window.location.search).get('nav') || 'home');
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');

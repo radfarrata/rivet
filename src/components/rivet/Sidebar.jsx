@@ -14,7 +14,7 @@ const NAV_GROUPS = [
       { id: 'explore-tasks', label: 'Explore Tasks', icon: <Search size={20} /> },
       { id: 'evaluation-lab', label: 'Run Evaluation', icon: <FlaskConical size={20} /> },
       { id: 'capability-map', label: 'Leaderboards', icon: <Trophy size={20} /> },
-      { id: 'expert-workspace', label: 'Expert Workspace', icon: <ShieldAlert size={18} />, href: '/expert' },
+      { id: 'expert-workspace', label: 'Expert Workspace', icon: <ShieldAlert size={20} /> },
       { id: 'projects', label: 'My Projects', icon: <Folder size={20} /> },
       { id: 'feed', label: 'Community', icon: <Users size={20} /> },
     ],
