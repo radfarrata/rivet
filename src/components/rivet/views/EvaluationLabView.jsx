@@ -20,7 +20,7 @@ export default function EvaluationLabView({ currentUser }) {
         <p className="text-sm text-[#8b90a0] mt-0.5">Bring a real-world task, compare multiple AI systems on it, and get evidence behind every score.</p>
       </div>
 
-      <EvaluationTaskForm currentUser={currentUser} onCreated={setSelected} />
+      <EvaluationTaskForm currentUser={currentUser} onCreated={setSelected} enableTemplates />
 
       <div className="flex gap-1 bg-[#12141b] border border-[#1f232e] rounded-xl p-1 w-fit">
         {[['all', 'All tasks'], ['mine', 'Your tasks']].map(([id, label]) => (
