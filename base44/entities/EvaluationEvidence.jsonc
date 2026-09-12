@@ -11,6 +11,12 @@
     "workspaceId": {
       "type": "string"
     },
+    "runId": {
+      "type": "string"
+    },
+    "artifactId": {
+      "type": "string"
+    },
     "modelId": {
       "type": "string"
     },

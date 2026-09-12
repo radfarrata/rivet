@@ -1,0 +1,122 @@
+{
+  "name": "EvaluationRun",
+  "type": "object",
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "taskVersionId": {
+      "type": "string"
+    },
+    "workspaceId": {
+      "type": "string"
+    },
+    "experimentKey": {
+      "type": "string"
+    },
+    "modelAlias": {
+      "type": "string"
+    },
+    "modelRevision": {
+      "type": "string"
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "complete",
+        "failed"
+      ]
+    },
+    "startedAt": {
+      "type": "string"
+    },
+    "completedAt": {
+      "type": "string"
+    },
+    "latencyMs": {
+      "type": "number"
+    },
+    "resultId": {
+      "type": "string"
+    },
+    "rootArtifactId": {
+      "type": "string"
+    },
+    "error": {
+      "type": "string"
+    },
+    "spans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "model",
+              "judge",
+              "artifact"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string"
+          },
+          "completedAt": {
+            "type": "string"
+          },
+          "artifactId": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "taskId",
+    "taskVersionId",
+    "experimentKey",
+    "modelAlias",
+    "methodologyVersion",
+    "status",
+    "startedAt"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

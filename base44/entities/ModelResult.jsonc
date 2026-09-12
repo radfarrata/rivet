@@ -21,6 +21,9 @@
       "type": "number",
       "default": 0
     },
+    "judgeConfidence": {
+      "type": "number"
+    },
     "summary": {
       "type": "string"
     },
@@ -41,6 +44,9 @@
       "default": "Rivet automated judge"
     },
     "taskVersionId": {
+      "type": "string"
+    },
+    "runId": {
       "type": "string"
     },
     "evidenceId": {

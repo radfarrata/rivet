@@ -1,4 +1,5 @@
 import {METHOD,MODELS,DOMAINS,requireValue,taskAccess,context,audit,scan,hash,normalize,store,isOwner} from './rivetCore.ts';
+import {assessTaskQuality} from './rivetContamination.ts';
 export async function createTask(b,user,p) {
   const d=p.data||{};
   requireValue(typeof d.title==='string' && d.title.trim().length>0 && d.title.length<=200,'Title is required (maximum 200 characters).');
@@ -27,6 +28,7 @@ export async function prepareVersion(b,user,taskId) {
     v=await s.TaskVersion.create({taskId:t.id,workspaceId:t.workspaceId||'',version:Math.max(0,...versions.map(x=>x.version))+1,contentHash,familyHash,snapshotUri:artifact.uri,snapshotHash:artifact.hash,methodologyVersion:METHOD,contaminationRisk:matches.length?'possible_overlap':'no_match_found',contaminationScope:'Exact normalized-prompt search of the authorized corpus only (public corpus for public tasks); online exposure and training contamination are unknown.',difficultySource:'Contributor-declared; not empirically calibrated'});
     await audit(b,user,'task_version_captured',v.id,t.id,{contentHash,version:v.version});
   }
+  if(!v.qualityAssessmentId){const corpus=(await context(b,user)).tasks;const ids=new Set(corpus.filter(x=>t.visibility!=='public'||x.visibility==='public').map(x=>x.id));const versionsForCheck=(await scan(s.TaskVersion)).filter(x=>ids.has(x.taskId));await assessTaskQuality(b,user,t,v,versionsForCheck);v=await s.TaskVersion.get(v.id);}
   const completed=await s.EvaluationEvidence.filter({taskVersionId:v.id,status:'complete'});
   const status=t.models.every(id=>completed.some(e=>e.modelId===id&&e.resultId))?'evaluated':'running';
   await s.EvaluationTask.update(t.id,{currentVersionId:v.id,status});return {versionId:v.id,models:t.models};

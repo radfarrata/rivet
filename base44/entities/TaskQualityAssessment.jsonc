@@ -1,0 +1,103 @@
+{
+  "name": "TaskQualityAssessment",
+  "type": "object",
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "taskVersionId": {
+      "type": "string"
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "highestCheckedRung": {
+      "type": "integer"
+    },
+    "risk": {
+      "type": "string",
+      "enum": [
+        "unchecked",
+        "no_match_found",
+        "possible_overlap",
+        "known_contamination"
+      ]
+    },
+    "scope": {
+      "type": "string"
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rung": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "flag",
+              "manual",
+              "not_applicable"
+            ]
+          },
+          "matches": {
+            "type": "integer"
+          },
+          "rate": {
+            "type": "number"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ngramSize": {
+      "type": "integer"
+    },
+    "assessedAt": {
+      "type": "string"
+    },
+    "assessedBy": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "taskId",
+    "taskVersionId",
+    "methodologyVersion",
+    "highestCheckedRung",
+    "risk",
+    "scope",
+    "checks",
+    "assessedAt"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

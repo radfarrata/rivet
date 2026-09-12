@@ -1,58 +1,59 @@
 {
-  "name": "TaskVersion",
+  "name": "EvidenceArtifact",
   "type": "object",
   "properties": {
+    "runId": {
+      "type": "string"
+    },
     "taskId": {
       "type": "string"
     },
-    "version": {
-      "type": "integer"
+    "taskVersionId": {
+      "type": "string"
     },
     "workspaceId": {
       "type": "string"
     },
-    "snapshotUri": {
-      "type": "string"
-    },
-    "snapshotHash": {
-      "type": "string"
-    },
-    "familyHash": {
-      "type": "string"
-    },
-    "contentHash": {
-      "type": "string"
-    },
-    "methodologyVersion": {
-      "type": "string"
-    },
-    "contaminationRisk": {
+    "kind": {
       "type": "string",
       "enum": [
-        "unchecked",
-        "no_match_found",
-        "possible_overlap",
-        "known_contamination"
+        "task_snapshot",
+        "model_output",
+        "judge_record",
+        "run_bundle"
       ]
     },
-    "contaminationScope": {
+    "uri": {
       "type": "string"
     },
-    "qualityAssessmentId": {
+    "sha256": {
       "type": "string"
     },
-    "difficultySource": {
+    "previousArtifactHash": {
+      "type": "string"
+    },
+    "mimeType": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "string"
+    },
+    "byteSize": {
+      "type": "number"
+    },
+    "createdAt": {
       "type": "string"
     }
   },
   "required": [
     "taskId",
-    "version",
-    "snapshotUri",
-    "snapshotHash",
-    "familyHash",
-    "contentHash",
-    "methodologyVersion"
+    "taskVersionId",
+    "kind",
+    "uri",
+    "sha256",
+    "mimeType",
+    "schemaVersion",
+    "createdAt"
   ],
   "rls": {
     "read": {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { integrity } from '@/components/rivet/integrity/client';
+import ContaminationLadder from '@/components/rivet/integrity/ContaminationLadder';
 export default function EvidenceReviewPanel({ data, currentUser }) {
   const qc = useQueryClient(); const [mode, setMode] = useState('submitReview'); const [score, setScore] = useState(''); const [notes, setNotes] = useState(''); const [conflict, setConflict] = useState(''); const [clear, setClear] = useState(false);
   const mutation = useMutation({ mutationFn: () => integrity(mode, { resultId: data.result.id, score: Number(score), verdict: Number(score) >= 80 ? 'pass' : Number(score) >= 50 ? 'partial' : 'fail', notes, hasConflict: !clear, conflictDeclaration: conflict }), onSuccess: () => { qc.invalidateQueries(); setNotes(''); } });
@@ -11,6 +12,7 @@ export default function EvidenceReviewPanel({ data, currentUser }) {
     <h2 className="font-semibold">Review & adjudication</h2>
     <p className="text-xs text-muted-foreground">{data.officialEligible ? 'Publication checks passed.' : 'Not official: complete provenance, an exact provider revision, two verified reviews and a final adjudication are required.'}</p>
     <p className="text-xs">{data.version?.contaminationRisk?.replaceAll('_', ' ') || 'Unchecked'}<span className="block text-muted-foreground">{data.version?.contaminationScope || 'Legacy exposure history is unknown.'}</span></p>
+    <ContaminationLadder quality={data.quality} />
     {data.finals.length > 0 && <div className="rounded-lg border p-3 text-sm"><strong>Final adjudication: {data.finals[0].finalScore}/100</strong><p className="whitespace-pre-wrap">{data.finals[0].structuredFeedback}</p></div>}
     {data.legacy || owner ? <p className="text-xs text-muted-foreground">{data.legacy ? 'Run a new task version before requesting official expert reviews.' : 'Task authors cannot review their own tasks.'}</p> : <form className="space-y-3" onSubmit={e => { e.preventDefault(); mutation.mutate(); }}>
       <p className="text-xs text-muted-foreground">Verified domain credentials required. Reviews here are not blinded and are labelled observational.</p>
