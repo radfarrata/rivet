@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ExpertWorkspaceTabs from '@/components/rivet/integrity/ExpertWorkspaceTabs';
 import ExpertIntegrityPanel from '@/components/rivet/integrity/ExpertIntegrityPanel';
 import EvaluationReviewQueue from '@/components/rivet/integrity/EvaluationReviewQueue';
+import AuditAdvisorView from '@/components/rivet/integrity/AuditAdvisorView';
 import { useTraces, findStepById } from '@/components/expert/useTraces';
 import TraceOutline from '@/components/expert/TraceOutline';
 import StepDetail from '@/components/expert/StepDetail';
@@ -35,7 +36,7 @@ export default function ExpertWorkspaceView({ currentUser }) {
     setSelectedStepId(null);
   };
 
-  if (section !== 'traces') return <div className="dark text-foreground max-w-5xl mx-auto"><ExpertWorkspaceTabs active={section} onChange={setSection} />{section === 'credentials' ? <ExpertIntegrityPanel /> : <EvaluationReviewQueue />}</div>;
+  if (section !== 'traces') return <div className="dark text-foreground max-w-5xl mx-auto"><ExpertWorkspaceTabs active={section} onChange={setSection} />{section === 'credentials' ? <ExpertIntegrityPanel /> : section === 'audit-advisor' ? <AuditAdvisorView /> : <EvaluationReviewQueue />}</div>;
   return (
     <div className="dark flex flex-col h-[calc(100vh-112px)] rounded-2xl border border-[#2f3336] bg-black overflow-hidden text-[#e7e9ea]">
       <ExpertWorkspaceTabs active={section} onChange={setSection} />
