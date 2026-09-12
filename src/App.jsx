@@ -13,6 +13,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ExpertWorkspace from './pages/ExpertWorkspace';
+import EvaluationEvidence from '@/pages/EvaluationEvidence';
 // Add page imports here
 
 const AuthenticatedApp = () => (
@@ -27,6 +28,7 @@ const AuthenticatedApp = () => (
     <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
       <Route path="/" element={<RivetDashboard />} />
       <Route path="/expert" element={<ExpertWorkspace />} />
+      <Route path="/evidence" element={<EvaluationEvidence />} />
       <Route path="/network" element={<NexusOS />} />
       <Route path="/dashboard" element={<Dashboard />} />
     </Route>

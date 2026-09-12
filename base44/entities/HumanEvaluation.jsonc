@@ -53,6 +53,30 @@
     },
     "notes": {
       "type": "string"
+    },
+    "evidenceId": {
+      "type": "string"
+    },
+    "credentialId": {
+      "type": "string"
+    },
+    "credentialStatusAtReview": {
+      "type": "string"
+    },
+    "conflictDeclaration": {
+      "type": "string"
+    },
+    "hasConflict": {
+      "type": "boolean"
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "reviewWeight": {
+      "type": "number"
+    },
+    "reviewProtocol": {
+      "type": "string"
     }
   },
   "required": [
@@ -61,5 +85,27 @@
     "modelId",
     "score",
     "verdict"
-  ]
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

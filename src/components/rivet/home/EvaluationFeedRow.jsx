@@ -2,6 +2,7 @@ import React from 'react';
 import Icon from '@/components/Icon';
 import { domainLabel } from '../evalModels';
 import SaveTaskButton from '../SaveTaskButton';
+import EvidenceLink from '@/components/rivet/integrity/EvidenceLink';
 
 const EVAL_LABEL = { hybrid: 'Human + Automated', human: 'Human evaluation', automated: 'Automated' };
 const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -33,13 +34,14 @@ export default function EvaluationFeedRow({ task, results, humanCount, onOpen })
 
         {results.length > 0 && (
           <div className="md:w-[240px] flex-shrink-0 bg-[#16181c] border border-[#2f3336] rounded-xl p-3">
-            <p className="text-[11px] text-[#71767b] font-semibold mb-2">Model Performance</p>
+            <p className="text-[11px] text-[#71767b] font-semibold mb-2">Task scores · n=1 · not a domain ranking</p>
             <div className="space-y-2">
               {results.slice(0, 4).map((r, i) => (
-                <div key={r.modelId} className="flex items-center gap-2 text-[11px]">
+                <div key={r.id} className="flex flex-wrap items-center gap-2 text-[11px]">
                   <span className="w-16 truncate text-[#e7e9ea]">{r.model}</span>
                   <div className="flex-1 h-1.5 bg-[#2f3336] rounded-full overflow-hidden"><div className={`h-full rounded-full ${BAR[i % BAR.length]}`} style={{ width: `${r.score}%` }} /></div>
                   <span className="w-8 text-right text-[#e7e9ea] font-semibold">{r.score}%</span>
+                  <span className="dark w-full"><EvidenceLink resultId={r.id} legacy={r.evidenceStatus !== 'complete'} /><span className="text-muted-foreground ml-2">{r.methodologyVersion}</span></span>
                 </div>
               ))}
             </div>

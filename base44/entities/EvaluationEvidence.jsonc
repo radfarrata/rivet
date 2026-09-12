@@ -1,0 +1,89 @@
+{
+  "name": "EvaluationEvidence",
+  "type": "object",
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "taskVersionId": {
+      "type": "string"
+    },
+    "workspaceId": {
+      "type": "string"
+    },
+    "modelId": {
+      "type": "string"
+    },
+    "modelResolution": {
+      "type": "string",
+      "enum": [
+        "requested_alias",
+        "provider_revision"
+      ]
+    },
+    "providerRevision": {
+      "type": "string"
+    },
+    "judgeModel": {
+      "type": "string"
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "complete",
+        "failed"
+      ]
+    },
+    "artifactUri": {
+      "type": "string"
+    },
+    "artifactHash": {
+      "type": "string"
+    },
+    "resultId": {
+      "type": "string"
+    },
+    "startedAt": {
+      "type": "string"
+    },
+    "completedAt": {
+      "type": "string"
+    },
+    "error": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "taskId",
+    "taskVersionId",
+    "modelId",
+    "methodologyVersion",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

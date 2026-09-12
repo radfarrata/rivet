@@ -3,6 +3,7 @@ import { Plus, X, FlaskConical, Lock, Globe } from 'lucide-react';
 import { useCreateEvaluationTask } from './useEvaluations';
 import { RIVET_MODELS, DOMAINS, DIFFICULTIES } from './evalModels';
 import LabTemplatePicker from '@/components/rivet/evaluation/LabTemplatePicker';
+import TaskWorkspaceSelect from '@/components/rivet/integrity/TaskWorkspaceSelect';
 
 const inputCls = 'w-full bg-[#0e1017] border border-[#1f232e] rounded-lg px-3 py-2 text-sm text-white placeholder-[#6b7080] focus:outline-none focus:border-[#653653]/60';
 const selectCls = 'bg-[#0e1017] border border-[#1f232e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none capitalize';
@@ -27,7 +28,7 @@ export default function EvaluationTaskForm({ currentUser, onCreated, enableTempl
     if (!valid) return;
     create.mutate({
       title: form.title, prompt: form.prompt, domain: form.domain, difficulty: form.difficulty,
-      evaluationCriteria: form.criteria.trim() || undefined, evaluationType: form.evaluationType, visibility: form.visibility,
+      evaluationCriteria: form.criteria.trim() || undefined, evaluationType: form.evaluationType, visibility: form.workspaceId ? 'private' : form.visibility, workspaceId: form.workspaceId || '',
       models: form.models, status: 'pending', creatorName: currentUser?.full_name || 'You',
     }, { onSuccess: (task) => { setForm(f => ({ ...f, title: '', prompt: '', criteria: '' })); setOpen(false); onCreated?.(task); } });
   };
@@ -66,10 +67,11 @@ export default function EvaluationTaskForm({ currentUser, onCreated, enableTempl
           {RIVET_MODELS.map(m => <Chip key={m.id} active={form.models.includes(m.id)} onClick={() => set('models', form.models.includes(m.id) ? form.models.filter(x => x !== m.id) : [...form.models, m.id])}>{m.label}</Chip>)}
         </div>
       </div>
+      {form.visibility === 'private' && <div className="dark"><TaskWorkspaceSelect value={form.workspaceId} onChange={value => set('workspaceId', value)} /></div>}
       {create.isError && <p role="alert" className="text-sm text-destructive">{create.error?.message || 'Could not create the task. Please try again.'}</p>}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex gap-1.5">
-          <Chip active={form.visibility === 'public'} onClick={() => set('visibility', 'public')}><span className="flex items-center gap-1"><Globe size={12} /> Public</span></Chip>
+          <Chip active={form.visibility === 'public'} onClick={() => setForm(f => ({ ...f, visibility: 'public', workspaceId: '' }))}><span className="flex items-center gap-1"><Globe size={12} /> Public</span></Chip>
           <Chip active={form.visibility === 'private'} onClick={() => set('visibility', 'private')}><span className="flex items-center gap-1"><Lock size={12} /> Private</span></Chip>
         </div>
         <button onClick={handleSubmit} disabled={create.isPending || !valid} className="bg-[#653653] hover:bg-[#7c4165] disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-semibold">

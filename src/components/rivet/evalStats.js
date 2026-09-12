@@ -5,7 +5,7 @@ export const FAILURE_LABELS = {
   instruction_violation: 'Instruction violation', safety_issue: 'Safety issue', formatting: 'Formatting', other: 'Other',
 };
 
-export const visibleTo = (tasks, user) => tasks.filter(t => t.visibility !== 'private' || t.created_by_id === user?.id);
+export const visibleTo = (tasks, user) => tasks.filter(t => t.visibility !== 'private' || t.workspaceAccess || t.ownerId === user?.id || t.created_by_id === user?.id);
 
 export function confidenceLabel(n) {
   if (n >= 10) return 'High';
@@ -14,16 +14,17 @@ export function confidenceLabel(n) {
 }
 
 export function summarizeHuman(evals) {
+  evals = [...new Map(evals.filter(e => e.credentialStatusAtReview === 'verified' && e.hasConflict === false).map(e => [e.evaluatorId, e])).values()];
   if (!evals.length) return null;
   const avg = evals.reduce((s, e) => s + (e.score || 0), 0) / evals.length;
   const counts = {};
   evals.forEach(e => { counts[e.verdict] = (counts[e.verdict] || 0) + 1; });
   const top = Math.max(...Object.values(counts));
-  return { avg, n: evals.length, agreement: Math.round((top / evals.length) * 100) };
+  return { avg, n: evals.length, agreement: evals.length < 2 ? null : Math.round((top / evals.length) * 100) };
 }
 
 export function blendedScore(result, human) {
-  return human ? Math.round((result.score + human.avg) / 2) : result.score;
+  return Number.isFinite(result.finalScore) ? result.finalScore : result.score;
 }
 
 export function aggregateModels(results, humanEvals, tasks, domain = 'all') {
@@ -32,7 +33,7 @@ export function aggregateModels(results, humanEvals, tasks, domain = 'all') {
   const taskById = Object.fromEntries(tasks.map(t => [t.id, t]));
   const agg = {};
 
-  results.filter(r => domain === 'all' || r.domain === domain).forEach(r => {
+  results.filter(r => r.evidenceStatus === 'complete' && r.officialEligible === true && (domain === 'all' || r.domain === domain)).forEach(r => {
     const evals = byResult[r.id] || [];
     const human = summarizeHuman(evals);
     const score = blendedScore(r, human);
@@ -68,7 +69,7 @@ export function monthlyTrend(results, humanEvals) {
   const byResult = {};
   humanEvals.forEach(e => { (byResult[e.resultId] = byResult[e.resultId] || []).push(e); });
   const buckets = {};
-  results.forEach(r => {
+  results.filter(r => r.evidenceStatus === 'complete').forEach(r => {
     const month = (r.created_date || '').slice(0, 7);
     if (!month) return;
     const b = buckets[month] = buckets[month] || {};

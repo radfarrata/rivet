@@ -39,11 +39,50 @@
     "judgedBy": {
       "type": "string",
       "default": "Rivet automated judge"
+    },
+    "taskVersionId": {
+      "type": "string"
+    },
+    "evidenceId": {
+      "type": "string"
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "evidenceStatus": {
+      "type": "string",
+      "enum": [
+        "legacy",
+        "complete",
+        "incomplete"
+      ]
     }
   },
   "required": [
     "taskId",
     "modelId",
     "score"
-  ]
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

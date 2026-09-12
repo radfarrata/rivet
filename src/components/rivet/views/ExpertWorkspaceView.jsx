@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import ExpertWorkspaceTabs from '@/components/rivet/integrity/ExpertWorkspaceTabs';
+import ExpertIntegrityPanel from '@/components/rivet/integrity/ExpertIntegrityPanel';
+import EvaluationReviewQueue from '@/components/rivet/integrity/EvaluationReviewQueue';
 import { useTraces, findStepById } from '@/components/expert/useTraces';
 import TraceOutline from '@/components/expert/TraceOutline';
 import StepDetail from '@/components/expert/StepDetail';
@@ -15,6 +18,7 @@ const SEV_DOT = { critical: 'bg-red-400', high: 'bg-orange-400', medium: 'bg-amb
 
 export default function ExpertWorkspaceView({ currentUser }) {
   const { data: traces = [], isLoading } = useTraces();
+  const [section, setSection] = useState('evidence');
   const [selectedId, setSelectedId] = useState(null);
   const [selectedStepId, setSelectedStepId] = useState(null);
 
@@ -31,8 +35,10 @@ export default function ExpertWorkspaceView({ currentUser }) {
     setSelectedStepId(null);
   };
 
+  if (section !== 'traces') return <div className="dark text-foreground max-w-5xl mx-auto"><ExpertWorkspaceTabs active={section} onChange={setSection} />{section === 'credentials' ? <ExpertIntegrityPanel /> : <EvaluationReviewQueue />}</div>;
   return (
-    <div className="flex flex-col h-[calc(100vh-112px)] rounded-2xl border border-[#2f3336] bg-black overflow-hidden text-[#e7e9ea]">
+    <div className="dark flex flex-col h-[calc(100vh-112px)] rounded-2xl border border-[#2f3336] bg-black overflow-hidden text-[#e7e9ea]">
+      <ExpertWorkspaceTabs active={section} onChange={setSection} />
       <header className="h-14 flex-shrink-0 flex items-center gap-4 px-4 border-b border-[#2f3336]">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-[#653653] flex items-center justify-center"><ShieldAlert size={17} className="text-white" /></div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import EvidenceLink from '@/components/rivet/integrity/EvidenceLink';
 import { X, Bot, Users, Layers, ShieldCheck, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { modelLabel, domainLabel } from '../evalModels';
 import { FAILURE_LABELS } from '../evalStats';
@@ -62,6 +63,7 @@ export default function ModelEvidencePanel({ row, onClose }) {
                   <span className="flex-1 text-white truncate">{h.taskTitle}</span>
                   <span className="text-[#6b7080] hidden sm:inline">{h.human ? `${h.human.n} human` : 'auto'}</span>
                   <span className="font-bold text-white w-10 text-right">{h.score}%</span>
+                  <EvidenceLink resultId={h.id} legacy={!h.evidenceId} />
                 </div>
               ))}
             </div>

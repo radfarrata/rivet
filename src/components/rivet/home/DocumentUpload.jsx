@@ -11,7 +11,8 @@ export default function DocumentUpload({ onExtracted }) {
     if (!file) return;
     setState({ status: 'working', name: file.name, error: '' });
     try {
-      const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
+      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+      const { signed_url: file_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 300 });
       const res = await base44.integrations.Core.ExtractDataFromUploadedFile({
         file_url,
         json_schema: {
@@ -28,7 +29,7 @@ export default function DocumentUpload({ onExtracted }) {
       onExtracted({
         title: out.title || file.name,
         prompt: `Based on the document "${out.title || file.name}":\n\n${out.key_content || out.summary || ''}\n\nQuestion: `,
-        fileUrl: file_url,
+        fileUri: file_uri,
       });
       setState({ status: 'done', name: file.name, error: '' });
     } catch (err) {

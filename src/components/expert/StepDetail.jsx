@@ -48,7 +48,7 @@ function StepBody({ step }) {
   if (step.type === 'reasoning') {
     return (
       <blockquote className="border-l-2 border-violet-500/50 pl-3 text-xs text-[#a9a9b4] italic leading-relaxed whitespace-pre-wrap">
-        {step.content}
+        Hidden or unverified internal reasoning is not displayed. Inspect the structured judge decision and evidence excerpts instead.
       </blockquote>
     );
   }

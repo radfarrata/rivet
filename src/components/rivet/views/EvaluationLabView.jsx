@@ -8,10 +8,10 @@ import { FlaskConical, ChevronRight, Lock } from 'lucide-react';
 import RivetEmptyState from '../RivetEmptyState';
 
 export default function EvaluationLabView({ currentUser }) {
-  const { data: allTasks = [], isLoading } = useEvaluationTasks();
+  const { data: allTasks = [], isLoading, isError, refetch } = useEvaluationTasks();
   const [selected, setSelected] = useState(null);
   const [scope, setScope] = useState('all');
-  const tasks = visibleTo(allTasks, currentUser).filter(t => scope === 'mine' ? t.created_by_id === currentUser?.id : true);
+  const tasks = visibleTo(allTasks, currentUser).filter(t => scope === 'mine' ? (t.ownerId || t.created_by_id) === currentUser?.id : true);
 
   return (
     <div className="space-y-5 max-w-[900px] mx-auto">
@@ -28,7 +28,7 @@ export default function EvaluationLabView({ currentUser }) {
         ))}
       </div>
 
-      {isLoading ? (
+      {isError ? <div role="alert" className="text-sm text-destructive">Could not load your authorized tasks. <button className="underline" onClick={() => refetch()}>Retry</button></div> : isLoading ? (
         [...Array(3)].map((_, i) => <div key={i} className="h-24 bg-[#12141b] rounded-2xl border border-[#1f232e] animate-pulse" />)
       ) : tasks.length === 0 ? (
         <div className="bg-[#16181c] rounded-2xl border border-[#2f3336]">

@@ -13,7 +13,7 @@ const TYPE_COLORS = {
   output: 'text-pink-400',
 };
 
-export default function TraceOutline({ trace, selectedStepId, onSelectStep }) {
+export default function TraceOutline({ trace, selectedStepId, onSelectStep, responsive = false }) {
   const [collapsed, setCollapsed] = useState(() => new Set());
 
   if (!trace) {
@@ -62,7 +62,7 @@ export default function TraceOutline({ trace, selectedStepId, onSelectStep }) {
   };
 
   return (
-    <aside className="w-[290px] flex-shrink-0 border-r border-[#232330] bg-[#0e0e12] flex flex-col min-h-0">
+    <aside className={`${responsive ? 'w-full max-h-72 xl:max-h-none' : 'w-[290px]'} flex-shrink-0 border-r border-[#232330] bg-[#0e0e12] flex flex-col min-h-0`}>
       <div className="px-3 py-2.5 border-b border-[#232330] flex-shrink-0">
         <p className="text-[11px] font-semibold text-[#9a9aa5] uppercase tracking-widest">Trace Outline</p>
         <p className="text-xs text-[#d4d4dc] font-medium truncate mt-1">{trace.caseTitle}</p>

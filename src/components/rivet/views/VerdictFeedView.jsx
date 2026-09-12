@@ -17,6 +17,7 @@ const TABS = [
   { id: 'foryou', label: 'For you' },
   { id: 'news', label: 'News' },
   { id: 'verdicts', label: 'Verdicts' },
+  { id: 'disagreements', label: 'Disagreements' },
   { id: 'movements', label: 'Movements' },
 ];
 
@@ -45,14 +46,16 @@ export default function VerdictFeedView({ currentUser, onNavigate, onViewProfile
 
     if (tab === 'news') return postItems.sort(byDate);
     if (tab === 'verdicts') return verdictItems.sort(byDate);
+    if (tab === 'disagreements') return verdictItems.filter(item => item.data.ranked.some(r => r.human?.n >= 2 && r.human.agreement < 100) || item.data.overruled).sort(byDate);
     if (tab === 'movements') return movements.map((m, i) => ({ kind: 'movement', key: `m-${i}`, data: m }));
     return [...postItems, ...verdictItems].sort(byDate);
   }, [tab, posts, verdicts, movements]);
 
   const emptyCopy = {
     news: ['Nothing shared yet', 'Be the first to post an AI breakthrough, release or paper.'],
-    verdicts: ['No verdicts yet', 'Run an evaluation and the result — with its reasoning — lands here.'],
-    movements: ['No score movements yet', 'Once models are evaluated repeatedly, their shifts show up here.'],
+    verdicts: ['No verdicts yet', 'Run an evaluation and the result — with structured judge feedback — lands here.'],
+    disagreements: ['No reviewed disagreements yet', 'Different verdicts from verified reviewers and final human reversals appear here; missing reviews are not disagreements.'],
+    movements: ['No eligible score movements yet', 'Only publication-eligible public evidence can contribute to movement summaries. Legacy and unresolved model aliases are excluded.'],
     foryou: ['Your feed is quiet', 'Share something about AI, or run an evaluation to start the conversation.'],
   }[tab];
 
@@ -65,7 +68,7 @@ export default function VerdictFeedView({ currentUser, onNavigate, onViewProfile
 
       <FeedTabs tabs={TABS} active={tab} onChange={setTab} />
 
-      {tab !== 'movements' && tab !== 'verdicts' && <NewsComposer currentUser={currentUser} />}
+      {tab !== 'movements' && tab !== 'verdicts' && tab !== 'disagreements' && <NewsComposer currentUser={currentUser} />}
 
       {isLoading ? (
         <RivetEmptyState loading title="Loading the feed…" />

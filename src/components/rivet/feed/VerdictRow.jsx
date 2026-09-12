@@ -27,7 +27,7 @@ export default function VerdictRow({ verdict, onOpen, onDisagree }) {
         <span className="font-semibold text-[#e7e9ea]">{task.creatorName || 'Anonymous'}</span>
         <span>· {fmt(verdict.date)}</span>
         <span className="ml-auto flex items-center gap-3" onClick={e => e.stopPropagation()}>
-          <span className="text-[11px]">{humanCount} expert{humanCount === 1 ? '' : 's'} · {confidence} confidence</span>
+          <span className="text-[11px]">{humanCount} review{humanCount === 1 ? '' : 's'} · one task, not a ranking</span>
           <SaveTaskButton task={task} />
         </span>
       </div>
@@ -35,7 +35,7 @@ export default function VerdictRow({ verdict, onOpen, onDisagree }) {
       <h3 className="text-[15px] font-bold text-white mt-2 leading-snug">{task.title}</h3>
 
       <p className="text-[14px] text-[#e7e9ea] mt-1.5 leading-snug">
-        <span className="font-bold text-white">{winner.model}</span> leads
+        <span className="font-bold text-white">{winner.model}</span> scored higher on this task
         {margin !== null ? <> by <span className="font-mono font-bold text-[#b06d97]">{margin} pts</span></> : null}
         {ranked.length > 1 ? <> over {ranked[1].model}</> : null}.
       </p>
@@ -46,7 +46,8 @@ export default function VerdictRow({ verdict, onOpen, onDisagree }) {
         </blockquote>
       )}
 
-      <VerdictBadges verdict={verdict} />
+      <p className="text-[11px] text-muted-foreground mt-2">{ranked.some(r => r.evidenceStatus !== 'complete') ? 'Contains legacy / incomplete provenance; excluded from official rankings.' : `${winner.methodologyVersion} · exploratory task result · domain confidence unavailable from one task`}</p>
+      <VerdictBadges verdict={{ ...verdict, upset: false }} />
       <ModelScoreBars ranked={ranked} />
 
       <div className="flex items-center gap-2 mt-3" onClick={e => e.stopPropagation()}>

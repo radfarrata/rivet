@@ -22,7 +22,7 @@ export default function RecentEvaluations({ currentUser, onNavigate, onOpenTask 
   const sorted = [...visible].sort((a, b) => new Date(b.created_date || 0) - new Date(a.created_date || 0));
   const feed = sorted.filter(t =>
     tab === 'completed' ? t.status === 'evaluated' :
-    tab === 'yours' ? t.created_by_id === currentUser?.id : true
+    tab === 'yours' ? (t.ownerId || t.created_by_id) === currentUser?.id : true
   ).slice(0, 12);
 
   return (

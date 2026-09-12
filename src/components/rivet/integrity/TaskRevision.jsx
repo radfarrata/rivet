@@ -1,0 +1,9 @@
+import React, { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { integrity } from '@/components/rivet/integrity/client';
+export default function TaskRevision({ task, onDone }) {
+  const qc = useQueryClient(); const [prompt, setPrompt] = useState(task.prompt); const [criteria, setCriteria] = useState(task.evaluationCriteria || 'Accuracy, correctness, and completeness of the answer.');
+  const save = useMutation({ mutationFn: () => integrity('reviseTask', { taskId: task.id, prompt, criteria }), onSuccess: () => { qc.invalidateQueries(); onDone?.(); } });
+  if (!task.canManage) return null;
+  return <details className="rounded-xl border border-border bg-card p-3"><summary className="cursor-pointer text-sm">Revise task without changing historical evidence</summary><form className="mt-3 space-y-2" onSubmit={e => { e.preventDefault(); save.mutate(); }}><textarea aria-label="Revised task prompt" required maxLength={40000} value={prompt} onChange={e => setPrompt(e.target.value)} rows={5} className="w-full rounded-lg bg-background border p-2 text-sm" /><textarea aria-label="Revised criteria" required maxLength={12000} value={criteria} onChange={e => setCriteria(e.target.value)} className="w-full rounded-lg bg-background border p-2 text-sm" /><button disabled={save.isPending} className="rounded-lg bg-primary px-3 py-2 text-primary-foreground text-sm">{save.isPending ? 'Saving…' : 'Save draft for next version'}</button>{save.isError && <p role="alert" className="text-xs text-destructive">{save.error.message}</p>}</form></details>;
+}

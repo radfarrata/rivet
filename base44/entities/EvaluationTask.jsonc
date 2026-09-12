@@ -73,10 +73,57 @@
     },
     "creatorName": {
       "type": "string"
+    },
+    "ownerId": {
+      "type": "string"
+    },
+    "workspaceId": {
+      "type": "string"
+    },
+    "currentVersionId": {
+      "type": "string"
+    },
+    "integrityVersion": {
+      "type": "string"
     }
   },
   "required": [
     "title",
     "prompt"
-  ]
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.visibility": "public"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.ownerId": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

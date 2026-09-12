@@ -1,0 +1,52 @@
+{
+  "name": "EvaluationAudit",
+  "type": "object",
+  "properties": {
+    "actorId": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "targetId": {
+      "type": "string"
+    },
+    "taskId": {
+      "type": "string"
+    },
+    "details": {
+      "type": "object"
+    },
+    "occurredAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "actorId",
+    "action",
+    "targetId",
+    "occurredAt"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

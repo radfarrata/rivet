@@ -45,10 +45,59 @@
     },
     "ruleDefinition": {
       "type": "string"
+    },
+    "resultId": {
+      "type": "string"
+    },
+    "taskId": {
+      "type": "string"
+    },
+    "evidenceId": {
+      "type": "string"
+    },
+    "finalScore": {
+      "type": "number"
+    },
+    "reviewIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "credentialId": {
+      "type": "string"
+    },
+    "conflictDeclaration": {
+      "type": "string"
+    },
+    "methodologyVersion": {
+      "type": "string"
     }
   },
   "required": [
     "traceId",
     "verdict"
-  ]
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
 }

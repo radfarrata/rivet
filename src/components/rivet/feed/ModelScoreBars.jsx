@@ -1,4 +1,5 @@
 import React from 'react';
+import EvidenceLink from '@/components/rivet/integrity/EvidenceLink';
 
 const BAR = ['bg-[#b06d97]', 'bg-[#4f8cff]', 'bg-[#2fd4a7]', 'bg-[#f5b544]', 'bg-[#71767b]'];
 
@@ -14,6 +15,7 @@ export default function ModelScoreBars({ ranked }) {
             <span className={`block h-full rounded-full ${BAR[i % BAR.length]}`} style={{ width: `${(r.score / max) * 100}%` }} />
           </span>
           <span className={`text-[11px] font-mono w-8 text-right ${i === 0 ? 'text-white font-semibold' : 'text-[#71767b]'}`}>{Math.round(r.score)}</span>
+          <span className="dark"><EvidenceLink resultId={r.resultId} legacy={r.evidenceStatus !== 'complete'} /></span>
         </div>
       ))}
     </div>

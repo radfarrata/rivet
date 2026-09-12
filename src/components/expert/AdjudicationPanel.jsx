@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import { integrity } from '@/components/rivet/integrity/client';
 import { toast } from '@/components/ui/use-toast';
 import { Gavel, Loader2, ArrowRight } from 'lucide-react';
 
@@ -21,6 +22,7 @@ export default function AdjudicationPanel({ trace, currentUser, onAdjudicated })
   const [failureType, setFailureType] = useState('hallucination');
   const [structuredFeedback, setStructuredFeedback] = useState('');
   const [ruleDefinition, setRuleDefinition] = useState('');
+  const [conflictDeclaration, setConflictDeclaration] = useState('');
 
   useEffect(() => {
     setVerdict('confirmed_failure');
@@ -31,43 +33,13 @@ export default function AdjudicationPanel({ trace, currentUser, onAdjudicated })
   }, [trace?.id]);
 
   const submit = useMutation({
-    mutationFn: async () => {
-      const expertName = currentUser?.full_name || 'Expert';
-      const evaluation = await base44.entities.ExpertEvaluation.create({
-        traceId: trace.id,
-        expertId: currentUser?.id,
-        expertName,
-        verdict,
-        severity,
-        failureType: verdict === 'confirmed_failure' ? failureType : 'not_applicable',
-        structuredFeedback: structuredFeedback.trim(),
-        ruleDefinition: ruleDefinition.trim() || undefined,
-      });
-
-      let regression = null;
-      if (verdict === 'confirmed_failure') {
-        regression = await base44.entities.RegressionTest.create({
-          name: `[${trace.caseId || 'TRACE'}] ${failureType.replace(/_/g, ' ')} — ${trace.caseTitle}`.slice(0, 120),
-          sourceEvaluationId: evaluation.id,
-          traceId: trace.id,
-          rule: ruleDefinition.trim(),
-          inputContext: (trace.steps?.[0]?.content || '').slice(0, 500),
-          expectedBehavior: structuredFeedback.trim(),
-          severity,
-          verifiedByExpertName: expertName,
-          active: true,
-        });
-      }
-
-      await base44.entities.AgentTrace.update(trace.id, { status: 'adjudicated' });
-      return { evaluation, regression };
-    },
+    mutationFn: () => integrity('legacyAdjudication', { traceId: trace.id, verdict, severity, failureType, structuredFeedback, ruleDefinition, conflictDeclaration }),
     onSuccess: ({ regression }) => {
       queryClient.invalidateQueries({ queryKey: ['pivo-traces'] });
       toast({
-        title: regression ? 'Adjudication saved — regression test created' : 'Adjudication saved',
+        title: regression ? 'Adjudication saved — inactive regression created' : 'Adjudication saved',
         description: regression
-          ? 'The failure is now a permanent automated test in the Regression Library.'
+          ? 'Review and approve the inactive regression before using it in a release gate.'
           : 'Trace moved out of the triage queue.',
       });
       onAdjudicated?.();
@@ -78,7 +50,7 @@ export default function AdjudicationPanel({ trace, currentUser, onAdjudicated })
 
   const canSubmit =
     !submit.isPending &&
-    structuredFeedback.trim().length > 0 &&
+    structuredFeedback.trim().length >= 20 && conflictDeclaration.trim().length >= 10 &&
     (verdict !== 'confirmed_failure' || (ruleDefinition.trim().length > 0 && failureType));
 
   return (
@@ -163,6 +135,8 @@ export default function AdjudicationPanel({ trace, currentUser, onAdjudicated })
               </div>
             )}
 
+            <label className="block text-xs text-muted-foreground">Conflict declaration<textarea value={conflictDeclaration} onChange={e => setConflictDeclaration(e.target.value)} placeholder="Declare affiliations and conflicts for this trace." className={`${inputCls} mt-2`} /></label>
+            {submit.isError && <p role="alert" className="text-xs text-destructive">{submit.error?.response?.data?.error || submit.error.message}</p>}
             <button
               onClick={() => submit.mutate()}
               disabled={!canSubmit}
@@ -177,7 +151,7 @@ export default function AdjudicationPanel({ trace, currentUser, onAdjudicated })
 
             {verdict === 'confirmed_failure' && (
               <p className="text-[10px] text-[#6f6f79] text-center">
-                Submitting converts this failure into a permanent regression test.
+                Submitting creates an inactive regression for approval; it does not automatically gate a release.
               </p>
             )}
           </div>

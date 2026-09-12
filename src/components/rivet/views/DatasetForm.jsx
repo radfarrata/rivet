@@ -13,17 +13,20 @@ export default function DatasetForm({ onDone }) {
   const [domain, setDomain] = useState('biology');
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
   const create = useCreateDataset();
 
   const submit = async (e) => {
     e.preventDefault();
     if (!name.trim()) return;
-    setUploading(true);
-    let fileUrl = '';
-    if (file) ({ file_url: fileUrl } = await base44.integrations.Core.UploadPublicFile({ file }));
-    await create.mutateAsync({ name: name.trim(), description, domain, fileUrl, fileName: file?.name || '', sizeBytes: file?.size || 0 });
-    setUploading(false);
-    onDone?.();
+    setUploading(true); setError('');
+    try {
+      let fileUri = '';
+      if (file) ({ file_uri: fileUri } = await base44.integrations.Core.UploadPrivateFile({ file }));
+      await create.mutateAsync({ name: name.trim(), description, domain, fileUri, fileName: file?.name || '', sizeBytes: file?.size || 0 });
+      onDone?.();
+    } catch (err) { setError(err.message || 'Dataset could not be saved.'); }
+    finally { setUploading(false); }
   };
 
   return (
@@ -39,6 +42,8 @@ export default function DatasetForm({ onDone }) {
           <input type="file" accept=".csv,.json,.xlsx,.pdf,.txt" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} />
         </label>
       </div>
+      <p className="text-xs text-muted-foreground">New files are stored privately. Historical public uploads require separate removal from public storage.</p>
+      {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
       <div className="flex justify-end gap-2">
         <button type="button" onClick={onDone} className="px-4 py-1.5 rounded-full text-[13px] text-[#e7e9ea] hover:bg-white/5">Cancel</button>
         <button type="submit" disabled={uploading || !name.trim()} className="flex items-center gap-2 bg-[#653653] hover:bg-[#7c4165] disabled:opacity-40 text-white px-4 py-1.5 rounded-full text-[13px] font-bold">

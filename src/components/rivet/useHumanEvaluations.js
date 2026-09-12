@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { integrity } from '@/components/rivet/integrity/client';
 
 export function useHumanEvaluations() {
   const queryClient = useQueryClient();
@@ -10,14 +11,15 @@ export function useHumanEvaluations() {
   }, [queryClient]);
   return useQuery({
     queryKey: ['rivet-human-evals'],
-    queryFn: () => base44.entities.HumanEvaluation.list('-created_date', 1000),
+    queryFn: () => integrity('reviews'),
+    refetchInterval: 15000,
   });
 }
 
 export function useCreateHumanEvaluation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data) => base44.entities.HumanEvaluation.create(data),
+    mutationFn: (data) => integrity('submitReview', data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-human-evals'] }),
   });
 }

@@ -3,12 +3,13 @@ import Icon from '@/components/Icon';
 import { useDatasets, useDeleteDataset } from '../useDatasets';
 import { domainLabel } from '../evalModels';
 import DatasetForm from './DatasetForm';
+import DatasetDownload from '@/components/rivet/integrity/DatasetDownload';
 import RivetEmptyState from '../RivetEmptyState';
 
 const fmtSize = (b) => (!b ? '—' : b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Math.round(b / 1e3)} KB`);
 
 export default function CustomDatasetsView() {
-  const { data: datasets = [], isLoading } = useDatasets();
+  const { data: datasets = [], isLoading, isError, refetch } = useDatasets();
   const remove = useDeleteDataset();
   const [adding, setAdding] = useState(false);
 
@@ -27,9 +28,10 @@ export default function CustomDatasetsView() {
       </div>
 
       {adding && <DatasetForm onDone={() => setAdding(false)} />}
+      {remove.isError && <p role="alert" className="text-sm text-destructive">Could not delete that dataset.</p>}
 
       <div className="rounded-2xl border border-[#2f3336] bg-[#16181c] overflow-hidden">
-        {isLoading ? (
+        {isError ? <p role="alert" className="p-4 text-sm text-destructive">Datasets unavailable. <button onClick={() => refetch()} className="underline">Retry</button></p> : isLoading ? (
           <RivetEmptyState loading title="Loading your datasets…" />
         ) : datasets.length === 0 ? (
           <RivetEmptyState title="No datasets yet" description="Upload a CSV, JSON or PDF to build evaluation tasks from your own data." />
@@ -40,7 +42,7 @@ export default function CustomDatasetsView() {
               <p className="text-sm font-semibold text-white truncate">{d.name}</p>
               <p className="text-[11px] text-[#71767b] truncate">{domainLabel(d.domain)} · {d.fileName || 'No file'} · {fmtSize(d.sizeBytes)}{d.description ? ` · ${d.description}` : ''}</p>
             </div>
-            {d.fileUrl && <a href={d.fileUrl} target="_blank" rel="noreferrer" className="text-[11px] text-[#b06d97] hover:underline">Open</a>}
+            <DatasetDownload dataset={d} />
             <button onClick={() => remove.mutate(d.id)} className="p-2 rounded-full text-[#71767b] hover:text-[#ff6b6b] hover:bg-white/5"><Icon name="trash" size={13} /></button>
           </div>
         ))}

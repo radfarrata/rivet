@@ -1,7 +1,8 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 
-export default function ReputationBadge({ reputation }) {
+export default function ReputationBadge({ reputation, expert }) {
+  if (expert) return <span className="inline-flex flex-wrap gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs text-foreground"><span className="capitalize">{expert.status}</span><span>{expert.reviews} verified reviews</span></span>;
   if (!reputation || reputation.score === 0) {
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#f0f2f5] text-[#65676b] border border-[#e4e6eb]">

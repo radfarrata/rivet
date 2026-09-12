@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChevronDown, Trophy, Bot, Users } from 'lucide-react';
 import HumanEvalForm from './HumanEvalForm';
+import EvidenceLink from '@/components/rivet/integrity/EvidenceLink';
 import { FAILURE_LABELS } from './evalStats';
 
 const Block = ({ label, color = 'text-[#8b90a0]', children }) => (
@@ -14,7 +15,7 @@ export default function ModelResultCard({ task, result, humanEvals, isBest, open
   return (
     <div className="rounded-xl border border-[#1f232e] bg-[#12141b] overflow-hidden">
       <button onClick={onToggle} className="w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-[#151823] transition-colors">
-        {isBest && <Trophy size={15} className="text-[#f5b544] flex-shrink-0" />}
+        {isBest && result.officialEligible && <Trophy size={15} className="text-[#f5b544] flex-shrink-0" />}
         <span className="text-sm font-semibold text-white w-24 truncate">{result.model}</span>
         <div className="flex-1 h-2 bg-[#1f232e] rounded-full overflow-hidden min-w-[50px]"><div className="h-full bg-[#b06d97] rounded-full" style={{ width: `${result.blended}%` }} /></div>
         <span className="text-sm font-bold text-white w-10 text-right">{result.blended}%</span>
@@ -22,8 +23,9 @@ export default function ModelResultCard({ task, result, humanEvals, isBest, open
       </button>
       <div className="px-4 pb-2 -mt-1 flex items-center gap-3 text-[10px] text-[#6b7080]">
         <span className="flex items-center gap-1"><Bot size={10} /> Automated {result.score}%</span>
-        <span className="flex items-center gap-1"><Users size={10} /> {h ? `Human ${Math.round(h.avg)}% · ${h.n} evaluator${h.n === 1 ? '' : 's'} · ${h.agreement}% agreement` : 'No human evaluations yet'}</span>
+        <span className="flex items-center gap-1"><Users size={10} /> {h ? `Human ${Math.round(h.avg)}% · ${h.n} evaluator${h.n === 1 ? '' : 's'} · ${h.agreement == null ? 'agreement unavailable' : `${h.agreement}% same-verdict share`}` : 'No human evaluations yet'}</span>
       </div>
+      <div className="dark px-4 pb-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground"><span>{result.evidenceStatus === 'complete' ? `${result.methodologyVersion} · task-scoped score, n=1` : 'Legacy / incomplete provenance — excluded from rankings'}</span><EvidenceLink resultId={result.id} legacy={!result.evidenceId} /></div>
       {open && (
         <div className="px-4 pb-4 pt-3 space-y-3 border-t border-[#1f232e]">
           <Block label="Why this score (automated judge)">{result.summary || '—'}</Block>
@@ -32,7 +34,7 @@ export default function ModelResultCard({ task, result, humanEvals, isBest, open
           {result.failureModes && <Block label="Failure modes" color="text-[#ff6b6b]">{result.failureModes}</Block>}
           <div>
             <p className="text-[10px] font-semibold text-[#8b90a0] uppercase tracking-wide mb-1">Full response · {result.model}</p>
-            <pre className="text-xs text-[#d4d7e0] whitespace-pre-wrap bg-[#0e1017] border border-[#1f232e] rounded-lg p-3 max-h-56 overflow-y-auto font-sans">{result.rawResponse}</pre>
+            <pre className="text-xs text-[#d4d7e0] whitespace-pre-wrap bg-[#0e1017] border border-[#1f232e] rounded-lg p-3 max-h-56 overflow-y-auto font-sans">{result.rawResponse || (result.evidenceId ? 'The captured output is available through Inspect evidence.' : 'No raw output was captured for this legacy result.')}</pre>
           </div>
           {humanEvals.length > 0 && (
             <div className="space-y-1.5">
@@ -41,6 +43,7 @@ export default function ModelResultCard({ task, result, humanEvals, isBest, open
                 <div key={e.id} className="bg-[#0e1017] border border-[#1f232e] rounded-lg px-3 py-2 text-xs">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-semibold text-white">{e.evaluatorName}</span>
+                    <span className="text-muted-foreground">{e.credentialStatusAtReview || 'Legacy / unverified'}</span>
                     <span className="text-[#b8bcc8]">{e.score}%</span>
                     <span className={`px-1.5 py-0.5 rounded font-semibold ${e.verdict === 'pass' ? 'bg-[#2fd4a7]/15 text-[#2fd4a7]' : e.verdict === 'partial' ? 'bg-[#f5b544]/15 text-[#f5b544]' : 'bg-[#ff6b6b]/15 text-[#ff6b6b]'}`}>{e.verdict}</span>
                     {e.failureCategory && e.failureCategory !== 'none' && <span className="text-[#ff6b6b]">{FAILURE_LABELS[e.failureCategory]}</span>}

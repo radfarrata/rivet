@@ -3,7 +3,7 @@ import { Award } from 'lucide-react';
 import { useEvaluationTasks, useModelResults } from '../useEvaluations';
 import { useHumanEvaluations } from '../useHumanEvaluations';
 
-const LEVELS = [[50, 'Core Contributor'], [20, 'Expert Evaluator'], [5, 'Contributor'], [0, 'Newcomer']];
+const LEVELS = [[50, 'Core Contributor'], [20, 'Active Contributor'], [5, 'Contributor'], [0, 'Newcomer']];
 
 export default function YourImpactCard({ currentUser, onNavigate }) {
   const { data: tasks = [] } = useEvaluationTasks();
@@ -11,7 +11,7 @@ export default function YourImpactCard({ currentUser, onNavigate }) {
   const { data: humanEvals = [] } = useHumanEvaluations();
   const uid = currentUser?.id;
 
-  const myTasks = tasks.filter(t => t.created_by_id === uid);
+  const myTasks = tasks.filter(t => (t.ownerId || t.created_by_id) === uid);
   const myTaskIds = new Set(myTasks.map(t => t.id));
   const myEvals = humanEvals.filter(e => e.evaluatorId === uid);
   const timesEvaluated = results.filter(r => myTaskIds.has(r.taskId)).length + humanEvals.filter(e => myTaskIds.has(e.taskId)).length;

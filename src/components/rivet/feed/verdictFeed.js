@@ -12,11 +12,12 @@ export function buildVerdicts(tasks, results, humanEvals) {
 
   return tasks
     .map(task => {
-      const rows = (resultsByTask[task.id] || []).map(r => {
+      const relevant = (resultsByTask[task.id] || []).filter(r => !task.currentVersionId || r.taskVersionId === task.currentVersionId);
+      const rows = relevant.map(r => {
         const evals = evalsByResult[r.id] || [];
         const human = summarizeHuman(evals);
         return {
-          resultId: r.id, modelId: r.modelId, model: r.model,
+          resultId: r.id, modelId: r.modelId, model: r.model, evidenceStatus: r.evidenceStatus, methodologyVersion: r.methodologyVersion, officialEligible: r.officialEligible,
           score: blendedScore(r, human), autoScore: r.score,
           human, summary: r.summary, weaknesses: r.weaknesses,
           evaluatorCount: evals.length,
@@ -27,7 +28,7 @@ export function buildVerdicts(tasks, results, humanEvals) {
       const ranked = [...rows].sort((a, b) => b.score - a.score);
       const autoRanked = [...rows].sort((a, b) => b.autoScore - a.autoScore);
       const scores = ranked.map(r => r.score);
-      const humanCount = rows.reduce((s, r) => s + r.evaluatorCount, 0);
+      const humanCount = rows.reduce((s, r) => s + (r.human?.n || 0), 0);
 
       return {
         task, ranked,
@@ -37,8 +38,8 @@ export function buildVerdicts(tasks, results, humanEvals) {
         overruled: humanCount > 0 && autoRanked[0].modelId !== ranked[0].modelId,
         autoWinner: autoRanked[0],
         humanCount,
-        confidence: confidenceLabel(humanCount),
-        date: ranked[0] && (resultsByTask[task.id][0]?.created_date || task.created_date),
+        confidence: 'insufficient evidence',
+        date: relevant[0]?.created_date || task.created_date,
       };
     })
     .filter(Boolean);
@@ -60,7 +61,7 @@ export function markUpsets(verdicts) {
 /** Score movements: each model's recent average vs its earlier average, per domain. */
 export function buildMovements(verdicts, minPerSide = 2) {
   const byModel = {};
-  verdicts.forEach(v => v.ranked.forEach(r => {
+  verdicts.filter(v => v.task.visibility === 'public' && v.ranked.every(r => r.officialEligible)).forEach(v => v.ranked.forEach(r => {
     const key = `${r.modelId}|${v.task.domain || 'other'}`;
     (byModel[key] = byModel[key] || { model: r.model, modelId: r.modelId, domain: v.task.domain || 'other', points: [] })
       .points.push({ score: r.score, date: v.date });

@@ -1,0 +1,75 @@
+{
+  "name": "TaskVersion",
+  "type": "object",
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer"
+    },
+    "workspaceId": {
+      "type": "string"
+    },
+    "snapshotUri": {
+      "type": "string"
+    },
+    "snapshotHash": {
+      "type": "string"
+    },
+    "familyHash": {
+      "type": "string"
+    },
+    "contentHash": {
+      "type": "string"
+    },
+    "methodologyVersion": {
+      "type": "string"
+    },
+    "contaminationRisk": {
+      "type": "string",
+      "enum": [
+        "unchecked",
+        "no_match_found",
+        "possible_overlap"
+      ]
+    },
+    "contaminationScope": {
+      "type": "string"
+    },
+    "difficultySource": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "taskId",
+    "version",
+    "snapshotUri",
+    "snapshotHash",
+    "familyHash",
+    "contentHash",
+    "methodologyVersion"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

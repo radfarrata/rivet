@@ -41,6 +41,7 @@ export default function HomeHero({ currentUser, onNavigate }) {
   const [difficulty, setDifficulty] = useState('intermediate');
   const [evaluationType, setEvaluationType] = useState('hybrid');
   const [tab, setTab] = useState('new');
+  const [fromUpload, setFromUpload] = useState(false);
   const create = useCreateEvaluationTask();
 
   const handleRun = () => {
@@ -48,7 +49,7 @@ export default function HomeHero({ currentUser, onNavigate }) {
     create.mutate({
       title: (title || prompt).trim().slice(0, 80),
       prompt: prompt.trim(),
-      domain, difficulty, evaluationType,
+      domain, difficulty, evaluationType, visibility: fromUpload ? 'private' : 'public',
       models: ['gpt_5_mini', 'claude-sonnet-5', 'gemini_3_flash'],
       status: 'pending',
       creatorName: currentUser?.full_name || 'You',
@@ -68,7 +69,7 @@ export default function HomeHero({ currentUser, onNavigate }) {
         ))}
       </div>
 
-      {tab === 'upload' && <div className="mb-3"><DocumentUpload onExtracted={(d) => { setTitle(d.title); setPrompt(d.prompt); setTab('new'); }} /></div>}
+      {tab === 'upload' && <div className="mb-3"><DocumentUpload onExtracted={(d) => { setTitle(d.title); setPrompt(d.prompt); setFromUpload(true); setTab('new'); }} /></div>}
       {tab === 'template' && <div className="mb-3"><TemplatePicker onPick={applyTemplate} /></div>}
 
       <div className="flex gap-3">
@@ -84,6 +85,8 @@ export default function HomeHero({ currentUser, onNavigate }) {
         />
       </div>
 
+      {fromUpload && <p className="text-xs text-muted-foreground">Document-derived tasks are private to you.</p>}
+      {create.isError && <p role="alert" className="text-xs text-destructive">{create.error.message}</p>}
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2 sm:pl-[52px]">
         <LabeledSelect icon="layers" label="Domain" value={domain} options={DOMAINS} onChange={setDomain} />
         <LabeledSelect icon="shield" label="Evaluation Type" value={evaluationType} options={EVAL_TYPES} onChange={setEvaluationType} />

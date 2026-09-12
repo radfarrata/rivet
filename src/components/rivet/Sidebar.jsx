@@ -79,13 +79,13 @@ export default function Sidebar({ activeNav, onNavChange, isMobileOpen, setIsMob
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-5 scrollbar-hide">
-          {NAV_GROUPS.map((group, gi) => (
+          {NAV_GROUPS.filter(group => group.label !== 'WALLET').map((group, gi) => (
             <div key={gi}>
               {group.label && (
                 <div className="px-3 py-2 text-[10px] font-semibold text-[#71767b] uppercase tracking-widest">{group.label}</div>
               )}
               <div className="space-y-0.5">
-                {group.items.map(item => (
+                {group.items.filter(item => !['chat','events','teams','wallet','escrow','withdraw','transactions'].includes(item.id)).map(item => (
                   <Link
                     key={item.id}
                     to="#"

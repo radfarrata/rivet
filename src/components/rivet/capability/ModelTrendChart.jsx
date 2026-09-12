@@ -9,7 +9,7 @@ export default function ModelTrendChart({ data }) {
   return (
     <div className="bg-[#12141b] border border-[#1f232e] rounded-2xl p-5">
       <h3 className="text-sm font-bold text-white flex items-center gap-2"><Activity size={15} className="text-[#b06d97]" /> Model performance over time</h3>
-      <p className="text-[11px] text-[#8b90a0] mb-4">Monthly average score per model — spot improvements and regressions as new evaluations land.</p>
+      <p className="text-[11px] text-[#8b90a0] mb-4">Descriptive monthly averages of captured evidence only. Task composition and model aliases may change; these lines do not establish improvement or regression.</p>
       {data.length < 2 ? (
         <p className="text-xs text-[#6b7080]">Trend appears once evaluations span more than one month.</p>
       ) : (

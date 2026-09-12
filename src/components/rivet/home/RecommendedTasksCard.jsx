@@ -11,19 +11,19 @@ export default function RecommendedTasksCard({ currentUser, onOpenTask }) {
   const { data: humanEvals = [] } = useHumanEvaluations();
   const uid = currentUser?.id;
 
-  const myDomains = new Set([...tasks.filter(t => t.created_by_id === uid).map(t => t.domain), ...humanEvals.filter(e => e.evaluatorId === uid).map(e => e.domain)]);
+  const myDomains = new Set([...tasks.filter(t => (t.ownerId || t.created_by_id) === uid).map(t => t.domain), ...humanEvals.filter(e => e.evaluatorId === uid).map(e => e.domain)]);
   const evaluatedByMe = new Set(humanEvals.filter(e => e.evaluatorId === uid).map(e => e.taskId));
   const humanCount = humanEvals.reduce((a, e) => { a[e.taskId] = (a[e.taskId] || 0) + 1; return a; }, {});
 
   const recommended = visibleTo(tasks, currentUser)
-    .filter(t => t.status === 'evaluated' && t.evaluationType !== 'automated' && !evaluatedByMe.has(t.id) && results.some(r => r.taskId === t.id))
+    .filter(t => t.status === 'evaluated' && t.evaluationType !== 'automated' && !evaluatedByMe.has(t.id) && (t.ownerId || t.created_by_id) !== uid && results.some(r => r.taskId === t.id && r.evidenceStatus === 'complete'))
     .sort((a, b) => (myDomains.has(b.domain) - myDomains.has(a.domain)) || ((humanCount[a.id] || 0) - (humanCount[b.id] || 0)))
     .slice(0, 3);
 
   return (
     <div className="bg-[#16181c] border border-[#2f3336] rounded-2xl p-4">
       <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-1"><Sparkles size={15} className="text-[#b06d97]" /> Recommended for you</h3>
-      <p className="text-[11px] text-[#71767b] mb-3">Responses that need human evaluation, matched to your expertise.</p>
+      <p className="text-[11px] text-[#71767b] mb-3">Captured responses awaiting review, based on your activity. Domain credentials are verified separately.</p>
       {recommended.length === 0 ? (
         <p className="text-xs text-[#71767b]">Nothing waiting for your review right now.</p>
       ) : (
