@@ -114,8 +114,8 @@ export default function PostCard({ post, currentUser, onUpvote, onSave, onRepost
               <Repeat2 size={15} /> {post.reposts || 0}
             </button>
           )}
-          <button onClick={(e) => { e.stopPropagation(); onUpvote?.(post); }} className="flex items-center gap-1 text-xs text-[#65676b] hover:text-[#050505] transition-colors">
-            <ChevronUp size={16} /> {post.upvotes || 0}
+          <button onClick={(e) => { e.stopPropagation(); onUpvote?.(post); }} className="group flex items-center gap-1 text-xs text-[#65676b] hover:text-[#653653] active:scale-90 transition-all">
+            <span className="rounded-full p-1 group-active:bg-[#653653]/15 group-active:scale-125 transition-transform"><ChevronUp size={16} /></span> {post.upvotes || 0}
           </button>
           {onSave && (
             <button onClick={(e) => { e.stopPropagation(); onSave(post); }} className={`flex items-center gap-1 text-xs transition-colors ${saved ? 'text-[#653653]' : 'text-[#65676b] hover:text-[#653653]'}`}>

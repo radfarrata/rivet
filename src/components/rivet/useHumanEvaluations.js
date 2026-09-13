@@ -20,6 +20,13 @@ export function useCreateHumanEvaluation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data) => integrity('submitReview', data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-human-evals'] }),
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: ['rivet-human-evals'] });
+      const previous = queryClient.getQueryData(['rivet-human-evals']);
+      queryClient.setQueryData(['rivet-human-evals'], old => [...(old || []), { ...data, id: `pending-${Date.now()}`, created_date: new Date().toISOString(), _pending: true }]);
+      return { previous };
+    },
+    onError: (_error, _data, context) => queryClient.setQueryData(['rivet-human-evals'], context.previous),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['rivet-human-evals'] }),
   });
 }

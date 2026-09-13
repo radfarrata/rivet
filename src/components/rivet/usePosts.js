@@ -1,74 +1,33 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-
+import { POSTS_KEY, flatPosts, patchPost, prependPost, removePost, reconcilePost } from '@/components/rivet/feed/postCache';
+const PAGE_SIZE=20;
+const snapshot=client=>client.getQueryData(POSTS_KEY);
+const restore=(client,previous)=>client.setQueryData(POSTS_KEY,previous);
 export function usePosts() {
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    const unsub = base44.entities.Post.subscribe(() => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }));
-    return unsub;
-  }, [queryClient]);
-  return useQuery({
-    queryKey: ['rivet-posts'],
-    queryFn: () => base44.entities.Post.list('-created_date', 100),
-  });
+  const queryClient=useQueryClient();
+  useEffect(()=>base44.entities.Post.subscribe(event=>{
+    queryClient.setQueryData(POSTS_KEY,data=>event.type==='delete'?removePost(data,event.id):event.type==='create'?prependPost(data,event.data):patchPost(data,event.id,event.data));
+  }),[queryClient]);
+  const query=useInfiniteQuery({queryKey:POSTS_KEY,initialPageParam:null,queryFn:async({pageParam})=>{
+    const items=pageParam
+      ? await base44.entities.Post.filter({created_date:{$lt:pageParam.created_date}},'-created_date',PAGE_SIZE)
+      : await base44.entities.Post.list('-created_date',PAGE_SIZE);
+    const last=items[items.length-1];
+    return {items,nextCursor:items.length===PAGE_SIZE?{id:last.id,created_date:last.created_date}:null};
+  },getNextPageParam:last=>last.nextCursor,staleTime:15000});
+  return {...query,data:flatPosts(query.data)};
 }
-
 export function useCreatePost() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (data) => base44.entities.Post.create(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
+  const client=useQueryClient();
+  return useMutation({mutationFn:data=>base44.entities.Post.create(data),onMutate:async data=>{await client.cancelQueries({queryKey:POSTS_KEY});const previous=snapshot(client),temp={...data,id:`pending-${Date.now()}`,created_date:new Date().toISOString(),_pending:true};client.setQueryData(POSTS_KEY,cache=>prependPost(cache,temp));return {previous,temp};},onError:(_e,_v,ctx)=>restore(client,ctx.previous),onSuccess:(saved,_v,ctx)=>client.setQueryData(POSTS_KEY,data=>reconcilePost(data,ctx.temp.id,saved))});
 }
-
 export function useUpvote() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, upvotes }) => base44.entities.Post.update(id, { upvotes: (upvotes || 0) + 1 }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
+  const client=useQueryClient();
+  return useMutation({mutationFn:({id,upvotes})=>base44.entities.Post.update(id,{upvotes:(upvotes||0)+1}),onMutate:async({id})=>{await client.cancelQueries({queryKey:POSTS_KEY});const previous=snapshot(client);client.setQueryData(POSTS_KEY,data=>patchPost(data,id,p=>({upvotes:(p.upvotes||0)+1})));return {previous};},onError:(_e,_v,ctx)=>restore(client,ctx.previous),onSuccess:(saved)=>client.setQueryData(POSTS_KEY,data=>patchPost(data,saved.id,saved))});
 }
-
-export function useToggleSave(currentUser) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ post }) => {
-      const savedBy = post.savedBy || [];
-      const has = savedBy.includes(currentUser.id);
-      const next = has ? savedBy.filter(u => u !== currentUser.id) : [...savedBy, currentUser.id];
-      return base44.entities.Post.update(post.id, { savedBy: next });
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
-}
-
-export function useToggleRepost(currentUser) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ post }) => {
-      const repostedBy = post.repostedBy || [];
-      const has = repostedBy.includes(currentUser.id);
-      const next = has ? repostedBy.filter(u => u !== currentUser.id) : [...repostedBy, currentUser.id];
-      return base44.entities.Post.update(post.id, { repostedBy: next, reposts: next.length });
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
-}
-
-export function useVotePoll(currentUser) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ post, optionId }) => {
-      const poll = post.poll;
-      if (!poll) return;
-      const options = (poll.options || []).map(o => {
-        const voterIds = (o.voterIds || []).filter(u => u !== currentUser.id);
-        if (o.id === optionId) voterIds.push(currentUser.id);
-        return { ...o, voterIds };
-      });
-      return base44.entities.Post.update(post.id, { poll: { ...poll, options } });
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
-}
+const toggleList=(name,countName,currentUser)=>(client,post)=>{const list=post[name]||[],has=list.includes(currentUser.id),next=has?list.filter(id=>id!==currentUser.id):[...list,currentUser.id];client.setQueryData(POSTS_KEY,data=>patchPost(data,post.id,{[name]:next,...(countName?{[countName]:next.length}:{})}));return next;};
+export function useToggleSave(currentUser) {const client=useQueryClient();return useMutation({mutationFn:({post})=>{const list=post.savedBy||[],next=list.includes(currentUser.id)?list.filter(id=>id!==currentUser.id):[...list,currentUser.id];return base44.entities.Post.update(post.id,{savedBy:next});},onMutate:async({post})=>{await client.cancelQueries({queryKey:POSTS_KEY});const previous=snapshot(client),next=toggleList('savedBy',null,currentUser)(client,post);return {previous,next};},onError:(_e,_v,ctx)=>restore(client,ctx.previous),onSuccess:saved=>client.setQueryData(POSTS_KEY,data=>patchPost(data,saved.id,saved))});}
+export function useToggleRepost(currentUser) {const client=useQueryClient();return useMutation({mutationFn:({post})=>{const list=post.repostedBy||[],next=list.includes(currentUser.id)?list.filter(id=>id!==currentUser.id):[...list,currentUser.id];return base44.entities.Post.update(post.id,{repostedBy:next,reposts:next.length});},onMutate:async({post})=>{await client.cancelQueries({queryKey:POSTS_KEY});const previous=snapshot(client),next=toggleList('repostedBy','reposts',currentUser)(client,post);return {previous,next};},onError:(_e,_v,ctx)=>restore(client,ctx.previous),onSuccess:saved=>client.setQueryData(POSTS_KEY,data=>patchPost(data,saved.id,saved))});}
+export function useVotePoll(currentUser) {const client=useQueryClient();return useMutation({mutationFn:({post,optionId})=>{const options=(post.poll?.options||[]).map(option=>{const voterIds=(option.voterIds||[]).filter(id=>id!==currentUser.id);if(option.id===optionId)voterIds.push(currentUser.id);return {...option,voterIds};});return base44.entities.Post.update(post.id,{poll:{...post.poll,options}});},onMutate:async({post,optionId})=>{await client.cancelQueries({queryKey:POSTS_KEY});const previous=snapshot(client),options=(post.poll?.options||[]).map(option=>{const voterIds=(option.voterIds||[]).filter(id=>id!==currentUser.id);if(option.id===optionId)voterIds.push(currentUser.id);return {...option,voterIds};});client.setQueryData(POSTS_KEY,data=>patchPost(data,post.id,{poll:{...post.poll,options}}));return {previous,options};},onError:(_e,_v,ctx)=>restore(client,ctx.previous),onSuccess:saved=>client.setQueryData(POSTS_KEY,data=>patchPost(data,saved.id,saved))});}

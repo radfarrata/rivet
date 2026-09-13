@@ -19,7 +19,7 @@ export default function NewsComposer({ currentUser }) {
   const post = () => {
     const text = content.trim();
     if (!text) return;
-    create.mutate({
+    const draft = {
       title: text.split('\n')[0].slice(0, 90),
       content: text,
       author: currentUser?.full_name || 'You',
@@ -27,7 +27,9 @@ export default function NewsComposer({ currentUser }) {
       postType: kind === 'question' ? 'question' : 'update',
       syndicate: 'global',
       tags: [kind],
-    }, { onSuccess: () => setContent('') });
+    };
+    setContent('');
+    create.mutate(draft, { onError: () => setContent(text) });
   };
 
   return (

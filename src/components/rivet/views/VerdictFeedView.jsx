@@ -12,6 +12,8 @@ import FeedTabs from '../home/FeedTabs';
 import RivetEmptyState from '../RivetEmptyState';
 import EvaluationTaskDetail from '../EvaluationTaskDetail';
 import PostDetailModal from '../PostDetailModal';
+import FeedSkeleton from '../feed/FeedSkeleton';
+import InfiniteFeedSentinel from '../feed/InfiniteFeedSentinel';
 
 const TABS = [
   { id: 'foryou', label: 'For you' },
@@ -25,7 +27,7 @@ export default function VerdictFeedView({ currentUser, onNavigate, onViewProfile
   const { data: tasks = [], isLoading } = useEvaluationTasks();
   const { data: results = [] } = useModelResults();
   const { data: humanEvals = [] } = useHumanEvaluations();
-  const { data: posts = [] } = usePosts();
+  const { data: posts = [], fetchNextPage, hasNextPage, isFetchingNextPage, isLoading: postsLoading } = usePosts();
   const upvote = useUpvote();
   const save = useToggleSave(currentUser);
   const repost = useToggleRepost(currentUser);
@@ -70,8 +72,8 @@ export default function VerdictFeedView({ currentUser, onNavigate, onViewProfile
 
       {tab !== 'movements' && tab !== 'verdicts' && tab !== 'disagreements' && <NewsComposer currentUser={currentUser} />}
 
-      {isLoading ? (
-        <RivetEmptyState loading title="Loading the feed…" />
+      {isLoading || postsLoading ? (
+        <FeedSkeleton />
       ) : items.length === 0 ? (
         <RivetEmptyState title={emptyCopy[0]} description={emptyCopy[1]} />
       ) : items.map(item => {
@@ -92,6 +94,7 @@ export default function VerdictFeedView({ currentUser, onNavigate, onViewProfile
         );
         return <MovementCard key={item.key} movement={item.data} onOpen={() => onNavigate?.('capability-map')} />;
       })}
+      {(tab === 'foryou' || tab === 'news') && <InfiniteFeedSentinel hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />}
 
       {selectedTask && <EvaluationTaskDetail task={selectedTask} currentUser={currentUser} onClose={() => setSelectedTask(null)} />}
       {selectedPost && <PostDetailModal post={selectedPost} currentUser={currentUser} onClose={() => setSelectedPost(null)} onViewProfile={onViewProfile} />}

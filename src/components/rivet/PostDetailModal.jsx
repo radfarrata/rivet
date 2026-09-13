@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useCreateTransaction } from './useTransactions';
 import { useCreateNotification } from './useNotifications';
 import { useEscrows, useReleaseEscrow, useRefundEscrow } from './useEscrow';
-import { useToggleSave, useToggleRepost, useVotePoll } from './usePosts';
+import { usePosts, useUpvote, useToggleSave, useToggleRepost, useVotePoll } from './usePosts';
 import PollBlock from './PollBlock';
 import ThreadedComments from './ThreadedComments';
 import { X, ChevronUp, MessageSquare, Code, CheckCircle2, Lock, Send, Bookmark, Repeat2, ListChecks } from 'lucide-react';
 
-export default function PostDetailModal({ post, onClose, currentUser, onViewProfile }) {
+export default function PostDetailModal({ post: initialPost, onClose, currentUser, onViewProfile }) {
   const queryClient = useQueryClient();
-  const [commentText, setCommentText] = useState('');
+  const { data: livePosts = [] } = usePosts();
+  const post = livePosts.find(item => item.id === initialPost.id) || initialPost;
 
   const createTxn = useCreateTransaction();
   const createNotif = useCreateNotification();
@@ -32,33 +33,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
     createNotif.mutate({ userId: ownerId, type, title, message, read: false });
   };
 
-  const { data: comments = [] } = useQuery({
-    queryKey: ['rivet-comments', post.id],
-    queryFn: () => base44.entities.Comment.filter({ postId: post.id }, 'created_date', 100),
-  });
-
-  useEffect(() => {
-    const unsub = base44.entities.Comment.subscribe(() => {
-      queryClient.invalidateQueries({ queryKey: ['rivet-comments', post.id] });
-    });
-    return unsub;
-  }, [queryClient, post.id]);
-
-  const upvote = useMutation({
-    mutationFn: () => base44.entities.Post.update(post.id, { upvotes: (post.upvotes || 0) + 1 }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }),
-  });
-
-  const addComment = useMutation({
-    mutationFn: (data) => base44.entities.Comment.create(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rivet-comments', post.id] });
-      base44.entities.Post.update(post.id, { replies: (post.replies || 0) + 1 });
-      queryClient.invalidateQueries({ queryKey: ['rivet-posts'] });
-      setCommentText('');
-      notifyOwner('comment', 'New comment', `${currentUser?.full_name || 'Someone'} commented on "${post.title}"`);
-    },
-  });
+  const upvote = useUpvote();
 
   const updateStatus = useMutation({
     mutationFn: ({ id, data }) => base44.entities.Post.update(id, data),
@@ -81,24 +56,14 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
     refundEscrow.mutate({ escrow, post, currentUser });
   };
 
-  const handleComment = () => {
-    if (!commentText.trim()) return;
-    addComment.mutate({
-      postId: post.id,
-      content: commentText,
-      authorName: currentUser?.full_name || 'You',
-      handle: `@${currentUser?.email?.split('@')[0] || 'you'}`,
-    });
-  };
-
   const statusBadge = post.status === 'open' ? 'bg-[#653653]/15 text-[#653653]' : post.status === 'pending_approval' ? 'bg-amber-100 text-amber-700' : 'bg-[#31a24c]/10 text-[#31a24c]';
   const statusLabel = post.status === 'pending_approval' ? 'In Progress' : post.status === 'resolved' ? 'Resolved' : 'Open';
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in" onClick={onClose}>
-      <div className="bg-[#ffffff] rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto border border-[#e4e6eb]" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in" onClick={onClose}>
+      <div className="bg-[#ffffff] rounded-none sm:rounded-2xl w-full max-w-2xl max-h-screen sm:max-h-[85vh] overflow-y-auto border border-[#e4e6eb]" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className="sticky top-0 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e4e6eb] px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e4e6eb] px-4 sm:px-6 py-4 flex items-center justify-between sm:rounded-t-2xl z-10">
           <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => { onViewProfile?.(post); onClose(); }}>
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#653653] to-[#653653] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{(post.author || '??').slice(0, 2).toUpperCase()}</div>
             <div>
@@ -110,7 +75,7 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
         </div>
 
         {/* Body */}
-        <div className="p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
             {post.isAgent && <span className="text-[10px] bg-[#653653]/15 text-[#653653] px-2 py-0.5 rounded-full font-medium">AI Agent</span>}
             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium capitalize ${statusBadge}`}>{statusLabel}</span>
@@ -217,8 +182,8 @@ export default function PostDetailModal({ post, onClose, currentUser, onViewProf
           )}
 
           {/* Actions */}
-          <div className="flex gap-2 pt-2">
-            <button onClick={() => upvote.mutate()} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb] transition-colors">
+          <div className="flex flex-wrap gap-2 pt-2">
+            <button onClick={() => upvote.mutate({ id: post.id, upvotes: post.upvotes })} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb] active:scale-90 transition-all">
               <ChevronUp size={16} /> {post.upvotes || 0}
             </button>
             <button onClick={() => toggleSave.mutate({ post })} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${saved ? 'bg-[#653653]/15 text-[#653653]' : 'bg-[#f0f2f5] text-[#050505] hover:bg-[#e4e6eb]'}`}>

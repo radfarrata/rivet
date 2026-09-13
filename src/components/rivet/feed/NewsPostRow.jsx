@@ -19,11 +19,12 @@ const fmt = (d) => {
 /** A community news post — the friendly half of the feed. */
 export default function NewsPostRow({ post, currentUser, onUpvote, onSave, onRepost, onOpen, onViewProfile }) {
   const kind = (post.tags || [])[0];
+  const pending = !!post._pending;
   const saved = (post.savedBy || []).includes(currentUser?.id);
   const reposted = (post.repostedBy || []).includes(currentUser?.id);
 
   return (
-    <article onClick={() => onOpen?.(post)} className="px-4 py-4 border-b border-[#2f3336] hover:bg-[#16181c] transition-colors cursor-pointer flex gap-3">
+    <article onClick={() => !pending && onOpen?.(post)} className={`px-4 py-4 border-b border-[#2f3336] hover:bg-[#16181c] transition-colors cursor-pointer flex gap-3 ${pending ? 'opacity-60' : ''}`}>
       <button
         onClick={e => { e.stopPropagation(); onViewProfile?.(post); }}
         className="w-10 h-10 rounded-full bg-[#1f232e] border border-[#2f3336] flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
@@ -34,7 +35,7 @@ export default function NewsPostRow({ post, currentUser, onUpvote, onSave, onRep
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 text-[13px] flex-wrap">
           <span className="font-bold text-white">{post.author || 'Anonymous'}</span>
-          <span className="text-[#71767b]">{post.handle} · {fmt(post.created_date)}</span>
+          <span className="text-[#71767b]">{post.handle} · {pending ? 'Sending…' : fmt(post.created_date)}</span>
           {kind && KIND_STYLE[kind] && (
             <span className={`ml-1 px-2 py-0.5 rounded-md text-[10px] font-semibold capitalize ${KIND_STYLE[kind]}`}>{kind}</span>
           )}
@@ -53,8 +54,8 @@ export default function NewsPostRow({ post, currentUser, onUpvote, onSave, onRep
           <button onClick={() => onRepost?.(post)} className={`flex items-center gap-1.5 text-[12px] transition-colors ${reposted ? 'text-[#2fd4a7]' : 'hover:text-[#2fd4a7]'}`}>
             <Icon name="trending" size={13} /> {post.reposts || 0}
           </button>
-          <button onClick={() => onUpvote?.(post)} className="flex items-center gap-1.5 text-[12px] hover:text-[#b06d97] transition-colors">
-            <Icon name="arrow-up" size={13} /> {post.upvotes || 0}
+          <button onClick={() => onUpvote?.(post)} className="group flex items-center gap-1.5 text-[12px] hover:text-[#b06d97] transition-colors active:scale-90">
+            <span className="rounded-full p-1 group-active:bg-[#b06d97]/20 group-active:scale-125 transition-transform"><Icon name="arrow-up" size={13} /></span> {post.upvotes || 0}
           </button>
           <button onClick={() => onSave?.(post)} className={`flex items-center gap-1.5 text-[12px] transition-colors ${saved ? 'text-[#b06d97]' : 'hover:text-[#b06d97]'}`}>
             <Icon name="bookmark" size={13} />

@@ -2,112 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { MessageSquare, Send, Reply } from 'lucide-react';
-
+import { POSTS_KEY, patchPost } from '@/components/rivet/feed/postCache';
 export default function ThreadedComments({ post, currentUser, notifyOwner }) {
-  const queryClient = useQueryClient();
-  const [text, setText] = useState('');
-  const [replyTo, setReplyTo] = useState(null);
-
-  const { data: comments = [] } = useQuery({
-    queryKey: ['rivet-comments', post.id],
-    queryFn: () => base44.entities.Comment.filter({ postId: post.id }, 'created_date', 200),
-  });
-
-  useEffect(() => {
-    const unsub = base44.entities.Comment.subscribe(() => queryClient.invalidateQueries({ queryKey: ['rivet-comments', post.id] }));
-    return unsub;
-  }, [queryClient, post.id]);
-
-  const add = useMutation({
-    mutationFn: (data) => base44.entities.Comment.create(data),
-    onSuccess: (_data, vars) => {
-      queryClient.invalidateQueries({ queryKey: ['rivet-comments', post.id] });
-      if (!vars.parentId) {
-        base44.entities.Post.update(post.id, { replies: (post.replies || 0) + 1 });
-        queryClient.invalidateQueries({ queryKey: ['rivet-posts'] });
-      }
-      setText('');
-      setReplyTo(null);
-      if (notifyOwner) notifyOwner('comment', 'New comment', `${currentUser?.full_name || 'Someone'} commented on "${post.title}"`);
-    },
-  });
-
-  const submit = () => {
-    if (!text.trim()) return;
-    add.mutate({
-      postId: post.id,
-      content: text,
-      authorName: currentUser?.full_name || 'You',
-      handle: `@${currentUser?.email?.split('@')[0] || 'you'}`,
-      parentId: replyTo?.id || undefined,
-    });
-  };
-
-  const byParent = {};
-  comments.forEach(c => {
-    const key = c.parentId || 'root';
-    (byParent[key] = byParent[key] || []).push(c);
-  });
-
-  const renderNode = (c, depth) => {
-    const children = byParent[c.id] || [];
-    return (
-      <div key={c.id} className={depth > 0 ? 'ml-6 pl-3 border-l border-[#e4e6eb]' : ''}>
-        <div className="flex gap-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-[#e4e6eb] flex items-center justify-center text-[#050505] font-bold text-[10px] flex-shrink-0">{(c.authorName || '??').slice(0, 2).toUpperCase()}</div>
-          <div className="flex-1">
-            <div className="bg-[#f0f2f5] rounded-xl px-3 py-2">
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-xs font-semibold text-[#050505]">{c.authorName}</span>
-                {c.handle && <span className="text-[10px] text-[#65676b]">{c.handle}</span>}
-              </div>
-              <p className="text-sm text-[#1c1e21]">{c.content}</p>
-            </div>
-            <button onClick={() => { setReplyTo({ id: c.id, name: c.authorName }); setText(''); }} className="mt-1 ml-1 text-[11px] font-medium text-[#65676b] hover:text-[#653653] inline-flex items-center gap-1">
-              <Reply size={11} /> Reply
-            </button>
-            {replyTo?.id === c.id && (
-              <div className="mt-1 flex gap-2">
-                <input
-                  autoFocus
-                  value={text}
-                  onChange={e => setText(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }}
-                  placeholder={`Reply to ${replyTo.name}...`}
-                  className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-1.5 text-xs text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]"
-                />
-                <button onClick={submit} className="bg-[#653653] text-white px-2.5 rounded-lg"><Send size={12} /></button>
-                <button onClick={() => { setReplyTo(null); setText(''); }} className="text-[#65676b] text-xs px-1">Cancel</button>
-              </div>
-            )}
-          </div>
-        </div>
-        {children.map(ch => renderNode(ch, depth + 1))}
-      </div>
-    );
-  };
-
-  const roots = byParent.root || [];
-
-  return (
-    <div>
-      <h3 className="text-sm font-bold text-[#050505] mb-3 flex items-center gap-2"><MessageSquare size={16} className="text-[#65676b]" /> Comments ({comments.length})</h3>
-      <div className="space-y-1 mb-4">
-        {roots.map(c => renderNode(c, 0))}
-        {comments.length === 0 && <p className="text-sm text-[#65676b] text-center py-4">No comments yet. Be the first to comment!</p>}
-      </div>
-      <div className="flex gap-2">
-        <input
-          value={replyTo ? '' : text}
-          onChange={e => { if (!replyTo) setText(e.target.value); }}
-          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }}
-          placeholder={replyTo ? `Replying to ${replyTo.name}...` : 'Write a comment...'}
-          className="flex-1 bg-[#f0f2f5] border border-[#e4e6eb] rounded-lg px-3 py-2 text-sm text-[#050505] placeholder-[#65676b] focus:outline-none focus:border-[#653653]"
-        />
-        <button onClick={submit} disabled={add.isPending || !text.trim() || !!replyTo} className="bg-[#653653] hover:bg-[#b85e92] disabled:opacity-40 text-white p-2.5 rounded-lg transition-colors">
-          <Send size={16} />
-        </button>
-      </div>
-    </div>
-  );
+  const queryClient=useQueryClient(),key=['rivet-comments',post.id];
+  const [text,setText]=useState(''),[replyTo,setReplyTo]=useState(null);
+  const {data:comments=[],isLoading}=useQuery({queryKey:key,queryFn:()=>base44.entities.Comment.filter({postId:post.id},'created_date',200)});
+  useEffect(()=>base44.entities.Comment.subscribe(event=>{if(event.data?.postId===post.id||comments.some(c=>c.id===event.id))queryClient.invalidateQueries({queryKey:key});}),[queryClient,post.id,comments]);
+  const add=useMutation({mutationFn:async data=>{const saved=await base44.entities.Comment.create(data);if(!data.parentId)await base44.entities.Post.update(post.id,{replies:(post.replies||0)+1});return saved;},onMutate:async data=>{await Promise.all([queryClient.cancelQueries({queryKey:key}),queryClient.cancelQueries({queryKey:POSTS_KEY})]);const previous=queryClient.getQueryData(key),previousPosts=queryClient.getQueryData(POSTS_KEY),temp={...data,id:`pending-${Date.now()}`,created_date:new Date().toISOString(),_pending:true};queryClient.setQueryData(key,old=>[...(old||[]),temp]);if(!data.parentId)queryClient.setQueryData(POSTS_KEY,cache=>patchPost(cache,post.id,p=>({replies:(p.replies||0)+1})));setText('');setReplyTo(null);return {previous,previousPosts,temp};},onError:(_e,_v,ctx)=>{queryClient.setQueryData(key,ctx.previous);queryClient.setQueryData(POSTS_KEY,ctx.previousPosts);},onSuccess:(saved,_v,ctx)=>{queryClient.setQueryData(key,old=>(old||[]).map(c=>c.id===ctx.temp.id?saved:c));notifyOwner?.('comment','New comment',`${currentUser?.full_name||'Someone'} commented on "${post.title}"`);}});
+  const submit=()=>{const content=text.trim();if(!content)return;add.mutate({postId:post.id,content,authorName:currentUser?.full_name||'You',handle:`@${currentUser?.email?.split('@')[0]||'you'}`,parentId:replyTo?.id||undefined});};
+  const byParent={};comments.forEach(c=>(byParent[c.parentId||'root']=byParent[c.parentId||'root']||[]).push(c));
+  const renderNode=(comment,depth)=> <div key={comment.id} className={depth?'ml-4 sm:ml-6 pl-3 border-l border-[#2f3336]':''}><div className={`flex gap-3 py-2 ${comment._pending?'opacity-60':''}`}><div className="w-8 h-8 rounded-full bg-[#202327] flex items-center justify-center text-white font-bold text-[10px] shrink-0">{(comment.authorName||'??').slice(0,2).toUpperCase()}</div><div className="flex-1 min-w-0"><div className="bg-[#16181c] rounded-xl px-3 py-2"><div className="flex gap-2"><span className="text-xs font-semibold text-white">{comment.authorName}</span><span className="text-[10px] text-[#71767b]">{comment._pending?'Sending…':comment.handle}</span></div><p className="text-sm text-[#e7e9ea] break-words">{comment.content}</p></div><button onClick={()=>{setReplyTo({id:comment.id,name:comment.authorName});setText('');}} className="mt-1 ml-1 text-[11px] font-medium text-[#71767b] hover:text-[#b06d97] inline-flex items-center gap-1"><Reply size={11}/> Reply</button>{replyTo?.id===comment.id&&<Composer compact placeholder={`Reply to ${replyTo.name}…`} text={text} setText={setText} submit={submit} cancel={()=>{setReplyTo(null);setText('');}} pending={add.isPending}/>}</div></div>{(byParent[comment.id]||[]).map(child=>renderNode(child,depth+1))}</div>;
+  return <div><h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2"><MessageSquare size={16} className="text-[#71767b]"/> Comments ({comments.length})</h3>{isLoading?<div role="status" className="space-y-3 animate-pulse">{[1,2,3].map(i=><div key={i} className="flex gap-3"><div className="h-8 w-8 rounded-full bg-[#202327]"/><div className="h-14 flex-1 rounded-xl bg-[#202327]"/></div>)}</div>:<div className="space-y-1 mb-4">{(byParent.root||[]).map(c=>renderNode(c,0))}{!comments.length&&<p className="text-sm text-[#71767b] text-center py-4">No comments yet. Be the first to comment.</p>}</div>}<Composer placeholder="Write a comment…" text={replyTo?'':text} setText={value=>{if(!replyTo)setText(value);}} submit={submit} pending={add.isPending||!!replyTo}/></div>;
 }
+function Composer({text,setText,submit,pending,placeholder,cancel,compact}) {return <div className={`flex gap-2 ${compact?'mt-2':''}`}><input autoFocus={compact} value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit();}}} placeholder={placeholder} className="min-w-0 flex-1 bg-[#16181c] border border-[#2f3336] rounded-full px-4 py-2 text-sm text-white placeholder-[#71767b] focus:outline-none focus:border-[#653653]"/><button aria-label="Send comment" onClick={submit} disabled={pending||!text.trim()} className="bg-[#653653] disabled:opacity-40 text-white p-2.5 rounded-full active:scale-90 transition-transform"><Send size={16}/></button>{cancel&&<button onClick={cancel} className="text-[#71767b] text-xs">Cancel</button>}</div>;}

@@ -4,6 +4,8 @@ import PostComposer from '../PostComposer';
 import PostDetailModal from '../PostDetailModal';
 import { usePosts, useUpvote, useToggleSave, useToggleRepost, useVotePoll } from '../usePosts';
 import { Sparkles, X } from 'lucide-react';
+import FeedSkeleton from '@/components/rivet/feed/FeedSkeleton';
+import InfiniteFeedSentinel from '@/components/rivet/feed/InfiniteFeedSentinel';
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -26,7 +28,7 @@ const TABS = [
 ];
 
 export default function FeedView({ currentUser, onViewProfile }) {
-  const { data: posts = [], isLoading } = usePosts();
+  const { data: posts = [], isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = usePosts();
   const upvote = useUpvote();
   const save = useToggleSave(currentUser);
   const repost = useToggleRepost(currentUser);
@@ -95,7 +97,7 @@ export default function FeedView({ currentUser, onViewProfile }) {
       {tab !== 'saved' && <PostComposer defaultType="discussion" currentUser={currentUser} />}
 
       {isLoading ? (
-        [...Array(3)].map((_, i) => <div key={i} className="h-40 bg-[#ffffff] rounded-2xl border border-[#e4e6eb] animate-pulse" />)
+        <FeedSkeleton count={3} />
       ) : filtered.length === 0 ? (
         <div className="bg-[#ffffff] rounded-2xl border border-[#e4e6eb] p-12 text-center">
           <p className="text-[#65676b] text-sm">{tab === 'saved' ? 'No saved posts yet. Bookmark posts to find them here.' : 'No posts yet. Be the first to share something!'}</p>
@@ -116,6 +118,7 @@ export default function FeedView({ currentUser, onViewProfile }) {
               onViewProfile={onViewProfile}
             />
           ))}
+          <InfiniteFeedSentinel hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
         </div>
       )}
       {selectedPost && <PostDetailModal post={selectedPost} onClose={() => setSelectedPost(null)} currentUser={currentUser} onViewProfile={onViewProfile} />}
