@@ -18,15 +18,7 @@ const TABS = [
   { id: 'template', label: 'From Template', icon: 'template' },
 ];
 
-type LabeledSelectProps = {
-  icon: string;
-  label: string;
-  value: string;
-  options: { id: string; label: string }[];
-  onChange: (value: string) => void;
-};
-
-function LabeledSelect({ icon, label, value, options, onChange }: LabeledSelectProps) {
+function LabeledSelect({ icon, label, value, options, onChange }) {
   const selected = options.find((o) => o.id === value)?.label ?? '';
 
   return (
@@ -53,18 +45,13 @@ function LabeledSelect({ icon, label, value, options, onChange }: LabeledSelectP
   );
 }
 
-type HomeHeroProps = {
-  currentUser?: { full_name?: string | null };
-  onNavigate?: (route: string) => void;
-};
-
-export default function HomeHero({ currentUser, onNavigate }: HomeHeroProps) {
+export default function HomeHero({ currentUser, onNavigate }) {
   const [prompt, setPrompt] = useState('');
   const [title, setTitle] = useState('');
   const [domain, setDomain] = useState('biology');
   const [difficulty, setDifficulty] = useState('intermediate');
   const [evaluationType, setEvaluationType] = useState('hybrid');
-  const [tab, setTab] = useState<'new' | 'upload' | 'template'>('new');
+  const [tab, setTab] = useState('new');
   const [fromUpload, setFromUpload] = useState(false);
 
   const create = useCreateEvaluationTask();
@@ -94,7 +81,7 @@ export default function HomeHero({ currentUser, onNavigate }: HomeHeroProps) {
     );
   };
 
-  const applyTemplate = (t: { label: string; prompt: string; domain: string; difficulty: string }) => {
+  const applyTemplate = (t) => {
     setTitle(t.label);
     setPrompt(t.prompt);
     setDomain(t.domain);
@@ -112,7 +99,7 @@ export default function HomeHero({ currentUser, onNavigate }: HomeHeroProps) {
         {TABS.map(({ id, label, icon }) => (
           <button
             key={id}
-            onClick={() => setTab(id as typeof tab)}
+            onClick={() => setTab(id)}
             className={`relative flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold transition-colors ${
               tab === id ? 'text-white' : 'text-[#71767b] hover:text-white'
             }`}
