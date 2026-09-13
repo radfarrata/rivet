@@ -11,6 +11,7 @@ export default function EvidenceReviewPanel({ data, currentUser }) {
   return <aside className="space-y-4 min-w-0 bg-card p-4 border-t xl:border-t-0 xl:border-l border-border">
     <h2 className="font-semibold">Review & adjudication</h2>
     <p className="text-xs text-muted-foreground">{data.officialEligible ? 'Publication checks passed.' : 'Not official: complete provenance, an exact provider revision, two verified reviews and a final adjudication are required.'}</p>
+    {!!data.publicationBlockers?.length && <ul className="list-disc pl-4 space-y-1 text-xs text-muted-foreground">{data.publicationBlockers.map(reason => <li key={reason}>{reason}</li>)}</ul>}
     <p className="text-xs">{data.version?.contaminationRisk?.replaceAll('_', ' ') || 'Unchecked'}<span className="block text-muted-foreground">{data.version?.contaminationScope || 'Legacy exposure history is unknown.'}</span></p>
     <ContaminationLadder quality={data.quality} />
     {data.finals.length > 0 && <div className="rounded-lg border p-3 text-sm"><strong>Final adjudication: {data.finals[0].finalScore}/100</strong><p className="whitespace-pre-wrap">{data.finals[0].structuredFeedback}</p></div>}

@@ -24,7 +24,7 @@ export default async function(req) {
       case 'submitReview':case 'finalAdjudication':result=await reviewAction(b,user,p);break;
       case 'legacyAdjudication':result=await legacyAdjudication(b,user,p);break;
       case 'migrate':result=await migrate(b,user);break;
-      case 'selfChecks':requireValue(user.role==='admin','Administrator required.',403);result=selfChecks();break;
+      case 'selfChecks':requireValue(user.role==='admin','Administrator required.',403);result=await selfChecks();break;
       case 'storageCheck': {
         requireValue(user.role==='admin','Administrator required.',403);
         const diagnostic={purpose:'Private evidence storage diagnostic',methodologyVersion:METHOD};

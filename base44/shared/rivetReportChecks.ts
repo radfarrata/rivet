@@ -1,17 +1,21 @@
 import {METHOD} from './rivetCore.ts';
+import {SCAN_PROTOCOL} from './rivetPublicationSafety.ts';
 import {reportEligibility,reportRankings} from './rivetReportEligibility.ts';
 import {REPORT_TEMPLATES,reportMarkdown,REPORT_METHOD,REPORT_LIMITATIONS} from './rivetReportTemplates.ts';
 export function reportChecks(){
   const checks=[],check=(name,pass)=>checks.push({name,pass:!!pass});
   const r={id:'r',taskId:'t',taskVersionId:'v',evidenceId:'e',modelId:'model',domain:'biology',score:80,methodologyVersion:METHOD};
-  const e={id:'e',taskId:'t',taskVersionId:'v',modelId:'model',status:'complete',resultId:'r',artifactUri:'private',artifactHash:'hash',modelResolution:'provider_revision',providerRevision:'revision-1',methodologyVersion:METHOD};
+  const e={id:'e',taskId:'t',taskVersionId:'v',modelId:'model',status:'complete',resultId:'r',artifactUri:'private',artifactHash:'hash',executionSource:'server_integration',modelResolution:'provider_revision',providerRevision:'revision-1',methodologyVersion:METHOD};
   const v={id:'v',taskId:'t',snapshotUri:'snapshot',snapshotHash:'snapshot-hash',qualityAssessmentId:'q',contaminationRisk:'no_match_found',methodologyVersion:METHOD};
   const reviews=['one','two'].map((id,i)=>({id,evaluatorId:id,resultId:'r',taskId:'t',evidenceId:'e',credentialStatusAtReview:'verified',hasConflict:false,credentialId:`c${i}`,methodologyVersion:METHOD}));
   const final={id:'final',resultId:'r',taskId:'t',evidenceId:'e',expertId:'adjudicator',credentialId:'c2',reviewIds:['one','two'],finalScore:85,methodologyVersion:METHOD};
   const credentials=['one','two','adjudicator'].map((userId,i)=>({id:`c${i}`,userId,status:'verified',domains:['biology']}));
   const events=[{id:'a1',action:'evaluation_completed',taskId:'t',targetId:'e',details:{resultId:'r',artifactHash:'hash'}},{id:'a2',action:'final_adjudication',taskId:'t',targetId:'final',details:{resultId:'r'}},...reviews.map(x=>({id:`a-${x.id}`,action:'expert_review_submitted',taskId:'t',targetId:x.id,details:{resultId:'r'}}))];
-  const d={tasks:[{id:'t',ownerId:'owner'}],evidences:[e],versions:[v],reviews,finals:[final],assessments:[{id:'q',taskVersionId:'v',risk:'no_match_found',methodologyVersion:METHOD}]};
+  const d={tasks:[{id:'t',ownerId:'owner'}],evidences:[e],versions:[v],reviews,finals:[final],assessments:[{id:'q',taskId:'t',taskVersionId:'v',risk:'no_match_found',methodologyVersion:METHOD,taskSnapshotHash:'snapshot-hash',scanProtocol:SCAN_PROTOCOL,scanStatus:'complete',eligiblePeerCount:1,checkedPeerCount:1,failedPeerCount:0,checks:[0,1,2,3,4,5].map(rung=>({rung,status:rung===4?'not_applicable':'pass'}))}]};
   check('Report accepts corroborated official metadata',reportEligibility(r,d,events,credentials).reasons.length===0);
+  check('Report blocks unverified imports even with reviews',reportEligibility(r,{...d,evidences:[{...e,executionSource:'external_import'}]},events,credentials).reasons.length>0);
+  check('Report blocks incomplete corpus scan',reportEligibility(r,{...d,assessments:[{...d.assessments[0],scanStatus:'incomplete'}]},events,credentials).reasons.length>0);
+  check('Report blocks pending manual contamination checks',reportEligibility(r,{...d,assessments:[{...d.assessments[0],checks:d.assessments[0].checks.map(c=>c.rung===0?{...c,status:'manual'}:c)}]},events,credentials).reasons.length>0);
   check('Report blocks unresolved provider revision',reportEligibility(r,{...d,evidences:[{...e,providerRevision:''}]},events,credentials).reasons.length>0);
   check('Report blocks contaminated tasks',reportEligibility(r,{...d,versions:[{...v,contaminationRisk:'known_contamination'}]},events,credentials).reasons.length>0);
   check('Report blocks missing audit records',reportEligibility(r,d,[],credentials).reasons.length>0);

@@ -3,6 +3,7 @@ import {interval,rankings,metrics} from './rivetStatistics.ts';
 import {ngramCoverage} from './rivetContamination.ts';
 import {calibrationChecks} from './rivetCalibrationChecks.ts';
 import {reportChecks} from './rivetReportChecks.ts';
+import {publicationChecks,contaminationSafetyChecks} from './rivetPublicationChecks.ts';
 export async function migrate(b,user) {
   requireValue(user.role==='admin','Administrator required.',403);
   const rows=await scan(b.asServiceRole.entities.ModelResult);
@@ -10,7 +11,7 @@ export async function migrate(b,user) {
   for(let i=0;i<updates.length;i+=100)await b.asServiceRole.entities.ModelResult.bulkUpdate(updates.slice(i,i+100));
   await audit(b,user,'legacy_migration',METHOD,'',{labelledResults:updates.length,preservedOriginalData:true});return {labelledResults:updates.length,preservedOriginalData:true};
 }
-export function selfChecks() {
+export async function selfChecks() {
   const checks=[];const check=(name,pass)=>checks.push({name,pass:!!pass});
   check('Single-task interval is unavailable',interval([75])===null);
   check('Constant-sample bootstrap is exact',JSON.stringify(interval([50,50,50]))==='[50,50]');
@@ -31,6 +32,6 @@ export function selfChecks() {
   check('Short prompts stay outside the n-gram denominator',ngramCoverage('too short','also short',13).checkable===false);
   const calibrated=metrics([{...rows[0],judgeConfidence:.9}],reviewed,[{resultId:'test1',methodologyVersion:METHOD,finalScore:20}]);
   check('Calibration reports Brier and chance-corrected disagreement',calibrated.brierScore===.81&&calibrated.krippendorffAlpha===0);
-  checks.push(...calibrationChecks(),...reportChecks());
+  checks.push(...calibrationChecks(),...reportChecks(),...publicationChecks(),...await contaminationSafetyChecks());
   return {ok:checks.every(c=>c.pass),checks,note:'Isolated in-memory checks only; no test experts, rankings, or scores persisted.'};
 }

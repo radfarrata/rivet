@@ -39,6 +39,15 @@
     "providerRevision": {
       "type": "string"
     },
+    "executionSource": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "server_integration",
+        "external_import"
+      ],
+      "default": "unknown"
+    },
     "judgeModel": {
       "type": "string"
     },

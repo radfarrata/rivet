@@ -1,11 +1,12 @@
 import {METHOD,evidenceComplete,validReview} from './rivetCore.ts';
 import {rankings} from './rivetStatistics.ts';
+import {publicationSafetyReasons} from './rivetPublicationSafety.ts';
 export function reportEligibility(r,d,events,credentials) {
   const reasons=[],e=d.evidences.find(x=>x.id===r.evidenceId),v=d.versions.find(x=>x.id===r.taskVersionId);
   if(!evidenceComplete(r,e,v)||v?.id!==r.taskVersionId||v?.taskId!==r.taskId||e?.methodologyVersion!==METHOD||v?.methodologyVersion!==METHOD)reasons.push('Incomplete or inconsistent provenance');
   if(e?.modelResolution!=='provider_revision'||!e.providerRevision?.trim())reasons.push('Exact provider revision unavailable');
   const quality=d.assessments.find(x=>x.id===v?.qualityAssessmentId);
-  if(v?.contaminationRisk!=='no_match_found'||quality?.risk!=='no_match_found'||quality?.taskVersionId!==v?.id||quality?.methodologyVersion!==METHOD)reasons.push('Contamination clearance missing');
+  reasons.push(...publicationSafetyReasons(e,v,quality));
   const credential=(id,uid)=>credentials.some(c=>c.id===id&&c.userId===uid&&c.status==='verified'&&c.domains?.includes(r.domain));
   const owner=d.tasks.find(t=>t.id===r.taskId);const ownerId=owner?.ownerId||owner?.created_by_id;
   const reviews=d.reviews.filter(x=>x.resultId===r.id&&x.taskId===r.taskId&&x.evidenceId===e?.id&&x.evaluatorId!==ownerId&&validReview(x)&&credential(x.credentialId,x.evaluatorId));

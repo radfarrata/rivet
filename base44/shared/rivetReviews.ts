@@ -27,7 +27,7 @@ export async function reviewAction(b,user,p) {
   requireValue(!(await s.ExpertEvaluation.filter({resultId:r.id})).length,'A final adjudication already exists; corrections require a new evaluation version.',409);
   const saved=await s.ExpertEvaluation.create({traceId:`evidence:${r.evidenceId}`,resultId:r.id,taskId:r.taskId,evidenceId:r.evidenceId,expertId:user.id,expertName:user.full_name||'Adjudicator',verdict:p.score>=80?'false_positive':'confirmed_failure',severity:'medium',failureType:'other',structuredFeedback:p.notes.trim(),finalScore:p.score,reviewIds:qualified.map(x=>x.id),credentialId:credential.id,conflictDeclaration:p.conflictDeclaration.trim(),methodologyVersion:r.methodologyVersion});
   await audit(b,user,'final_adjudication',saved.id,task.id,{resultId:r.id,reviewIds:saved.reviewIds,finalScore:p.score});
-  if(r.rankingEntryId)await s.RankingEntry.update(r.rankingEntryId,{officialEligible:officialEligible(r,e,v,reviews,[saved]),computedAt:new Date().toISOString()});
+  if(r.rankingEntryId){const quality=v.qualityAssessmentId?await s.TaskQualityAssessment.get(v.qualityAssessmentId):null;await s.RankingEntry.update(r.rankingEntryId,{officialEligible:officialEligible(r,e,v,reviews,[saved],quality),computedAt:new Date().toISOString()});}
   return saved;
 }
 export async function legacyAdjudication(b,user,p) {

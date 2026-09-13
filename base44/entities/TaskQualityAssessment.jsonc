@@ -66,6 +66,31 @@
     },
     "assessedBy": {
       "type": "string"
+    },
+    "scanProtocol": {
+      "type": "string"
+    },
+    "scanStatus": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "incomplete"
+      ]
+    },
+    "eligiblePeerCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "checkedPeerCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failedPeerCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "taskSnapshotHash": {
+      "type": "string"
     }
   },
   "required": [
