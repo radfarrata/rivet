@@ -1,20 +1,17 @@
 {
-  "name": "ModelResult",
+  "name": "RankingEntry",
   "type": "object",
   "properties": {
+    "resultId": {
+      "type": "string"
+    },
+    "runId": {
+      "type": "string"
+    },
     "taskId": {
       "type": "string"
     },
-    "taskTitle": {
-      "type": "string"
-    },
-    "domain": {
-      "type": "string"
-    },
-    "modelId": {
-      "type": "string"
-    },
-    "model": {
+    "taskVersionId": {
       "type": "string"
     },
     "modelVersionId": {
@@ -23,70 +20,58 @@
     "methodologyVersionId": {
       "type": "string"
     },
+    "methodologyVersion": {
+      "type": "string"
+    },
     "suiteId": {
       "type": "string"
     },
-    "rankingEntryId": {
+    "domain": {
+      "type": "string"
+    },
+    "modelId": {
+      "type": "string"
+    },
+    "modelLabel": {
       "type": "string"
     },
     "score": {
-      "type": "number",
-      "default": 0
-    },
-    "judgeConfidence": {
       "type": "number"
-    },
-    "summary": {
-      "type": "string"
-    },
-    "strengths": {
-      "type": "string"
-    },
-    "weaknesses": {
-      "type": "string"
-    },
-    "failureModes": {
-      "type": "string"
-    },
-    "rawResponse": {
-      "type": "string"
-    },
-    "judgedBy": {
-      "type": "string",
-      "default": "Rivet automated judge"
-    },
-    "taskVersionId": {
-      "type": "string"
-    },
-    "runId": {
-      "type": "string"
-    },
-    "evidenceId": {
-      "type": "string"
-    },
-    "methodologyVersion": {
-      "type": "string"
     },
     "evidenceStatus": {
       "type": "string",
       "enum": [
-        "legacy",
         "complete",
         "incomplete"
       ]
+    },
+    "officialEligible": {
+      "type": "boolean",
+      "default": false
+    },
+    "computedAt": {
+      "type": "string"
     }
   },
   "required": [
+    "resultId",
+    "runId",
     "taskId",
+    "taskVersionId",
+    "modelVersionId",
+    "methodologyVersionId",
+    "methodologyVersion",
+    "suiteId",
+    "domain",
     "modelId",
-    "score"
+    "modelLabel",
+    "score",
+    "evidenceStatus",
+    "officialEligible",
+    "computedAt"
   ],
   "rls": {
-    "read": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
+    "read": {},
     "create": {
       "user_condition": {
         "role": "admin"

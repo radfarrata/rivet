@@ -18,6 +18,7 @@ export const DOMAINS = [
   { id: 'safety', label: 'Safety' },
   { id: 'scientific_reasoning', label: 'Scientific Reasoning' },
   { id: 'agentic', label: 'Agentic' },
+  { id: 'open_weight_core', label: 'Open-Weight Core' },
   { id: 'other', label: 'Other' },
 ];
 

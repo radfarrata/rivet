@@ -1,12 +1,14 @@
 import {createClientFromRequest} from 'npm:@base44/sdk@0.8.44';
 import {METHOD,requireValue,taskAccess,load,store,audit,MODELS,scan} from '../../shared/rivetCore.ts';
 import {prepareVersion} from '../../shared/rivetTasks.ts';
+import {recordOpenWeightResult} from '../../shared/rivetOpenWeightRun.ts';
 export default async function(req) {
   const b=createClientFromRequest(req); let user,evidence,task,run;
   try {
     user=await b.auth.me();if(!user)return Response.json({error:'Sign in to run evaluations.'},{status:401});
     const p=await req.json();requireValue(typeof p.taskId==='string','Task ID is required.');
     if(p.action==='prepare')return Response.json(await prepareVersion(b,user,p.taskId));
+    if(p.action==='openWeightResult')return Response.json(await recordOpenWeightResult(b,user,p));
     requireValue(p.action==='model' && MODELS.includes(p.modelId),'Invalid run action or model.');
     task=await taskAccess(b,user,p.taskId,true);const s=b.asServiceRole.entities;
     const v=await s.TaskVersion.get(p.versionId);requireValue(v && v.taskId===task.id && v.id===task.currentVersionId,'Task version is unavailable or superseded.');

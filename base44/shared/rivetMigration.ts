@@ -14,7 +14,7 @@ export function selfChecks() {
   const checks=[];const check=(name,pass)=>checks.push({name,pass:!!pass});
   check('Single-task interval is unavailable',interval([75])===null);
   check('Constant-sample bootstrap is exact',JSON.stringify(interval([50,50,50]))==='[50,50]');
-  const rows=[{id:'test1',modelId:'a',model:'A',domain:'biology',score:80,evidenceStatus:'complete',familyHash:'same',created_date:'2026-01-01'},{id:'test2',modelId:'a',model:'A',domain:'biology',score:90,evidenceStatus:'complete',familyHash:'same',created_date:'2026-01-02'}];
+  const rows=[{id:'test1',modelId:'a',model:'A',domain:'biology',score:80,methodologyVersion:METHOD,evidenceStatus:'complete',familyHash:'same',created_date:'2026-01-01'},{id:'test2',modelId:'a',model:'A',domain:'biology',score:90,methodologyVersion:METHOD,evidenceStatus:'complete',familyHash:'same',created_date:'2026-01-02'}];
   const rank=rankings(rows,'biology')[0];check('Duplicate prompts count once',rank.n===1&&rank.runCount===2&&rank.avg===90);check('Sparse cohorts never verified',rank.label==='insufficient evidence');
   check('Legacy results never enter rankings',rankings([{...rows[0],evidenceStatus:'legacy'}],'biology').length===0);
   check('Missing evidence prevents publication',!evidenceComplete(rows[0],null,null));check('No reviews yields unavailable agreement',metrics(rows,[]).agreement===null);

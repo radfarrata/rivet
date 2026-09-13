@@ -23,6 +23,7 @@
         "safety",
         "scientific_reasoning",
         "agentic",
+        "open_weight_core",
         "other"
       ]
     },
@@ -61,6 +62,25 @@
         "type": "string"
       },
       "default": []
+    },
+    "modelVersionIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "benchmarkSuiteId": {
+      "type": "string"
+    },
+    "methodologyVersionId": {
+      "type": "string"
+    },
+    "suiteTaskKey": {
+      "type": "string"
+    },
+    "benchmarkDimension": {
+      "type": "string"
     },
     "status": {
       "type": "string",

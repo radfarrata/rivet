@@ -1,0 +1,63 @@
+{
+  "name": "MethodologyVersion",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "suiteId": {
+      "type": "string"
+    },
+    "suiteVersion": {
+      "type": "string"
+    },
+    "protocol": {
+      "type": "object"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "retired"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "key",
+    "name",
+    "version",
+    "domain",
+    "suiteId",
+    "suiteVersion",
+    "protocol",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

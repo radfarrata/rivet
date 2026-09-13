@@ -26,6 +26,12 @@
     "methodologyVersion": {
       "type": "string"
     },
+    "methodologyVersionId": {
+      "type": "string"
+    },
+    "suiteId": {
+      "type": "string"
+    },
     "contaminationRisk": {
       "type": "string",
       "enum": [

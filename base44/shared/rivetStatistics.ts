@@ -9,7 +9,7 @@ export function interval(values) {
 }
 export function metrics(results,reviews,finals=[]) {
   const ids=new Set(results.map(r=>r.id));
-  const eligible=reviews.filter(r=>ids.has(r.resultId)&&r.evaluatorId&&validReview(r)&&['pass','partial','fail'].includes(r.verdict));
+  const eligible=reviews.filter(review=>ids.has(review.resultId)&&review.evaluatorId&&validReview(review)&&results.some(result=>result.id===review.resultId&&result.methodologyVersion===review.methodologyVersion)&&['pass','partial','fail'].includes(review.verdict));
   let pairs=0,agree=0,pairedResults=0,reviewCount=0;
   const errors=[],matches=[],calibration=[],adjudicated=[],reviewUnits=[];
   for(const r of results){
@@ -17,7 +17,7 @@ export function metrics(results,reviews,finals=[]) {
     reviewUnits.push(unique);reviewCount+=unique.length;
     if(unique.length>=2)pairedResults++;
     unique.forEach((left,i)=>unique.slice(i+1).forEach(right=>{pairs++;if(left.verdict===right.verdict)agree++;}));
-    const f=finals.find(x=>x.resultId===r.id&&x.methodologyVersion===METHOD&&Number.isFinite(x.finalScore)&&x.finalScore>=0&&x.finalScore<=100);
+    const f=finals.find(x=>x.resultId===r.id&&x.methodologyVersion===r.methodologyVersion&&Number.isFinite(x.finalScore)&&x.finalScore>=0&&x.finalScore<=100);
     if(f&&unique.length>=2&&Number.isFinite(r.score)&&r.score>=0&&r.score<=100){
       adjudicated.push({...r,humanScore:f.finalScore});errors.push(Math.abs(r.score-f.finalScore));
       const correct=Number(scoreBand(r.score)===scoreBand(f.finalScore));matches.push(correct);
@@ -40,6 +40,6 @@ export function rankings(results,domain,official=false) {
   return [...byModel.entries()].map(([modelId,rs])=>{
     const history=[...new Map(rs.filter(r=>familyChoice.get(r.familyHash)===cohortKey(r)).sort((a,b)=>a.created_date.localeCompare(b.created_date)).map(r=>[r.familyHash,r])).values()];
     const values=history.map(r=>official?r.finalScore:r.score);const ci=interval(values);const n=values.length;const resolved=rs.filter(r=>r.modelResolution==='provider_revision'&&r.providerRevision);
-    return {modelId,model:rs[0].model,modelAlias:modelId,modelRevision:resolved[0]?.providerRevision||null,aliasStatus:resolved.length===rs.length?'resolved':'alias only',avg:mean(values),ci,n,runCount:rs.length,availableFamilies:new Set(rs.map(r=>r.familyHash)).size,methodologyVersion:METHOD,label:n<30?'insufficient evidence':official&&n>=50&&ci&&ci[1]-ci[0]<=10?'verified':'exploratory',history:history.map(r=>({id:r.id,taskTitle:r.taskTitle,score:official?r.finalScore:r.score,created_date:r.created_date})),coverage:rs.length?n/new Set(rs.map(r=>r.familyHash)).size:0};
+    return {modelId,model:rs[0].model,modelAlias:modelId,modelRevision:resolved[0]?.providerRevision||null,aliasStatus:resolved.length===rs.length?'resolved':'alias only',avg:mean(values),ci,n,runCount:rs.length,availableFamilies:new Set(rs.map(r=>r.familyHash)).size,methodologyVersion:rs[0]?.methodologyVersion||METHOD,label:n<30?'insufficient evidence':official&&n>=50&&ci&&ci[1]-ci[0]<=10?'verified':'exploratory',history:history.map(r=>({id:r.id,taskTitle:r.taskTitle,score:official?r.finalScore:r.score,created_date:r.created_date})),coverage:rs.length?n/new Set(rs.map(r=>r.familyHash)).size:0};
   }).sort((a,b)=>(b.avg??-1)-(a.avg??-1));
 }

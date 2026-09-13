@@ -16,16 +16,18 @@ export async function createTask(b,user,p) {
 }
 export async function prepareVersion(b,user,taskId) {
   const t=await taskAccess(b,user,taskId,true); const s=b.asServiceRole.entities;
-  requireValue(t.prompt?.trim() && t.models?.length && t.models.every(x=>MODELS.includes(x)),'Task prompt or selected models are invalid.');
+  const suiteMethod=t.methodologyVersionId?await s.MethodologyVersion.get(t.methodologyVersionId):null;
+  const methodology=suiteMethod?.key||METHOD;
+  requireValue(t.prompt?.trim() && t.models?.length && (t.benchmarkSuiteId ? suiteMethod?.status==='active'&&suiteMethod.suiteId===t.benchmarkSuiteId&&t.modelVersionIds?.length===t.models.length : t.models.every(x=>MODELS.includes(x))),'Task prompt, selected models, or suite methodology are invalid.');
   const criteria=t.evaluationCriteria?.trim()||'Accuracy, correctness, and completeness of the answer.';
-  const snapshot={title:t.title,prompt:t.prompt,criteria,domain:t.domain,difficulty:t.difficulty,evaluationType:t.evaluationType,models:t.models,methodologyVersion:METHOD};
+  const snapshot={title:t.title,prompt:t.prompt,criteria,domain:t.domain,difficulty:t.difficulty,evaluationType:t.evaluationType,models:t.models,modelVersionIds:t.modelVersionIds||[],suiteId:t.benchmarkSuiteId||'',methodologyVersionId:t.methodologyVersionId||'',methodologyVersion:methodology};
   const contentHash=await hash(JSON.stringify(snapshot)); const familyHash=await hash(normalize(t.prompt));
   const versions=await scan(s.TaskVersion,{taskId:t.id}); let v=versions.find(x=>x.contentHash===contentHash);
   if(!v){
     const accessible=(await context(b,user)).tasks.filter(x=>t.visibility!=='public'||x.visibility==='public');
     const matches=(await scan(s.TaskVersion,{familyHash})).filter(x=>accessible.some(task=>task.id===x.taskId));
     const artifact=await store(b,snapshot);
-    v=await s.TaskVersion.create({taskId:t.id,workspaceId:t.workspaceId||'',version:Math.max(0,...versions.map(x=>x.version))+1,contentHash,familyHash,snapshotUri:artifact.uri,snapshotHash:artifact.hash,methodologyVersion:METHOD,contaminationRisk:matches.length?'possible_overlap':'no_match_found',contaminationScope:'Exact normalized-prompt search of the authorized corpus only (public corpus for public tasks); online exposure and training contamination are unknown.',difficultySource:'Contributor-declared; not empirically calibrated'});
+    v=await s.TaskVersion.create({taskId:t.id,workspaceId:t.workspaceId||'',version:Math.max(0,...versions.map(x=>x.version))+1,contentHash,familyHash,snapshotUri:artifact.uri,snapshotHash:artifact.hash,methodologyVersion:methodology,methodologyVersionId:t.methodologyVersionId||'',suiteId:t.benchmarkSuiteId||'',contaminationRisk:matches.length?'possible_overlap':'no_match_found',contaminationScope:'Exact normalized-prompt search of the authorized corpus only (public corpus for public tasks); online exposure and training contamination are unknown.',difficultySource:'Contributor-declared; not empirically calibrated'});
     await audit(b,user,'task_version_captured',v.id,t.id,{contentHash,version:v.version});
   }
   if(!v.qualityAssessmentId){const corpus=(await context(b,user)).tasks;const ids=new Set(corpus.filter(x=>t.visibility!=='public'||x.visibility==='public').map(x=>x.id));const versionsForCheck=(await scan(s.TaskVersion)).filter(x=>ids.has(x.taskId));await assessTaskQuality(b,user,t,v,versionsForCheck);v=await s.TaskVersion.get(v.id);}

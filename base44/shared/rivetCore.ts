@@ -1,5 +1,7 @@
 export const METHOD = 'rivet-evidence-1.0';
-export const DOMAINS = ['reasoning','coding','mathematics','biology','chemistry','physics','medicine','multimodal','long_context','safety','scientific_reasoning','agentic','other'];
+export const OPEN_WEIGHT_METHOD = 'open-weight-core-1.0';
+export const DOMAINS = ['reasoning','coding','mathematics','biology','chemistry','physics','medicine','multimodal','long_context','safety','scientific_reasoning','agentic','open_weight_core','other'];
+export const SUPPORTED_METHODS = [METHOD,OPEN_WEIGHT_METHOD];
 export const MODELS = ['gpt_5_mini','gpt_5_4','claude-sonnet-5','gemini_3_flash'];
 export function requireValue(ok, message, status = 400) { if (!ok) { const e = new Error(message); e.status = status; throw e; } }
 export async function scan(entity, query = {}) {
@@ -47,8 +49,8 @@ export async function load(b,uri,digest) {
 export async function audit(b,user,action,targetId,taskId='',details={}) {
   return await b.asServiceRole.entities.EvaluationAudit.create({actorId:user.id,action,targetId,taskId,details,occurredAt:new Date().toISOString()});
 }
-export const validReview = r => r.credentialStatusAtReview === 'verified' && r.hasConflict === false && r.methodologyVersion === METHOD;
-export const evidenceComplete = (r,e,v) => !!(e && v && e.status === 'complete' && e.resultId === r.id && e.taskId === r.taskId && e.taskVersionId === r.taskVersionId && e.modelId === r.modelId && e.artifactUri && e.artifactHash && v.snapshotUri && v.snapshotHash && r.methodologyVersion === METHOD && Number.isFinite(r.score) && r.score >= 0 && r.score <= 100);
+export const validReview = r => r.credentialStatusAtReview === 'verified' && r.hasConflict === false && SUPPORTED_METHODS.includes(r.methodologyVersion);
+export const evidenceComplete = (r,e,v) => !!(e && v && e.status === 'complete' && e.resultId === r.id && e.taskId === r.taskId && e.taskVersionId === r.taskVersionId && e.modelId === r.modelId && e.artifactUri && e.artifactHash && v.snapshotUri && v.snapshotHash && SUPPORTED_METHODS.includes(r.methodologyVersion) && e.methodologyVersion === r.methodologyVersion && v.methodologyVersion === r.methodologyVersion && Number.isFinite(r.score) && r.score >= 0 && r.score <= 100);
 export function officialEligible(r,e,v,reviews,finals) {
-  return evidenceComplete(r,e,v) && e.modelResolution === 'provider_revision' && !!e.providerRevision && v.contaminationRisk !== 'unchecked' && v.contaminationRisk !== 'possible_overlap' && new Set(reviews.filter(validReview).map(x=>x.evaluatorId)).size>=2 && finals.some(f=>f.resultId===r.id && f.methodologyVersion===METHOD && Number.isFinite(f.finalScore) && f.reviewIds?.length>=2);
+  return evidenceComplete(r,e,v) && e.modelResolution === 'provider_revision' && !!e.providerRevision && v.contaminationRisk !== 'unchecked' && v.contaminationRisk !== 'possible_overlap' && new Set(reviews.filter(x=>validReview(x)&&x.methodologyVersion===r.methodologyVersion).map(x=>x.evaluatorId)).size>=2 && finals.some(f=>f.resultId===r.id && f.methodologyVersion===r.methodologyVersion && Number.isFinite(f.finalScore) && f.reviewIds?.length>=2);
 }

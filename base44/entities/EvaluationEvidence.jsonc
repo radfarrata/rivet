@@ -20,6 +20,15 @@
     "modelId": {
       "type": "string"
     },
+    "modelVersionId": {
+      "type": "string"
+    },
+    "suiteId": {
+      "type": "string"
+    },
+    "methodologyVersionId": {
+      "type": "string"
+    },
     "modelResolution": {
       "type": "string",
       "enum": [

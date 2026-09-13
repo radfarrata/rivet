@@ -1,0 +1,92 @@
+{
+  "name": "ModelVersion",
+  "type": "object",
+  "properties": {
+    "modelId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "providerModelId": {
+      "type": "string"
+    },
+    "family": {
+      "type": "string"
+    },
+    "hfRepoUrl": {
+      "type": "string"
+    },
+    "githubUrl": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "parameterCount": {
+      "type": "number"
+    },
+    "activeParameterCount": {
+      "type": "number"
+    },
+    "contextWindow": {
+      "type": "integer"
+    },
+    "benchmarkHighlights": {
+      "type": "object"
+    },
+    "releaseDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "open_weight": {
+      "type": "boolean",
+      "default": true
+    },
+    "identityStatus": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "to_be_confirmed"
+      ]
+    },
+    "identitySourceUrl": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "modelId",
+    "name",
+    "provider",
+    "providerModelId",
+    "family",
+    "license",
+    "open_weight",
+    "identityStatus",
+    "identitySourceUrl"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
