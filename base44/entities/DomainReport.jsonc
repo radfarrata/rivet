@@ -1,0 +1,81 @@
+{
+  "name": "DomainReport",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "templateId": {
+      "type": "string"
+    },
+    "templateVersion": {
+      "type": "string"
+    },
+    "snapshotHash": {
+      "type": "string"
+    },
+    "snapshotUri": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "cutoffAt": {
+      "type": "string"
+    },
+    "generatedBy": {
+      "type": "string"
+    },
+    "taskIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "resultCount": {
+      "type": "integer"
+    },
+    "auditCount": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "title",
+    "domain",
+    "templateId",
+    "templateVersion",
+    "snapshotHash",
+    "snapshotUri",
+    "generatedAt",
+    "cutoffAt",
+    "generatedBy",
+    "taskIds",
+    "resultCount",
+    "auditCount"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

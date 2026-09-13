@@ -5,6 +5,7 @@ import {createTask,reviseTask,workspaceAction} from '../../shared/rivetTasks.ts'
 import {expertAction} from '../../shared/rivetExperts.ts';
 import {reviewAction,legacyAdjudication} from '../../shared/rivetReviews.ts';
 import {migrate,selfChecks} from '../../shared/rivetMigration.ts';
+import {reportAction} from '../../shared/rivetReports.ts';
 export default async function(req) {
   try {
     const b=createClientFromRequest(req);const user=await b.auth.me();if(!user)return Response.json({error:'Sign in to access evaluation evidence.'},{status:401});
@@ -15,6 +16,7 @@ export default async function(req) {
       }
       case 'evidence':requireValue(typeof p.resultId==='string','Result ID is required.');result=await evidenceView(b,user,p.resultId);break;
       case 'rankings':requireValue(DOMAINS.includes(p.domain),'Choose one domain; overall intelligence scores are not supported.');result=await rankingView(b,user,p.domain,p.official===true);break;
+      case 'reportReadiness':case 'generateReport':case 'reportSnapshot':result=await reportAction(b,user,p);break;
       case 'createTask':result=await createTask(b,user,p);break;
       case 'reviseTask':result=await reviseTask(b,user,p);break;
       case 'workspaces':case 'createWorkspace':case 'addMember':case 'removeMember':result=await workspaceAction(b,user,p);break;

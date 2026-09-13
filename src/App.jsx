@@ -14,6 +14,7 @@ import ResetPassword from './pages/ResetPassword';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import ExpertWorkspace from './pages/ExpertWorkspace';
 import EvaluationEvidence from '@/pages/EvaluationEvidence';
+import DomainReport from '@/pages/DomainReport';
 // Add page imports here
 
 const AuthenticatedApp = () => (
@@ -29,6 +30,7 @@ const AuthenticatedApp = () => (
       <Route path="/" element={<RivetDashboard />} />
       <Route path="/expert" element={<ExpertWorkspace />} />
       <Route path="/evidence" element={<EvaluationEvidence />} />
+      <Route path="/report" element={<DomainReport />} />
       <Route path="/network" element={<NexusOS />} />
       <Route path="/dashboard" element={<Dashboard />} />
     </Route>

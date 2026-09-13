@@ -1,0 +1,28 @@
+import {METHOD} from './rivetCore.ts';
+import {reportEligibility,reportRankings} from './rivetReportEligibility.ts';
+import {REPORT_TEMPLATES,reportMarkdown,REPORT_METHOD,REPORT_LIMITATIONS} from './rivetReportTemplates.ts';
+export function reportChecks(){
+  const checks=[],check=(name,pass)=>checks.push({name,pass:!!pass});
+  const r={id:'r',taskId:'t',taskVersionId:'v',evidenceId:'e',modelId:'model',domain:'biology',score:80,methodologyVersion:METHOD};
+  const e={id:'e',taskId:'t',taskVersionId:'v',modelId:'model',status:'complete',resultId:'r',artifactUri:'private',artifactHash:'hash',modelResolution:'provider_revision',providerRevision:'revision-1',methodologyVersion:METHOD};
+  const v={id:'v',taskId:'t',snapshotUri:'snapshot',snapshotHash:'snapshot-hash',qualityAssessmentId:'q',contaminationRisk:'no_match_found',methodologyVersion:METHOD};
+  const reviews=['one','two'].map((id,i)=>({id,evaluatorId:id,resultId:'r',taskId:'t',evidenceId:'e',credentialStatusAtReview:'verified',hasConflict:false,credentialId:`c${i}`,methodologyVersion:METHOD}));
+  const final={id:'final',resultId:'r',taskId:'t',evidenceId:'e',expertId:'adjudicator',credentialId:'c2',reviewIds:['one','two'],finalScore:85,methodologyVersion:METHOD};
+  const credentials=['one','two','adjudicator'].map((userId,i)=>({id:`c${i}`,userId,status:'verified',domains:['biology']}));
+  const events=[{id:'a1',action:'evaluation_completed',taskId:'t',targetId:'e',details:{resultId:'r',artifactHash:'hash'}},{id:'a2',action:'final_adjudication',taskId:'t',targetId:'final',details:{resultId:'r'}},...reviews.map(x=>({id:`a-${x.id}`,action:'expert_review_submitted',taskId:'t',targetId:x.id,details:{resultId:'r'}}))];
+  const d={tasks:[{id:'t',ownerId:'owner'}],evidences:[e],versions:[v],reviews,finals:[final],assessments:[{id:'q',taskVersionId:'v',risk:'no_match_found',methodologyVersion:METHOD}]};
+  check('Report accepts corroborated official metadata',reportEligibility(r,d,events,credentials).reasons.length===0);
+  check('Report blocks unresolved provider revision',reportEligibility(r,{...d,evidences:[{...e,providerRevision:''}]},events,credentials).reasons.length>0);
+  check('Report blocks contaminated tasks',reportEligibility(r,{...d,versions:[{...v,contaminationRisk:'known_contamination'}]},events,credentials).reasons.length>0);
+  check('Report blocks missing audit records',reportEligibility(r,d,[],credentials).reasons.length>0);
+  check('Report blocks stale completion hash',reportEligibility(r,d,events.map(a=>a.action==='evaluation_completed'?{...a,details:{resultId:'r',artifactHash:'changed'}}:a),credentials).reasons.length>0);
+  check('Report blocks revoked reviewer credentials',reportEligibility(r,d,events,credentials.map((c,i)=>i===0?{...c,status:'revoked'}:c)).reasons.length>0);
+  check('Report requires independent adjudicator',reportEligibility(r,{...d,finals:[{...final,expertId:'one',credentialId:'c0'}]},events,credentials).reasons.length>0);
+  check('Report validates referenced reviews',reportEligibility(r,{...d,finals:[{...final,reviewIds:['unrelated','also-unrelated']}]},events,credentials).reasons.length>0);
+  const rows=reportRankings(['rev1','rev2'].map((providerRevision,i)=>({...r,id:`r${i}`,providerRevision,modelResolution:'provider_revision',evidenceStatus:'complete',officialEligible:true,finalScore:85,familyHash:'family',cohortHash:'cohort',created_date:'2026-01-01'})),'biology');
+  check('Reports never pool distinct provider revisions',rows.length===2&&rows.every(row=>row.n===1&&row.modelAlias==='model'));
+  check('Official evidence alone does not verify sparse aggregates',rows.every(row=>row.label==='insufficient evidence'));
+  const m={title:'Biology report',template:REPORT_TEMPLATES[0],templateVersion:'report-v1',domainLabel:'Biology',generatedAt:'2026-01-01',cutoffAt:'2026-01-01',latestAuditAt:'2026-01-01',rows,metrics:{calibrationResults:0,statisticsVersion:'stats'},audits:[],evidence:[],exclusions:{},totalResults:2,eligibleResults:2,methodology:REPORT_METHOD,methodologyVersion:METHOD,limitations:REPORT_LIMITATIONS};
+  check('Every template freezes methods and limitations',REPORT_TEMPLATES.every(template=>{const md=reportMarkdown({...m,template});return md.includes('## Methodology')&&md.includes('## Verification and limitations')&&md.includes('Evidence cutoff:');}));
+  return checks;
+}
