@@ -1,0 +1,11 @@
+import React from 'react';
+const number = n => n == null ? 'Not available' : n.toFixed(3);
+export default function JudgeAgreementDetails({ metrics }) {
+  const cards=[['Judge–human Cohen’s κ',number(metrics.cohenKappa)],['Signed score bias',number(metrics.meanSignedError)],['Score-error variance · points²',number(metrics.scoreErrorVariance)],['Mean reviewer variance · points²',number(metrics.meanReviewerVariance)]];
+  return <div className="space-y-3">
+    <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">{cards.map(([label,value])=><div key={label} className="rounded-lg border border-border bg-background p-3"><p className="text-xs text-muted-foreground">{label}</p><strong className="text-lg">{value}</strong></div>)}</div>
+    <p className="text-xs text-muted-foreground">Bias = automated minus final human score; positive means more generous scoring. Error SD: {number(metrics.scoreErrorSD)} points. Reviewer variance averages within-result sample variances across {metrics.reviewerVarianceResults ?? 0} results, not across different tasks.</p>
+    <details className="rounded-lg border border-border p-3"><summary className="cursor-pointer text-sm font-medium">Judge–human confusion matrix</summary><div className="mt-3 overflow-x-auto"><table className="w-full text-sm text-left"><caption className="text-left text-xs text-muted-foreground mb-2">Counts · rows: final human verdict · columns: automated verdict</caption><thead><tr><th scope="col">Human / Judge</th>{metrics.confusionLabels?.map(label=><th scope="col" key={label} className="p-2 capitalize">{label}</th>)}</tr></thead><tbody>{metrics.confusionMatrix?.map((row,i)=><tr key={i} className="border-t border-border"><th scope="row" className="capitalize">{metrics.confusionLabels[i]}</th>{row.map((count,j)=><td key={j} className="p-2 tabular-nums">{count}</td>)}</tr>)}</tbody></table></div><p className="text-xs text-muted-foreground mt-2">{metrics.calibrationResults} paired adjudications · fail &lt;50, partial 50–79, pass ≥80. κ is unavailable when its chance-agreement denominator is zero.</p></details>
+    <p className="text-xs text-muted-foreground">Repeated-judge variance: Not available — independent re-judgments of the same frozen output are not yet recorded. Score-error variance is not judge repeatability.</p>
+  </div>;
+}

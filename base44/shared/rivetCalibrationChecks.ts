@@ -1,0 +1,30 @@
+import {METHOD} from './rivetCore.ts';
+import {metrics} from './rivetStatistics.ts';
+import {kendallTauB,judgeRankingAgreement} from './rivetJudgeRanking.ts';
+import {nominalAlpha,sampleVariance} from './rivetCalibration.ts';
+export function calibrationChecks(){
+  const checks=[],check=(name,pass)=>checks.push({name,pass:!!pass});
+  check('Tau-b perfect ordering',kendallTauB([1,2,3],[1,2,3])===1);
+  check('Tau-b reversed ordering',kendallTauB([1,2,3],[3,2,1])===-1);
+  check('Tau-b accounts for one-sided ties',Math.abs(kendallTauB([1,1,2],[1,2,3])-2/Math.sqrt(6))<1e-10);
+  check('All tied ranking is unavailable',kendallTauB([1,1,1],[1,2,3])===null);
+  check('Alpha ignores singleton ratings',nominalAlpha([['pass','fail'],['pass']])===0);
+  check('Alpha weights uneven reviewer counts',Math.abs(nominalAlpha([['pass','pass','fail'],['fail','fail']])-1/3)<1e-10);
+  check('Singleton variance unavailable',sampleVariance([10])===null);
+  const rows=[40,60,90].map((score,i)=>({id:`cal-${i}`,score,judgeConfidence:.8,taskId:`task-${i}`,taskVersionId:`v-${i}`,domain:'biology',modelId:'a',methodologyVersion:METHOD}));
+  const reviews=rows.flatMap(r=>['x','y'].map((evaluatorId,i)=>({resultId:r.id,evaluatorId,score:r.score+(i?2:-2),verdict:r.score>=80?'pass':r.score>=50?'partial':'fail',credentialStatusAtReview:'verified',hasConflict:false,methodologyVersion:METHOD})));
+  const finals=rows.map(r=>({resultId:r.id,methodologyVersion:METHOD,finalScore:r.score}));
+  const m=metrics(rows,reviews,finals);
+  check('Kappa perfect across all three labels',m.cohenKappa===1);
+  check('Reviewer variance is within results',m.meanReviewerVariance===8&&m.reviewerVarianceResults===3);
+  check('Zero score error is measured, not missing',m.scoreErrorVariance===0&&m.meanSignedError===0);
+  check('Out-of-scope reviews do not inflate counts',metrics(rows,[...reviews,{...reviews[0],resultId:'unrelated'}],finals).reviewCount===6);
+  check('Duplicate reviewer counted once',metrics(rows,[...reviews,reviews[0]],finals).reviewCount===6);
+  check('Missing adjudication yields no calibration',metrics(rows,reviews,[]).cohenKappa===null);
+  const pairs=['a','b','c'].flatMap((modelId,i)=>[1,2].map(t=>({id:`${modelId}${t}`,taskId:`t${t}`,taskVersionId:`v${t}`,cohortHash:`h${t}`,familyHash:`f${t}`,domain:'biology',modelId,methodologyVersion:METHOD,score:20+i*20,humanScore:80-i*20,created_date:'2026-01-01'})));
+  const ranking=judgeRankingAgreement(pairs)[0];
+  check('Model means use identical snapshot cohort',ranking.tauB===-1&&ranking.matchedTasks===2);
+  check('Changed rubric snapshots never compare',judgeRankingAgreement(pairs.map(p=>p.modelId==='c'?{...p,cohortHash:`changed-${p.cohortHash}`}:p))[0].tauB===null);
+  check('Different methods never pool rankings',judgeRankingAgreement(pairs.map(p=>p.modelId==='c'?{...p,methodologyVersion:'other'}:p)).every(g=>g.tauB===null));
+  return checks;
+}

@@ -1,6 +1,7 @@
 import {scan,requireValue,audit,METHOD,canRead,evidenceComplete,officialEligible} from './rivetCore.ts';
 import {interval,rankings,metrics} from './rivetStatistics.ts';
 import {ngramCoverage} from './rivetContamination.ts';
+import {calibrationChecks} from './rivetCalibrationChecks.ts';
 export async function migrate(b,user) {
   requireValue(user.role==='admin','Administrator required.',403);
   const rows=await scan(b.asServiceRole.entities.ModelResult);
@@ -28,6 +29,7 @@ export function selfChecks() {
   check('13-gram overlap reports covered-token share',overlap.checkable&&overlap.covered===13/14);
   check('Short prompts stay outside the n-gram denominator',ngramCoverage('too short','also short',13).checkable===false);
   const calibrated=metrics([{...rows[0],judgeConfidence:.9}],reviewed,[{resultId:'test1',methodologyVersion:METHOD,finalScore:20}]);
-  check('Calibration reports Brier and chance-corrected disagreement',calibrated.brierScore===.81&&calibrated.krippendorffAlpha===-1);
+  check('Calibration reports Brier and chance-corrected disagreement',calibrated.brierScore===.81&&calibrated.krippendorffAlpha===0);
+  checks.push(...calibrationChecks());
   return {ok:checks.every(c=>c.pass),checks,note:'Isolated in-memory checks only; no test experts, rankings, or scores persisted.'};
 }

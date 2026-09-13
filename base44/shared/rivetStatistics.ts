@@ -1,4 +1,5 @@
 import { METHOD, validReview } from './rivetCore.ts';
+import {scoreBand,nominalAlpha,calibrationExtensions} from './rivetCalibration.ts';
 const mean = xs => xs.length ? xs.reduce((s,x)=>s+x,0)/xs.length : null;
 export function interval(values) {
   if (values.length < 2) return null;
@@ -7,23 +8,28 @@ export function interval(values) {
   return [samples[49],samples[1949]];
 }
 export function metrics(results,reviews,finals=[]) {
-  const eligible=reviews.filter(validReview); let pairs=0,agree=0,disagree=0,pairedResults=0,calibrationResults=0;
-  const errors=[],matches=[],calibration=[]; const band=n=>n>=80?'pass':n>=50?'partial':'fail';
+  const ids=new Set(results.map(r=>r.id));
+  const eligible=reviews.filter(r=>ids.has(r.resultId)&&r.evaluatorId&&validReview(r)&&['pass','partial','fail'].includes(r.verdict));
+  let pairs=0,agree=0,pairedResults=0,reviewCount=0;
+  const errors=[],matches=[],calibration=[],adjudicated=[],reviewUnits=[];
   for(const r of results){
-    const unique=[...new Map(eligible.filter(x=>x.resultId===r.id).map(x=>[x.evaluatorId,x])).values()];
+    const unique=[...new Map(eligible.filter(x=>x.resultId===r.id).sort((a,b)=>(a.created_date||'').localeCompare(b.created_date||'')).map(x=>[x.evaluatorId,x])).values()];
+    reviewUnits.push(unique);reviewCount+=unique.length;
     if(unique.length>=2)pairedResults++;
-    unique.forEach((left,i)=>unique.slice(i+1).forEach(right=>{pairs++;if(left.verdict===right.verdict)agree++;else disagree++;}));
-    const f=finals.find(x=>x.resultId===r.id&&x.methodologyVersion===METHOD&&Number.isFinite(x.finalScore));
-    if(f&&unique.length>=2){calibrationResults++;errors.push(Math.abs(r.score-f.finalScore));const correct=Number(band(r.score)===band(f.finalScore));matches.push(correct);if(Number.isFinite(r.judgeConfidence))calibration.push({confidence:Math.max(0,Math.min(1,r.judgeConfidence)),correct});}
+    unique.forEach((left,i)=>unique.slice(i+1).forEach(right=>{pairs++;if(left.verdict===right.verdict)agree++;}));
+    const f=finals.find(x=>x.resultId===r.id&&x.methodologyVersion===METHOD&&Number.isFinite(x.finalScore)&&x.finalScore>=0&&x.finalScore<=100);
+    if(f&&unique.length>=2&&Number.isFinite(r.score)&&r.score>=0&&r.score<=100){
+      adjudicated.push({...r,humanScore:f.finalScore});errors.push(Math.abs(r.score-f.finalScore));
+      const correct=Number(scoreBand(r.score)===scoreBand(f.finalScore));matches.push(correct);
+      if(Number.isFinite(r.judgeConfidence)&&r.judgeConfidence>=0&&r.judgeConfidence<=1)calibration.push({confidence:r.judgeConfidence,correct});
+    }
   }
-  const labels=['pass','partial','fail'];const total=eligible.length;
-  const expectedDisagreement=total>1?1-labels.reduce((sum,label)=>sum+(eligible.filter(r=>r.verdict===label).length/total)**2,0):0;
-  const alpha=pairs&&expectedDisagreement?1-(disagree/pairs)/expectedDisagreement:null;
+  const alpha=nominalAlpha(reviewUnits.map(rs=>rs.map(r=>r.verdict)));
   const bins=Array.from({length:10},(_,i)=>{const items=calibration.filter(x=>Math.min(9,Math.floor(x.confidence*10))===i);const confidence=mean(items.map(x=>x.confidence));const accuracy=mean(items.map(x=>x.correct));return {range:`${(i/10).toFixed(1)}–${((i+1)/10).toFixed(1)}`,n:items.length,confidence,accuracy,gap:items.length?Math.abs(confidence-accuracy):null};});
   const brierScore=mean(calibration.map(x=>(x.confidence-x.correct)**2));
   const ece=calibration.length?bins.reduce((sum,b)=>sum+(b.n/calibration.length)*(b.gap||0),0):null;
   const mce=calibration.length?Math.max(...bins.map(b=>b.gap||0)):null;const high=calibration.filter(x=>x.confidence>=.9);
-  return {reviewCount:eligible.length,pairedResults,pairCount:pairs,agreement:pairs?100*agree/pairs:null,krippendorffAlpha:alpha,calibrationResults,calibratedConfidenceResults:calibration.length,meanAbsoluteError:mean(errors),judgeHumanAgreement:matches.length?100*mean(matches):null,brierScore,ece,mce,calibrationBins:bins,highConfidenceCount:high.length,highConfidenceErrors:high.filter(x=>!x.correct).length,protocol:'Verified, conflict-free reviews only. Raw agreement is paired with nominal Krippendorff alpha for chance correction. Judge calibration uses final adjudications backed by at least two reviewers; ECE uses 10 equal-width bins and confidence ≥0.90 defines the high-confidence slice. Observational, non-blinded MVP data—not held-out validation.'};
+  return {...calibrationExtensions(adjudicated,reviewUnits),reviewCount,pairedResults,pairCount:pairs,agreement:pairs?100*agree/pairs:null,krippendorffAlpha:alpha,calibrationResults:adjudicated.length,calibratedConfidenceResults:calibration.length,meanAbsoluteError:mean(errors),judgeHumanAgreement:matches.length?100*mean(matches):null,brierScore,ece,mce,calibrationBins:bins,highConfidenceCount:high.length,highConfidenceErrors:high.filter(x=>!x.correct).length,protocol:'Verified, conflict-free reviews only, scoped to these results and deduplicated by reviewer. Nominal Krippendorff alpha uses coincidence weighting and finite-sample expected disagreement; singleton reviews are excluded from alpha. Judge calibration uses final adjudications backed by at least two reviewers. ECE uses 10 equal-width bins; confidence ≥0.90 defines the high-confidence slice. Confidence scores are self-reported. Observational, non-blinded MVP data—not held-out validation.'};
 }
 export function rankings(results,domain,official=false) {
   const scoped=results.filter(r=>r.domain===domain&&r.evidenceStatus==='complete'&&(!official||r.officialEligible));const byModel=new Map();

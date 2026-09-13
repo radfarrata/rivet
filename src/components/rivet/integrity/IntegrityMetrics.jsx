@@ -1,5 +1,7 @@
 import React from 'react';
 import CalibrationReliability from '@/components/rivet/integrity/CalibrationReliability';
+import JudgeAgreementDetails from '@/components/rivet/integrity/JudgeAgreementDetails';
+import JudgeRankingAgreement from '@/components/rivet/integrity/JudgeRankingAgreement';
 export default function IntegrityMetrics({ metrics }) {
   if (!metrics) return null;
   const value = n => n == null ? 'Not available' : `${n.toFixed(1)}%`;
@@ -10,6 +12,8 @@ export default function IntegrityMetrics({ metrics }) {
       <p>Judge vs final human verdict: <strong>{value(metrics.judgeHumanAgreement)}</strong><span className="block text-xs text-muted-foreground">{metrics.calibrationResults} adjudicated results · absolute score error {metrics.meanAbsoluteError == null ? 'not available' : metrics.meanAbsoluteError.toFixed(1)}</span></p>
     </div>
     <CalibrationReliability metrics={metrics} />
+    <JudgeAgreementDetails metrics={metrics} />
+    <JudgeRankingAgreement groups={metrics.rankingAgreement} />
     <p className="text-xs text-muted-foreground">{metrics.protocol} All verified reviewers have equal weight. Missing observations are not counted as agreement.</p>
   </section>;
 }
