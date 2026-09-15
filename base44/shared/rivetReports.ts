@@ -1,4 +1,4 @@
-import {context,requireValue,store,load,audit,scan,METHOD} from './rivetCore.ts';
+import {context,requireValue,store,load,audit,scan,METHOD,DOMAINS} from './rivetCore.ts';
 import {metrics} from './rivetStatistics.ts';
 import {reportSources,verifyReportSource} from './rivetReportSources.ts';
 import {REPORT_TEMPLATES,REPORT_VERSION,REPORT_METHOD,REPORT_LIMITATIONS,reportMarkdown} from './rivetReportTemplates.ts';
@@ -10,6 +10,20 @@ async function allowedReports(b,user,domain){
   return reports.filter(r=>r.taskIds?.length&&r.taskIds.every(id=>allowed.has(id))).sort((a,b)=>b.generatedAt.localeCompare(a.generatedAt));
 }
 export async function reportAction(b,user,p){
+  if(p.action==='reportAvailability'){
+    requireValue(DOMAINS.includes(p.domain),'Choose a report domain.');
+    const reports=await allowedReports(b,user,p.domain),byModel=new Map();
+    for(let i=0;i<reports.length;i+=4){
+      const batch=reports.slice(i,i+4);
+      const manifests=await Promise.all(batch.map(r=>load(b,r.snapshotUri,r.snapshotHash)));
+      manifests.forEach((manifest,index)=>{
+        const report=batch[index];
+        requireValue(manifest.domain===p.domain&&manifest.evidence?.length&&manifest.evidence.every(e=>report.taskIds.includes(e.taskId)),'Report source access has changed.',403);
+        for(const evidence of manifest.evidence)if(evidence.modelAlias&&!byModel.has(evidence.modelAlias))byModel.set(evidence.modelAlias,{modelId:evidence.modelAlias,report:summary(report)});
+      });
+    }
+    return {models:[...byModel.values()]};
+  }
   if(p.action==='reportSnapshot'){
     requireValue(typeof p.snapshotHash==='string'&&/^[a-f0-9]{64}$/.test(p.snapshotHash),'A full report snapshot identifier is required.');
     const saved=(await b.asServiceRole.entities.DomainReport.filter({snapshotHash:p.snapshotHash}))[0];requireValue(saved,'Report unavailable.',404);

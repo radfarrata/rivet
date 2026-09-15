@@ -16,7 +16,7 @@ export default async function(req) {
       }
       case 'evidence':requireValue(typeof p.resultId==='string','Result ID is required.');result=await evidenceView(b,user,p.resultId);break;
       case 'rankings':requireValue(DOMAINS.includes(p.domain),'Choose one domain; overall intelligence scores are not supported.');result=await rankingView(b,user,p.domain,p.official===true);break;
-      case 'reportReadiness':case 'generateReport':case 'reportSnapshot':result=await reportAction(b,user,p);break;
+      case 'reportAvailability':case 'reportReadiness':case 'generateReport':case 'reportSnapshot':result=await reportAction(b,user,p);break;
       case 'createTask':result=await createTask(b,user,p);break;
       case 'reviseTask':result=await reviseTask(b,user,p);break;
       case 'workspaces':case 'createWorkspace':case 'addMember':case 'removeMember':result=await workspaceAction(b,user,p);break;
