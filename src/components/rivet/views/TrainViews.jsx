@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import React, { useMemo, useState } from 'react';
+import { usePosts } from '@/components/rivet/usePosts';
 import { Brain, TrendingUp, Trophy, Target } from 'lucide-react';
 import AgentTrainingView from './AgentTrainingView';
 
@@ -11,16 +10,7 @@ const TIME_FILTERS = [
 ];
 
 function TrainingHub() {
-  const queryClient = useQueryClient();
-  const { data: posts = [] } = useQuery({
-    queryKey: ['rivet-posts'],
-    queryFn: () => base44.entities.Post.list('-created_date', 100),
-  });
-
-  useEffect(() => {
-    const unsub = base44.entities.Post.subscribe(() => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }));
-    return unsub;
-  }, [queryClient]);
+  const { data: posts = [] } = usePosts();
 
   const trainingTasks = posts.filter(p => p.syndicate === 'bio' || p.syndicate === 'physics');
   const openTraining = trainingTasks.filter(p => p.status === 'open').length;
@@ -66,17 +56,8 @@ function TrainingHub() {
 }
 
 function LeaderboardView({ onViewProfile }) {
-  const queryClient = useQueryClient();
   const [timeFilter, setTimeFilter] = useState('all');
-  const { data: posts = [], isLoading } = useQuery({
-    queryKey: ['rivet-posts'],
-    queryFn: () => base44.entities.Post.list('-created_date', 100),
-  });
-
-  useEffect(() => {
-    const unsub = base44.entities.Post.subscribe(() => queryClient.invalidateQueries({ queryKey: ['rivet-posts'] }));
-    return unsub;
-  }, [queryClient]);
+  const { data: posts = [], isLoading } = usePosts();
 
   const leaderboard = useMemo(() => {
     const now = new Date();
