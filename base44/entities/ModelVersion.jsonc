@@ -58,6 +58,19 @@
     },
     "notes": {
       "type": "string"
+    },
+    "repositoryMetadata": {
+      "type": "object"
+    },
+    "repositoryMetadataSourceUrl": {
+      "type": "string"
+    },
+    "repositoryMetadataSyncedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "repositoryMetadataCommitSha": {
+      "type": "string"
     }
   },
   "required": [

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Settings, Loader2, Check, LogOut } from 'lucide-react';
 import { DOMAINS } from '../evalModels';
+import GitHubMetadataSettings from '../settings/GitHubMetadataSettings';
 
 const inputCls = 'w-full bg-[#0e1017] border border-[#1f232e] rounded-xl px-3 py-2.5 text-sm text-white placeholder-[#6b7080] focus:outline-none focus:border-[#653653]/60';
 
@@ -56,6 +57,7 @@ export default function SettingsView({ currentUser }) {
           </button>
         </div>
       </div>
+      <GitHubMetadataSettings currentUser={currentUser} />
     </div>
   );
 }
