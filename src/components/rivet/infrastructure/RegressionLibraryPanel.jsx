@@ -1,0 +1,8 @@
+import React from 'react';
+import { Loader2, TestTube2 } from 'lucide-react';
+
+export default function RegressionLibraryPanel({ tests, toggle, onOpenExperts }) {
+  return <section className="rounded-2xl border border-[#2f3336] bg-[#16181c] overflow-hidden"><div className="flex items-start justify-between gap-3 border-b border-[#2f3336] p-4"><div><h2 className="flex items-center gap-2 text-sm font-bold text-white"><TestTube2 size={15} className="text-[#b06d97]" /> Regression library</h2><p className="mt-1 text-xs text-[#71767b]">Only active, expert-verified tests block releases.</p></div><button onClick={onOpenExperts} className="text-xs text-white underline">Review failures</button></div>
+    {!tests.length ? <p className="p-5 text-xs text-[#71767b]">Confirmed failures will appear here as draft regression tests.</p> : <div className="divide-y divide-[#2f3336]">{tests.map(test => <div key={test.id} className="flex items-center gap-3 p-4"><div className="min-w-0 flex-1"><p className="truncate text-xs font-semibold text-white">{test.name}</p><p className="text-[10px] uppercase text-[#71767b]">{test.severity || 'medium'} · {test.verifiedByExpertName || 'expert verification recorded'}</p></div><button disabled={toggle.isPending} onClick={() => toggle.mutate({ id: test.id, active: !test.active })} className={`flex items-center gap-1 rounded-full border px-3 py-1 text-[10px] font-bold uppercase ${test.active ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400' : 'border-[#2f3336] text-[#71767b]'}`}>{toggle.isPending && <Loader2 size={10} className="animate-spin" />}{test.active ? 'Active' : 'Draft'}</button></div>)}</div>}
+  </section>;
+}

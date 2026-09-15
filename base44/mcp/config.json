@@ -3,6 +3,50 @@
   "tools": {
     "functions": [
       {
+        "name": "manage_evaluations",
+        "title": "Manage evaluations",
+        "description": "Create and revise real-world evaluation tasks, inspect authorized evidence and results, manage private workspaces, or query domain rankings. Required fields depend on the selected action and are validated by Rivet.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "action": { "type": "string", "enum": ["tasks", "results", "evidence", "rankings", "createTask", "reviseTask", "workspaces", "createWorkspace"] },
+            "taskId": { "type": "string" },
+            "resultId": { "type": "string" },
+            "title": { "type": "string" },
+            "prompt": { "type": "string" },
+            "criteria": { "type": "string" },
+            "domain": { "type": "string" },
+            "difficulty": { "type": "string" },
+            "evaluationType": { "type": "string", "enum": ["automated", "human", "hybrid"] },
+            "visibility": { "type": "string", "enum": ["public", "private"] },
+            "models": { "type": "array", "items": { "type": "string" } },
+            "workspaceId": { "type": "string" },
+            "name": { "type": "string" },
+            "official": { "type": "boolean" }
+          },
+          "required": ["action"]
+        },
+        "handler": "rivetIntegrity",
+        "annotations": { "read_only_hint": false, "destructive_hint": false, "idempotent_hint": false }
+      },
+      {
+        "name": "run_evaluation",
+        "title": "Run evaluation",
+        "description": "Prepare an immutable task version or run one selected model against it. Call prepare first, then call model once for each returned model ID.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "action": { "type": "string", "enum": ["prepare", "model"] },
+            "taskId": { "type": "string" },
+            "versionId": { "type": "string" },
+            "modelId": { "type": "string" }
+          },
+          "required": ["action", "taskId"]
+        },
+        "handler": "rivetRun",
+        "annotations": { "read_only_hint": false, "destructive_hint": false, "idempotent_hint": false }
+      },
+      {
         "name": "evaluate_release_candidate",
         "title": "Evaluate release candidate",
         "description": "Apply the signed-in user's active expert-verified regression tests to a system release. Use from CI after supplying one result for every active test.",
