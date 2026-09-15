@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useEvaluationTasks } from '../useEvaluations';
 import { visibleTo } from '../evalStats';
 import EvaluationTaskForm from '../EvaluationTaskForm';
@@ -7,10 +7,12 @@ import { domainLabel, modelLabel } from '../evalModels';
 import { FlaskConical, ChevronRight, Lock } from 'lucide-react';
 import RivetEmptyState from '../RivetEmptyState';
 import DomainReportBuilder from '@/components/rivet/reports/DomainReportBuilder';
+import ResearchEvaluationFlow from '@/components/rivet/evaluation/ResearchEvaluationFlow';
 
-export default function EvaluationLabView({ currentUser }) {
+export default function EvaluationLabView({ currentUser, initialTask, onInitialTaskHandled }) {
   const { data: allTasks = [], isLoading, isError, refetch } = useEvaluationTasks();
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(initialTask || null);
+  useEffect(() => { if (initialTask) { setSelected(initialTask); onInitialTaskHandled?.(); } }, [initialTask, onInitialTaskHandled]);
   const [scope, setScope] = useState('all');
   const tasks = visibleTo(allTasks, currentUser).filter(t => scope === 'mine' ? (t.ownerId || t.created_by_id) === currentUser?.id : true);
 
@@ -20,6 +22,7 @@ export default function EvaluationLabView({ currentUser }) {
         <h2 className="text-xl font-bold text-white flex items-center gap-2"><FlaskConical size={20} className="text-[#b06d97]" /> Evaluation Lab</h2>
         <p className="text-sm text-[#8b90a0] mt-0.5">Bring a real-world task, compare multiple AI systems on it, and get evidence behind every score.</p>
       </div>
+      <ResearchEvaluationFlow />
 
       <DomainReportBuilder currentUser={currentUser} />
       <EvaluationTaskForm currentUser={currentUser} onCreated={setSelected} enableTemplates />

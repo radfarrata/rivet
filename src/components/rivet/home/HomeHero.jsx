@@ -5,6 +5,7 @@ import { useCreateEvaluationTask } from '../useEvaluations';
 import { DOMAINS } from '../evalModels';
 import TemplatePicker from './TemplatePicker';
 import DocumentUpload from './DocumentUpload';
+import CompactModelPicker from '@/components/rivet/evaluation/CompactModelPicker';
 
 const EVAL_TYPES = [
   { id: 'hybrid', label: 'Human + Automated' },
@@ -51,6 +52,8 @@ export default function HomeHero({ currentUser, onNavigate }) {
   const [domain, setDomain] = useState('biology');
   const [difficulty, setDifficulty] = useState('intermediate');
   const [evaluationType, setEvaluationType] = useState('hybrid');
+  const [criteria, setCriteria] = useState('');
+  const [models, setModels] = useState(['gpt_5_mini', 'claude-sonnet-5', 'gemini_3_flash']);
   const [tab, setTab] = useState('new');
   const [fromUpload, setFromUpload] = useState(false);
 
@@ -66,16 +69,18 @@ export default function HomeHero({ currentUser, onNavigate }) {
         domain,
         difficulty,
         evaluationType,
+        evaluationCriteria: criteria.trim() || undefined,
         visibility: fromUpload ? 'private' : 'public',
-        models: ['gpt_5_mini', 'claude-sonnet-5', 'gemini_3_flash'],
+        models,
         status: 'pending',
         creatorName: currentUser?.full_name || 'You',
       },
       {
-        onSuccess: () => {
+        onSuccess: (task) => {
           setPrompt('');
           setTitle('');
-          onNavigate?.('evaluation-lab');
+          setCriteria('');
+          onNavigate?.('evaluation-lab', { task });
         },
       }
     );
@@ -146,6 +151,11 @@ export default function HomeHero({ currentUser, onNavigate }) {
         />
       </div>
 
+      <div className="mt-3 sm:pl-[52px]">
+        <textarea value={criteria} onChange={(e) => setCriteria(e.target.value)} rows={2} placeholder="Evaluation rubric (recommended): what makes a response correct, useful, and complete?" className="w-full resize-none rounded-xl border border-[#2f3336] bg-black px-3 py-2.5 text-[13px] text-white placeholder-[#71767b] focus:border-[#71767b] focus:outline-none" />
+      </div>
+      <div className="mt-3"><CompactModelPicker value={models} onChange={setModels} /></div>
+
       {/* Helper + error */}
       {fromUpload && (
         <p className="mt-2 text-xs text-[#71767b]">Document-derived tasks are private to you.</p>
@@ -175,7 +185,7 @@ export default function HomeHero({ currentUser, onNavigate }) {
 
         <button
           onClick={handleRun}
-          disabled={create.isPending || !prompt.trim()}
+          disabled={create.isPending || !prompt.trim() || models.length < 2}
           className="ml-auto flex flex-shrink-0 items-center justify-center gap-2 rounded-full bg-[#653653] px-5 py-2.5 text-[13px] font-bold text-white transition-colors hover:bg-[#7c4165] disabled:opacity-40"
         >
           {create.isPending ? (
@@ -183,7 +193,7 @@ export default function HomeHero({ currentUser, onNavigate }) {
           ) : (
             <Icon name="play" size={12} />
           )}
-          Run Evaluation
+          Create & review
         </button>
       </div>
     </div>

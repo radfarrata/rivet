@@ -17,7 +17,7 @@ import CustomDatasetsView from './views/CustomDatasetsView';
 import ExpertWorkspaceView from './views/ExpertWorkspaceView';
 import VerdictFeedView from './views/VerdictFeedView';
 
-export default function ContentView({ activeNav, currentUser, onViewProfile, onNavigate }) {
+export default function ContentView({ activeNav, currentUser, onViewProfile, onNavigate, initialTask, onInitialTaskHandled }) {
   switch (activeNav) {
     case 'verdict-feed': return <VerdictFeedView currentUser={currentUser} onNavigate={onNavigate} onViewProfile={onViewProfile} />;
     case 'projects': return <ProjectsView currentUser={currentUser} onViewProfile={onViewProfile} />;
@@ -38,7 +38,7 @@ export default function ContentView({ activeNav, currentUser, onViewProfile, onN
     case 'agent-training': return <TrainViews mode="agents" onViewProfile={onViewProfile} />;
     case 'agent-analytics': return <AgentAnalyticsView />;
     case 'leaderboard': return <TrainViews mode="leaderboard" onViewProfile={onViewProfile} />;
-    case 'evaluation-lab': return <EvaluationLabView currentUser={currentUser} />;
+    case 'evaluation-lab': return <EvaluationLabView currentUser={currentUser} initialTask={initialTask} onInitialTaskHandled={onInitialTaskHandled} />;
     case 'capability-map': return <CapabilityMapView />;
     case 'explore-tasks': return <ExploreTasksView currentUser={currentUser} />;
     case 'saved-tasks': return <SavedTasksView currentUser={currentUser} />;

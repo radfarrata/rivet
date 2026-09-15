@@ -15,7 +15,12 @@ export default function RivetDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [profileUser, setProfileUser] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [navigationTask, setNavigationTask] = useState(null);
   useEffect(() => { base44.auth.me().then(setCurrentUser).catch(() => {}); }, []);
+
+  const navigate = (id, context = {}) => {
+    setActiveNav(id); setSearchQuery(''); setProfileUser(null); setNavigationTask(context.task || null); setIsMobileNavOpen(false);
+  };
 
   const handleViewProfile = (user) => {
     setProfileUser({
@@ -31,7 +36,7 @@ export default function RivetDashboard() {
     <div className="flex h-screen bg-black overflow-hidden">
       <Sidebar
         activeNav={activeNav}
-        onNavChange={(id) => { setActiveNav(id); setSearchQuery(''); setProfileUser(null); setIsMobileNavOpen(false); }}
+        onNavChange={navigate}
         isMobileOpen={isMobileNavOpen}
         setIsMobileNavOpen={setIsMobileNavOpen}
         currentUser={currentUser}
@@ -45,9 +50,9 @@ export default function RivetDashboard() {
           ) : profileUser ? (
             <ProfileView user={profileUser} currentUser={currentUser} onBack={() => setProfileUser(null)} onViewProfile={handleViewProfile} />
           ) : activeNav === 'home' ? (
-            <HomeView currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+            <HomeView currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={navigate} searchQuery={searchQuery} onSearchChange={setSearchQuery} />
           ) : (
-            <ContentView activeNav={activeNav} currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={(id) => { setActiveNav(id); setSearchQuery(''); }} />
+            <ContentView activeNav={activeNav} currentUser={currentUser} onViewProfile={handleViewProfile} onNavigate={navigate} initialTask={navigationTask} onInitialTaskHandled={() => setNavigationTask(null)} />
           )}
         </main>
       </div>
