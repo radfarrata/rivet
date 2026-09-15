@@ -15,6 +15,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import ExpertWorkspace from './pages/ExpertWorkspace';
 import EvaluationEvidence from '@/pages/EvaluationEvidence';
 import DomainReport from '@/pages/DomainReport';
+import OAuthConsent from '@/pages/OAuthConsent';
 // Add page imports here
 
 const AuthenticatedApp = () => (
@@ -24,6 +25,7 @@ const AuthenticatedApp = () => (
     <Route path="/register" element={<Register />} />
     <Route path="/forgot-password" element={<ForgotPassword />} />
     <Route path="/reset-password" element={<ResetPassword />} />
+    <Route path="/oauth/consent" element={<OAuthConsent />} />
 
     {/* All app routes gated behind login */}
     <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>

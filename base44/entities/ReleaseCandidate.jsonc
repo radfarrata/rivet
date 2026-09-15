@@ -47,7 +47,18 @@
     "triggeredBy": {
       "type": "string"
     },
+    "submittedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
     "completedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "gatePolicyVersion": {
+      "type": "string"
+    },
+    "gateSnapshotHash": {
       "type": "string"
     }
   },

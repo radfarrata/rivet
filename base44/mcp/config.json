@@ -1,0 +1,25 @@
+{
+  "auth": "oauth",
+  "tools": {
+    "functions": [
+      {
+        "name": "evaluate_release_candidate",
+        "title": "Evaluate release candidate",
+        "description": "Apply the signed-in user's active expert-verified regression tests to a system release. Use from CI after supplying one result for every active test.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "candidateId": { "type": "string", "description": "Optional existing release candidate ID." },
+            "agentId": { "type": "string", "description": "Stable system or agent identifier." },
+            "agentName": { "type": "string", "description": "System or agent display name; required when candidateId is omitted." },
+            "version": { "type": "string", "description": "Immutable release version; required when candidateId is omitted." },
+            "results": { "type": "array", "description": "One result for every active regression test.", "items": { "type": "object", "properties": { "testId": { "type": "string" }, "passed": { "type": "boolean" }, "evidenceUri": { "type": "string" }, "notes": { "type": "string" } }, "required": ["testId", "passed"] } }
+          },
+          "required": ["results"]
+        },
+        "handler": "evaluateReleaseCandidate",
+        "annotations": { "read_only_hint": false, "destructive_hint": false, "idempotent_hint": false }
+      }
+    ]
+  }
+}

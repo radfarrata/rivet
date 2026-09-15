@@ -1,0 +1,5 @@
+import React from 'react';
+import { Braces, LockKeyhole } from 'lucide-react';
+export default function ApiAccessPanel() {
+  return <section className="rounded-2xl border border-[#2f3336] bg-[#16181c] p-5"><div className="flex items-start gap-3"><Braces size={17} className="mt-0.5 text-[#b06d97]" /><div><h2 className="text-sm font-bold text-white">Authenticated evaluation API</h2><p className="mt-1 text-xs leading-relaxed text-[#71767b]">OAuth machine access exposes authorized evaluation records and the deterministic release gate to compatible AI and development clients. Existing app permissions remain enforced.</p><p className="mt-3 flex items-center gap-1.5 text-[11px] text-[#b8bcc8]"><LockKeyhole size={12} /> Publish the app to activate or update the API surface.</p></div></div></section>;
+}

@@ -22,6 +22,7 @@ const NAV_GROUPS = [
     items: [
       { id: 'saved-tasks', label: 'Saved Tasks', icon: 'bookmark' },
       { id: 'custom-datasets', label: 'Custom Datasets', icon: 'database' },
+      { id: 'evaluation-infrastructure', label: 'Infrastructure', icon: 'cpu' },
       { id: 'settings', label: 'Settings', icon: 'settings' },
     ],
   },
