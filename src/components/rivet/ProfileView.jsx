@@ -7,6 +7,7 @@ import SnapchatProfileHeader from './SnapchatProfileHeader';
 import ContributionHeatmap from './ContributionHeatmap';
 import ReputationCard from './ReputationCard';
 import { computeReputation } from './useAgentReputation';
+import ProfessionalProfiles from '@/components/rivet/profile/ProfessionalProfiles';
 
 export default function ProfileView({
   user,
@@ -125,6 +126,8 @@ export default function ProfileView({
           }}
         />
       </section>
+
+      <ProfessionalProfiles userId={user.uid} currentUser={currentUser} />
 
       {/* Reputation */}
       <section>
