@@ -1,4 +1,5 @@
-export const POSTS_KEY = ['rivet-posts'];
+// Keep paginated data separate from plain Post.list arrays; parent invalidations still reach both.
+export const POSTS_KEY = ['rivet-posts', 'infinite'];
 export const flatPosts = data => data?.pages?.flatMap(page => page.items) || [];
 export const mapPostCache = (data, change) => data ? ({...data,pages:data.pages.map(page=>({...page,items:page.items.map(post=>change(post))}))}) : data;
 export const patchPost = (data,id,patch) => mapPostCache(data,post=>post.id===id?{...post,...(typeof patch==='function'?patch(post):patch)}:post);
